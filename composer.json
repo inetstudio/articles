@@ -1,0 +1,26 @@
+{
+    "name": "inetstudio/articles",
+    "description": "Package for articles",
+    "homepage": "https://github.com/inetstudio/articles",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Konstantin Bukin",
+        "email": "bukin@inetstudio.ru"
+      }
+    ],
+    "require": {
+      "cviebrock/eloquent-sluggable": "^4.2",
+      "inetstudio/admin-panel": "1.*",
+      "inetstudio/categories": "1.*",
+      "inetstudio/tags": "1.*",
+      "phoenix/eloquent-meta": "1.6.*",
+      "spatie/laravel-medialibrary": "^5.0.0",
+      "venturecraft/revisionable": "1.*"
+    },
+    "autoload": {
+      "psr-4": {
+        "InetStudio\\Articles\\": "src/"
+      }
+    }
+}
