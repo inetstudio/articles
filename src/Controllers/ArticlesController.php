@@ -14,7 +14,7 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use InetStudio\Articles\Transformers\ArticleTransformer;
 
 /**
- * Контроллер для управления статьими.
+ * Контроллер для управления статьями.
  *
  * Class ContestByTagStatusesController
  */
@@ -30,20 +30,50 @@ class ArticlesController extends Controller
     {
         $table = $dataTable->getHtmlBuilder();
 
-        $table->columns([
+        $table->columns($this->getColumns());
+        $table->ajax($this->getAjaxOptions());
+        $table->parameters($this->getTableParameters());
+
+        return view('admin.module.articles::pages.articles.index', compact('table'));
+    }
+
+    /**
+     * Свойства колонок datatables.
+     *
+     * @return array
+     */
+    private function getColumns()
+    {
+        return [
             ['data' => 'title', 'name' => 'title', 'title' => 'Заголовок'],
             ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
             ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
             ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
-        ]);
+        ];
+    }
 
-        $table->ajax([
+    /**
+     * Свойства ajax datatables.
+     *
+     * @return array
+     */
+    private function getAjaxOptions()
+    {
+        return [
             'url' => route('back.articles.data'),
             'type' => 'POST',
             'data' => 'function(data) { data._token = $(\'meta[name="csrf-token"]\').attr(\'content\'); }',
-        ]);
+        ];
+    }
 
-        $table->parameters([
+    /**
+     * Свойства datatables.
+     *
+     * @return array
+     */
+    private function getTableParameters()
+    {
+        return [
             'paging' => true,
             'pagingType' => 'full_numbers',
             'searching' => true,
@@ -52,9 +82,7 @@ class ArticlesController extends Controller
             'language' => [
                 'url' => asset('admin/js/plugins/datatables/locales/russian.json'),
             ],
-        ]);
-
-        return view('admin.module.articles::pages.articles.index', compact('table'));
+        ];
     }
 
     /**
@@ -106,21 +134,15 @@ class ArticlesController extends Controller
      */
     public function edit($id = null)
     {
-        if (! is_null($id) && $id > 0) {
-            $item = ArticleModel::where('id', '=', $id)->first();
-        } else {
-            abort(404);
-        }
-
-        if (empty($item)) {
-            abort(404);
-        } else {
+        if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
             $categories = CategoryModel::getTree();
 
             return view('admin.module.articles::pages.articles.form', [
                 'item' => $item,
                 'categories' => $categories,
             ]);
+        } else {
+            abort(404);
         }
     }
 
@@ -139,21 +161,16 @@ class ArticlesController extends Controller
     /**
      * Сохранение статьи.
      *
-     * @param $request
+     * @param SaveArticleRequest $request
      * @param null $id
      * @return \Illuminate\Http\RedirectResponse
      */
     private function save($request, $id = null)
     {
-        if (! is_null($id) && $id > 0) {
-            $edit = true;
-            $item = ArticleModel::where('id', '=', $id)->first();
-
-            if (empty($item)) {
-                abort(404);
-            }
+        if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
+            $action = 'отредактирована';
         } else {
-            $edit = false;
+            $action = 'создана';
             $item = new ArticleModel();
         }
 
@@ -164,42 +181,83 @@ class ArticlesController extends Controller
         $item->publish_date = ($request->has('publish_date')) ? date('Y-m-d H:i', \DateTime::createFromFormat('!d.m.Y H:i', $request->get('publish_date'))->getTimestamp()) : null;
         $item->save();
 
+        $this->saveMeta($item, $request);
+        $this->saveCategories($item, $request);
+        $this->saveTags($item, $request);
+        $this->saveImages($item, $request, ['og_image', 'preview']);
+
+        Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
+
+        return redirect()->to(route('back.articles.edit', $item->fresh()->id));
+    }
+
+    /**
+     * Сохраняем мета теги.
+     *
+     * @param ArticleModel $item
+     * @param SaveArticleRequest $request
+     */
+    private function saveMeta($item, $request)
+    {
         if ($request->has('meta')) {
             foreach ($request->get('meta') as $key => $value) {
                 $item->updateMeta($key, $value);
             }
         }
+    }
 
+    /**
+     * Сохраняем категории.
+     *
+     * @param ArticleModel $item
+     * @param SaveArticleRequest $request
+     */
+    private function saveCategories($item, $request)
+    {
         if ($request->has('categories')) {
             $categories = explode(',', $request->get('categories'));
             $item->recategorize(CategoryModel::whereIn('id', $categories)->get());
         } else {
             $item->uncategorize($item->categories);
         }
+    }
 
+    /**
+     * Сохраняем теги.
+     *
+     * @param ArticleModel $item
+     * @param SaveArticleRequest $request
+     */
+    private function saveTags($item, $request)
+    {
         if ($request->has('tags')) {
-            $item->syncTags(TagModel::whereIn('id', $request->get('tags'))->get());
+            $item->syncTags(TagModel::whereIn('id', (array) $request->get('tags'))->get());
         } else {
             $item->detachTags($item->tags);
         }
+    }
 
-        foreach (['og_image', 'preview'] as $name) {
+    /**
+     * Сохраняем изображения.
+     *
+     * @param ArticleModel $item
+     * @param SaveArticleRequest $request
+     * @param array $images
+     */
+    private function saveImages($item, $request, $images)
+    {
+        foreach ($images as $name) {
             $properties = $request->get($name);
 
-            if (isset($properties['base64'])) {
+            if (isset($properties['base64']) && isset($properties['filename'])) {
                 $image = $properties['base64'];
                 $filename = $properties['filename'];
 
-                array_forget($properties, 'base64');
-                array_forget($properties,'filename');
-            }
-
-            if (isset($image) && isset($filename)) {
                 if (isset($properties['type']) && $properties['type'] == 'single') {
                     $item->clearMediaCollection($name);
-                    array_forget($properties,'type');
                 }
 
+                array_forget($properties, ['type', 'base64', 'filename']);
                 $properties = array_filter($properties);
 
                 $item->addMediaFromBase64($image)
@@ -209,7 +267,7 @@ class ArticlesController extends Controller
                     ->toMediaCollection($name, 'articles');
             } else {
                 if (isset($properties['type']) && $properties['type'] == 'single') {
-                    array_forget($properties,'type');
+                    array_forget($properties, 'type');
 
                     $properties = array_filter($properties);
 
@@ -219,11 +277,6 @@ class ArticlesController extends Controller
                 }
             }
         }
-
-        $action = ($edit) ? 'отредактирована' : 'создана';
-        Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
-
-        return redirect()->to(route('back.articles.edit', $item->fresh()->id));
     }
 
     /**
@@ -234,25 +287,17 @@ class ArticlesController extends Controller
      */
     public function destroy($id = null)
     {
-        if (! is_null($id) && $id > 0) {
-            $item = ArticleModel::where('id', '=', $id)->first();
+        if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
+            $item->delete();
+
+            return response()->json([
+                'success' => true,
+            ]);
         } else {
             return response()->json([
                 'success' => false,
             ]);
         }
-
-        if (empty($item)) {
-            return response()->json([
-                'success' => false,
-            ]);
-        }
-
-        $item->delete();
-
-        return response()->json([
-            'success' => true,
-        ]);
     }
 
     /**
