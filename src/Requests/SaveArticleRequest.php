@@ -69,7 +69,7 @@ class SaveArticleRequest extends FormRequest
             'meta.og:title' => 'max:255',
             'meta.og:description' => 'max:255',
             'title' => 'required|max:255',
-            'slug' => 'required|alpha_dash|max:255|unique:articles,slug,' .$request->get('article_id'),
+            'slug' => 'required|alpha_dash|max:255|unique:articles,slug,'.$request->get('article_id'),
             //'preview.file' => 'required',
             'preview.crop.3_2' => 'required',
             'preview.crop.3_4' => 'required',
@@ -77,7 +77,7 @@ class SaveArticleRequest extends FormRequest
             'preview.copyright' => 'max:255',
             'preview.alt' => 'required|max:255',
             'tags' => 'array',
-            'publish_date' => 'date_format:d.m.Y H:i'
+            'publish_date' => 'date_format:d.m.Y H:i',
         ];
     }
 }
