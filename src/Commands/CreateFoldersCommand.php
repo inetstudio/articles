@@ -11,7 +11,7 @@ class CreateFoldersCommand extends Command
      *
      * @var string
      */
-    protected $name = 'inetstudio:tags:folders';
+    protected $name = 'inetstudio:articles:folders';
 
     /**
      * The console command description.
