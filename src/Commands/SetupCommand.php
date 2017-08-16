@@ -26,7 +26,7 @@ class SetupCommand extends Command
      * @var array
      */
     protected $calls = [
-        'vendor:publish --provider="InetStudio\Articles\ArticlesServiceProvider" --tag="migrations" --force' => 'Publish migrations',
+        'vendor:publish --provider="InetStudio\Articles\ArticlesServiceProvider" --tag="migrations"' => 'Publish migrations',
         'migrate' => 'Migration',
         'optimize' => 'Optimize',
         'inetstudio:articles:folders' => 'Create folders',
