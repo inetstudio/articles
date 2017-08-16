@@ -22,6 +22,11 @@ class ArticlesServiceProvider extends ServiceProvider
                     __DIR__.'/../database/migrations/create_articles_tables.php.stub' => database_path('migrations/'.$timestamp.'_create_articles_tables.php'),
                 ], 'migrations');
             }
+
+            $this->commands([
+                Commands\SetupCommand::class,
+                Commands\CreateFoldersCommand::class,
+            ]);
         }
     }
 
@@ -32,8 +37,6 @@ class ArticlesServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->register('Phoenix\EloquentMeta\ServiceProvider');
-        $this->app->register('Cviebrock\EloquentSluggable\ServiceProvider');
-        $this->app->register('Spatie\MediaLibrary\MediaLibraryServiceProvider');
+
     }
 }

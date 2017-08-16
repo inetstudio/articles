@@ -7,30 +7,20 @@
 @section('title', $title)
 
 @section('styles')
-    <!-- SELECT2 -->
-    <link href="{!! asset('admin/css/plugins/select2/select2.min.css') !!}" rel="stylesheet">
-
-    <!-- ICHECK -->
-    <link href="{!! asset('admin/css/plugins/iCheck/custom.css') !!}" rel="stylesheet">
+    <!-- CROPPER -->
+    <link href="{!! asset('admin/css/plugins/cropper/cropper.min.css') !!}" rel="stylesheet">
 
     <!-- DATETIMEPICKER -->
     <link href="{!! asset('admin/css/plugins/datetimepicker/jquery.datetimepicker.css') !!}" rel="stylesheet">
 
-    <!-- CROPPER -->
-    <link href="{!! asset('admin/css/plugins/cropper/cropper.min.css') !!}" rel="stylesheet">
+    <!-- ICHECK -->
+    <link href="{!! asset('admin/css/plugins/iCheck/custom.css') !!}" rel="stylesheet">
 
     <!-- JSTREE -->
     <link href="{!! asset('admin/css/plugins/jstree/style.min.css') !!}" rel="stylesheet">
 
-    <style>
-        .jstree-open > .jstree-anchor > .fa-folder:before {
-            content: "\f07c";
-        }
-
-        .jstree-default .jstree-icon.none {
-            width: 0;
-        }
-    </style>
+    <!-- SELECT2 -->
+    <link href="{!! asset('admin/css/plugins/select2/select2.min.css') !!}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -67,117 +57,9 @@
 
             {!! Form::hidden('article_id', (!$item->id) ? '' : $item->id) !!}
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel-group float-e-margins" id="metaAccordion">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#metaAccordion" href="#collapseMeta" aria-expanded="false" class="collapsed">Мета теги</a>
-                                </h5>
-                            </div>
-                            <div id="collapseMeta" class="panel-collapse collapse" aria-expanded="false">
-                                <div class="panel-body">
+            {!! Form::meta('', $item) !!}
 
-                                    {!! Form::string('meta[title]', $item->getMeta('title'), [
-                                        'label' => [
-                                            'title' => 'Title',
-                                        ],
-                                    ]) !!}
-
-                                    {!! Form::string('meta[description]', $item->getMeta('description'), [
-                                        'label' => [
-                                            'title' => 'Description',
-                                        ],
-                                    ]) !!}
-
-                                    {!! Form::string('meta[keywords]', $item->getMeta('keywords'), [
-                                        'label' => [
-                                            'title' => 'Keywords',
-                                        ],
-                                    ]) !!}
-
-                                    {!! Form::radios('meta[robots]', $item->getMeta('robots'), [
-                                        'label' => [
-                                            'title' => 'Индексировать',
-                                        ],
-                                        'radios' => [
-                                            [
-                                                'label' => 'Да',
-                                                'value' => 'index, follow',
-                                                'options' => [
-                                                    'class' => 'i-checks',
-                                                ],
-                                            ],
-                                            [
-                                                'label' => 'Нет',
-                                                'value' => 'noindex, nofollow',
-                                                'options' => [
-                                                    'class' => 'i-checks',
-                                                ],
-                                            ],
-                                        ],
-                                    ]) !!}
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel-group float-e-margins" id="socialMetaAccordion">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#socialMetaAccordion" href="#collapseSocialMeta" aria-expanded="false" class="collapsed">Социальные мета теги</a>
-                                </h5>
-                            </div>
-                            <div id="collapseSocialMeta" class="panel-collapse collapse" aria-expanded="false">
-                                <div class="panel-body">
-
-                                    {!! Form::string('meta[og:title]', $item->getMeta('og:title'), [
-                                        'label' => [
-                                            'title' => 'og:title',
-                                        ],
-                                    ]) !!}
-
-                                    {!! Form::string('meta[og:description]', $item->getMeta('og:description'), [
-                                        'label' => [
-                                            'title' => 'og:description',
-                                        ],
-                                    ]) !!}
-
-                                    @php
-                                        $ogImageMedia = $item->getFirstMedia('og_image');
-                                    @endphp
-
-                                    {!! Form::crop('og_image', $ogImageMedia, [
-                                        'label' => [
-                                            'title' => 'og:image',
-                                        ],
-                                        'image' => [
-                                            'src' => isset($ogImageMedia) ? url($ogImageMedia->getUrl()) : '',
-                                            'type' => 'single',
-                                        ],
-                                        'crops' => [
-                                            [
-                                                'title' => 'Размер 968х475',
-                                                'name' => 'default',
-                                                'ratio' => '968/475',
-                                                'value' => isset($ogImageMedia) ? $ogImageMedia->getCustomProperty('crop.default') : '',
-                                            ],
-                                        ],
-                                    ]) !!}
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {!! Form::social_meta('', $item) !!}
 
             <div class="row">
                 <div class="col-lg-12">
@@ -223,7 +105,6 @@
                                         ],
                                         'image' => [
                                             'src' => isset($previewImageMedia) ? url($previewImageMedia->getUrl()) : '',
-                                            'type' => 'single',
                                         ],
                                         'crops' => [
                                             [
@@ -231,12 +112,24 @@
                                                 'name' => '3_4',
                                                 'ratio' => '3/4',
                                                 'value' => isset($previewImageMedia) ? $previewImageMedia->getCustomProperty('crop.3_4') : '',
+                                                'size' => [
+                                                    'width' => 384,
+                                                    'height' => 512,
+                                                    'type' => 'min',
+                                                    'description' => 'Минимальный размер области 3x4 — 384x512 пикселей'
+                                                ],
                                             ],
                                             [
                                                 'title' => 'Размер 3х2',
                                                 'name' => '3_2',
                                                 'ratio' => '3/2',
                                                 'value' => isset($previewImageMedia) ? $previewImageMedia->getCustomProperty('crop.3_2') : '',
+                                                'size' => [
+                                                    'width' => 768,
+                                                    'height' => 512,
+                                                    'type' => 'min',
+                                                    'description' => 'Минимальный размер области 3x4 — 768x512 пикселей'
+                                                ],
                                             ],
                                         ],
                                         'additional' => [
@@ -265,6 +158,7 @@
                                         'field' => [
                                             'class' => 'tinymce-simple',
                                             'type' => 'simple',
+                                            'id' => 'description',
                                         ],
                                     ]) !!}
 
@@ -274,11 +168,29 @@
                                         ],
                                         'field' => [
                                             'class' => 'tinymce',
+                                            'id' => 'content',
+                                            'hasImages' => true,
+                                        ],
+                                        'images' => [
+                                            'media' => $item->getMedia('content'),
+                                            'fields' => [
+                                                [
+                                                    'title' => 'Описание',
+                                                    'name' => 'description',
+                                                ],
+                                                [
+                                                    'title' => 'Copyright',
+                                                    'name' => 'copyright',
+                                                ],
+                                                [
+                                                    'title' => 'Alt',
+                                                    'name' => 'alt',
+                                                ],
+                                            ],
                                         ],
                                     ]) !!}
 
                                     <div class="form-group ">
-
                                         <label for="title" class="col-sm-2 control-label">Категории</label>
 
                                         <div class="col-sm-10">
@@ -342,24 +254,31 @@
 
     {!! Form::modals_crop() !!}
 
+    {!! Form::modals_uploader('', '', '') !!}
+
+    {!! Form::modals_edit_image('', '', '') !!}
+
 @endsection
 
 @section('scripts')
-    <!-- SELECT2 -->
-    <script src="{!! asset('admin/js/plugins/select2/select2.full.min.js') !!}"></script>
-    <script src="{!! asset('admin/js/plugins/select2/i18n/ru.js') !!}"></script>
+    <!-- CROPPER -->
+    <script src="{!! asset('admin/js/plugins/cropper/cropper.min.js') !!}"></script>
+
+    <!-- DATETIMEPICKER -->
+    <script src="{!! asset('admin/js/plugins/datetimepicker/jquery.datetimepicker.full.min.js') !!}"></script>
 
     <!-- ICHECK -->
     <script src="{!! asset('admin/js/plugins/iCheck/icheck.min.js') !!}"></script>
 
-    <!-- CROPPER -->
-    <script src="{!! asset('admin/js/plugins/cropper/cropper.min.js') !!}"></script>
-
     <!-- JSTREE -->
     <script src="{!! asset('admin/js/plugins/jstree/jstree.min.js') !!}"></script>
 
-    <!-- DATETIMEPICKER -->
-    <script src="{!! asset('admin/js/plugins/datetimepicker/jquery.datetimepicker.full.min.js') !!}"></script>
+    <!-- PLUPLOAD -->
+    <script src="{!! asset('admin/js/plugins/plupload/plupload.full.min.js') !!}"></script>
+
+    <!-- SELECT2 -->
+    <script src="{!! asset('admin/js/plugins/select2/select2.full.min.js') !!}"></script>
+    <script src="{!! asset('admin/js/plugins/select2/i18n/ru.js') !!}"></script>
 
     <!-- TINYMCE -->
     <script src="{!! asset('admin/js/plugins/tinymce/tinymce.min.js') !!}"></script>

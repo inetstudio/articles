@@ -7,6 +7,7 @@ use Yajra\Datatables\Datatables;
 use App\Http\Controllers\Controller;
 use InetStudio\Tags\Models\TagModel;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Categories\Models\CategoryModel;
 use InetStudio\Articles\Requests\SaveArticleRequest;
@@ -176,15 +177,15 @@ class ArticlesController extends Controller
 
         $item->title = strip_tags($request->get('title'));
         $item->slug = strip_tags($request->get('slug'));
-        $item->description = strip_tags($request->get('description'));
-        $item->content = $request->get('content');
+        $item->description = strip_tags($request->input('description.text'));
+        $item->content = $request->input('content.text');
         $item->publish_date = ($request->has('publish_date')) ? date('Y-m-d H:i', \DateTime::createFromFormat('!d.m.Y H:i', $request->get('publish_date'))->getTimestamp()) : null;
         $item->save();
 
         $this->saveMeta($item, $request);
         $this->saveCategories($item, $request);
         $this->saveTags($item, $request);
-        $this->saveImages($item, $request, ['og_image', 'preview']);
+        $this->saveImages($item, $request, ['og_image', 'preview', 'content']);
 
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
 
@@ -249,31 +250,52 @@ class ArticlesController extends Controller
         foreach ($images as $name) {
             $properties = $request->get($name);
 
-            if (isset($properties['base64']) && isset($properties['filename'])) {
-                $image = $properties['base64'];
-                $filename = $properties['filename'];
+            if (isset($properties['images'])) {
+                $item->clearMediaCollectionExcept($name, $properties['images']);
 
-                if (isset($properties['type']) && $properties['type'] == 'single') {
-                    $item->clearMediaCollection($name);
+                foreach ($properties['images'] as $image) {
+                    if ($image['id']) {
+                        $media = $item->media->find($image['id']);
+                        $media->custom_properties = $image['properties'];
+                        $media->save();
+                    } else {
+                        $filename = $image['filename'];
+
+                        $file = Storage::disk('temp')->getDriver()->getAdapter()->getPathPrefix().$image['tempname'];
+
+                        $item->addMedia($file)
+                            ->withCustomProperties($image['properties'])
+                            ->usingName(pathinfo($filename, PATHINFO_FILENAME))
+                            ->usingFileName($image['tempname'])
+                            ->toMediaCollection($name, 'articles');
+                    }
                 }
-
-                array_forget($properties, ['type', 'base64', 'filename']);
-                $properties = array_filter($properties);
-
-                $item->addMediaFromBase64($image)
-                    ->withCustomProperties($properties)
-                    ->usingName(pathinfo($filename, PATHINFO_FILENAME))
-                    ->usingFileName(md5($image).'.'.pathinfo($filename, PATHINFO_EXTENSION))
-                    ->toMediaCollection($name, 'articles');
             } else {
-                if (isset($properties['type']) && $properties['type'] == 'single') {
-                    array_forget($properties, 'type');
+                if (isset($properties['tempname']) && isset($properties['filename'])) {
+                    $image = $properties['tempname'];
+                    $filename = $properties['filename'];
 
+                    $item->clearMediaCollection($name);
+
+                    array_forget($properties, ['tempname', 'temppath', 'filename']);
+                    $properties = array_filter($properties);
+
+                    $file = Storage::disk('temp')->getDriver()->getAdapter()->getPathPrefix().$image;
+
+                    $item->addMedia($file)
+                        ->withCustomProperties($properties)
+                        ->usingName(pathinfo($filename, PATHINFO_FILENAME))
+                        ->usingFileName($image)
+                        ->toMediaCollection($name, 'articles');
+                } else {
                     $properties = array_filter($properties);
 
                     $media = $item->getFirstMedia($name);
-                    $media->custom_properties = $properties;
-                    $media->save();
+
+                    if ($media) {
+                        $media->custom_properties = $properties;
+                        $media->save();
+                    }
                 }
             }
         }
