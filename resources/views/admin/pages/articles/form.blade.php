@@ -247,7 +247,7 @@
                 </div>
             </div>
 
-            {!! Form::buttons('', '', ['back' => 'back.tags.index']) !!}
+            {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}
 
         {!! Form::close()!!}
     </div>
