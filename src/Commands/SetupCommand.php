@@ -26,11 +26,11 @@ class SetupCommand extends Command
      * @var array
      */
     protected $calls = [
-        'vandor:publish --provider="InetStudio\Articles\ArticlesServiceProvider" --tag="migrations" --force' => 'Publish migrations',
+        'vendor:publish --provider="InetStudio\Articles\ArticlesServiceProvider" --tag="migrations" --force' => 'Publish migrations',
         'migrate' => 'Migration',
         'optimize' => 'Optimize',
         'inetstudio:articles:folders' => 'Create folders',
-        'vandor:publish --provider="InetStudio\Articles\ArticlesServiceProvider" --tag="public" --force' => 'Publish public',
+        'vendor:publish --provider="InetStudio\Articles\ArticlesServiceProvider" --tag="public" --force' => 'Publish public',
     ];
 
     /**
