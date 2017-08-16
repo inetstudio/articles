@@ -12,8 +12,7 @@
     "require": {
       "inetstudio/admin-panel": "1.*",
       "inetstudio/categories": "1.*",
-      "inetstudio/tags": "1.*",
-      "venturecraft/revisionable": "1.*"
+      "inetstudio/tags": "1.*"
     },
     "autoload": {
       "psr-4": {
