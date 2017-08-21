@@ -13,7 +13,7 @@
 
 @section('content')
 
-    @include('admin.module.tags::partials.breadcrumb_index', ['title' => $title])
+    @include('admin.module.articles::partials.breadcrumb_index', ['title' => $title])
 
     <div class="wrapper wrapper-content">
         <div class="row">

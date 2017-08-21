@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Categories\Traits\HasCategories;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
+use InetStudio\Ingredients\Traits\HasIngredients;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 
 /**
@@ -65,6 +66,7 @@ class ArticleModel extends Model implements HasMedia
     use SoftDeletes;
     use HasCategories;
     use HasMediaTrait;
+    use HasIngredients;
     use RevisionableTrait;
 
     /**

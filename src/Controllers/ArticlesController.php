@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Categories\Models\CategoryModel;
+use InetStudio\Ingredients\Models\IngredientModel;
 use InetStudio\Articles\Requests\SaveArticleRequest;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use InetStudio\Articles\Transformers\ArticleTransformer;
@@ -184,6 +185,7 @@ class ArticlesController extends Controller
 
         $this->saveMeta($item, $request);
         $this->saveCategories($item, $request);
+        $this->saveIngredients($item, $request);
         $this->saveTags($item, $request);
         $this->saveImages($item, $request, ['og_image', 'preview', 'content']);
 
@@ -220,6 +222,21 @@ class ArticlesController extends Controller
             $item->recategorize(CategoryModel::whereIn('id', $categories)->get());
         } else {
             $item->uncategorize($item->categories);
+        }
+    }
+
+    /**
+     * Сохраняем ингредиенты.
+     *
+     * @param ArticleModel $item
+     * @param SaveArticleRequest $request
+     */
+    private function saveIngredients($item, $request)
+    {
+        if ($request->has('ingredients')) {
+            $item->syncIngredients(IngredientModel::whereIn('id', (array) $request->get('ingredients'))->get());
+        } else {
+            $item->detachIngredients($item->categories);
         }
     }
 

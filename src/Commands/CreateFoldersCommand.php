@@ -29,7 +29,7 @@ class CreateFoldersCommand extends Command
     {
         // TODO использовать конфиг
 
-        $path = storage_path().'/app/public/tags';
+        $path = storage_path().'/app/public/articles';
 
         if (! is_dir($path)) {
             mkdir($path, 0777, true);

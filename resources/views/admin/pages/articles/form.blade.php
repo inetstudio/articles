@@ -13,9 +13,6 @@
     <!-- DATETIMEPICKER -->
     <link href="{!! asset('admin/css/plugins/datetimepicker/jquery.datetimepicker.css') !!}" rel="stylesheet">
 
-    <!-- ICHECK -->
-    <link href="{!! asset('admin/css/plugins/iCheck/custom.css') !!}" rel="stylesheet">
-
     <!-- JSTREE -->
     <link href="{!! asset('admin/css/plugins/jstree/style.min.css') !!}" rel="stylesheet">
 
@@ -190,6 +187,20 @@
                                         ],
                                     ]) !!}
 
+                                    {!! Form::dropdown('ingredients[]', $item->ingredients()->pluck('id')->toArray(), [
+                                        'label' => [
+                                            'title' => 'Ингредиенты',
+                                        ],
+                                        'field' => [
+                                            'class' => 'select2 form-control',
+                                            'data-placeholder' => 'Выберите ингредиенты',
+                                            'style' => 'width: 100%',
+                                            'multiple' => 'multiple',
+                                            'data-source' => route('back.ingredients.getSuggestions'),
+                                        ],
+                                        'options' => (old('ingredients')) ? \InetStudio\Ingredients\Models\IngredientModel::whereIn('id', old('ingredients'))->pluck('title', 'id')->toArray() : $item->ingredients()->pluck('title', 'id')->toArray(),
+                                    ]) !!}
+
                                     <div class="form-group ">
                                         <label for="title" class="col-sm-2 control-label">Категории</label>
 
@@ -266,9 +277,6 @@
 
     <!-- DATETIMEPICKER -->
     <script src="{!! asset('admin/js/plugins/datetimepicker/jquery.datetimepicker.full.min.js') !!}"></script>
-
-    <!-- ICHECK -->
-    <script src="{!! asset('admin/js/plugins/iCheck/icheck.min.js') !!}"></script>
 
     <!-- JSTREE -->
     <script src="{!! asset('admin/js/plugins/jstree/jstree.min.js') !!}"></script>
