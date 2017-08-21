@@ -11,6 +11,10 @@ class ArticlesServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views/admin', 'admin.module.articles');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
+        $this->publishes([
+            __DIR__.'/../config/articles.php' => config_path('articles.php'),
+        ], 'config');
+
         $this->mergeConfigFrom(
             __DIR__.'/../config/filesystems.php', 'filesystems.disks'
         );

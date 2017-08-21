@@ -13,8 +13,8 @@ use InetStudio\Categories\Traits\HasCategories;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Ingredients\Traits\HasIngredients;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
  * InetStudio\Articles\Models\ArticleModel
@@ -59,7 +59,7 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel withoutTrashed()
  * @mixin \Eloquent
  */
-class ArticleModel extends Model implements HasMedia
+class ArticleModel extends Model implements HasMediaConversions
 {
     use HasTags;
     use MetaTrait;
@@ -151,5 +151,22 @@ class ArticleModel extends Model implements HasMedia
     public static function getTagClassName(): string
     {
         return TagModel::class;
+    }
+
+    public function registerMediaConversions()
+    {
+        $quality = (config('articles.images.quality')) ? config('articles.images.quality') : 75;
+
+        if (config('articles.images.conversions')) {
+            foreach (config('articles.images.conversions') as $collection => $conversions) {
+                foreach ($conversions as $conversion) {
+                    $this->addMediaConversion($conversion['name'])
+                        ->quality($quality)
+                        ->width($conversion['size']['width'])
+                        ->height($conversion['size']['height'])
+                        ->performOnCollections($collection);
+                }
+            }
+        }
     }
 }

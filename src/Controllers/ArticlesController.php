@@ -288,6 +288,23 @@ class ArticlesController extends Controller
                     }
                 }
             } else {
+                $manipulations = [];
+
+                if (isset($properties['crop'])) {
+                    foreach ($properties['crop'] as $key => $cropJSON) {
+                        $cropData = json_decode($cropJSON, true);
+
+                        $manipulations[$name.'_'.$key] = [
+                            'manualCrop' => implode(',', [
+                                round($cropData['width']),
+                                round($cropData['height']),
+                                round($cropData['x']),
+                                round($cropData['y']),
+                            ]),
+                        ];
+                    }
+                }
+
                 if (isset($properties['tempname']) && isset($properties['filename'])) {
                     $image = $properties['tempname'];
                     $filename = $properties['filename'];
@@ -299,11 +316,15 @@ class ArticlesController extends Controller
 
                     $file = Storage::disk('temp')->getDriver()->getAdapter()->getPathPrefix().$image;
 
-                    $item->addMedia($file)
+                    $media = $item->addMedia($file)
                         ->withCustomProperties($properties)
                         ->usingName(pathinfo($filename, PATHINFO_FILENAME))
                         ->usingFileName($image)
                         ->toMediaCollection($name, 'articles');
+
+                    $media->manipulations = $manipulations;
+                    $media->save();
+
                 } else {
                     $properties = array_filter($properties);
 
@@ -311,6 +332,7 @@ class ArticlesController extends Controller
 
                     if ($media) {
                         $media->custom_properties = $properties;
+                        $media->manipulations = $manipulations;
                         $media->save();
                     }
                 }
