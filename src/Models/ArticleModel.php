@@ -14,6 +14,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Ingredients\Traits\HasIngredients;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
 /**
  * InetStudio\Articles\Models\ArticleModel
@@ -68,6 +69,7 @@ class ArticleModel extends Model implements HasMedia
     use HasMediaTrait;
     use HasIngredients;
     use RevisionableTrait;
+    use SluggableScopeHelpers;
 
     const HREF = '/article/';
 
