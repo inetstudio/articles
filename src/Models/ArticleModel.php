@@ -69,6 +69,8 @@ class ArticleModel extends Model implements HasMedia
     use HasIngredients;
     use RevisionableTrait;
 
+    const HREF = '/article/';
+
     /**
      * Связанная с моделью таблица.
      *
@@ -132,6 +134,16 @@ class ArticleModel extends Model implements HasMedia
         $engine->addRules($rules);
 
         return $engine;
+    }
+
+    /**
+     * Ссылка на материал.
+     *
+     * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+     */
+    public function getHrefAttribute()
+    {
+        return url(self::HREF . (!empty($this->slug) ? $this->slug : $this->id));
     }
 
     public static function getTagClassName(): string

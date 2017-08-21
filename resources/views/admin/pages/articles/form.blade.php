@@ -42,6 +42,14 @@
         </div>
     </div>
 
+    @if ($item->id)
+        <div class="row m-sm">
+            <a class="btn btn-white" href="{{ $item->href }}" target="_blank">
+                <i class="fa fa-eye"></i> Посмотреть на сайте
+            </a>
+        </div>
+    @endif
+
     <div class="wrapper wrapper-content">
 
         {!! Form::info() !!}
