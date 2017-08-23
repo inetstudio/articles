@@ -32,8 +32,8 @@ class ArticlesController extends Controller
     {
         $table = $dataTable->getHtmlBuilder();
 
-        $table->columns($this->getColumns());
-        $table->ajax($this->getAjaxOptions());
+        $table->columns($this->getColumns('articles'));
+        $table->ajax($this->getAjaxOptions('articles'));
         $table->parameters($this->getTableParameters());
 
         return view('admin.module.articles::pages.articles.index', compact('table'));
@@ -42,27 +42,41 @@ class ArticlesController extends Controller
     /**
      * Свойства колонок datatables.
      *
+     * @param $model
      * @return array
      */
-    private function getColumns()
+    private function getColumns($model)
     {
-        return [
-            ['data' => 'title', 'name' => 'title', 'title' => 'Заголовок'],
-            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
-            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
-            ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
-        ];
+        if ($model == 'articles') {
+            return [
+                ['data' => 'title', 'name' => 'title', 'title' => 'Заголовок'],
+                ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
+                ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
+                ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
+            ];
+        } elseif ($model == 'products') {
+            return [
+                ['data' => 'id', 'name' => 'id', 'title' => 'ID', 'orderable' => false, 'searchable' => false, 'visible' => false],
+                ['data' => 'preview', 'name' => 'preview', 'title' => 'Изображение', 'orderable' => false, 'searchable' => false],
+                ['data' => 'brand', 'name' => 'brand', 'title' => 'Бренд'],
+                ['data' => 'title', 'name' => 'title', 'title' => 'Название'],
+                ['data' => 'description', 'name' => 'description', 'title' => 'Описание'],
+                ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
+            ];
+        }
     }
 
     /**
      * Свойства ajax datatables.
      *
+     * @param $model
+     * @param $type
      * @return array
      */
-    private function getAjaxOptions()
+    private function getAjaxOptions($model, $type = '')
     {
         return [
-            'url' => route('back.articles.data'),
+            'url' => route('back.'.$model.'.data', ['type' => $type]),
             'type' => 'POST',
             'data' => 'function(data) { data._token = $(\'meta[name="csrf-token"]\').attr(\'content\'); }',
         ];
@@ -105,15 +119,23 @@ class ArticlesController extends Controller
     /**
      * Добавление статьи.
      *
+     * @param Datatables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(Datatables $dataTable)
     {
+        $table = $dataTable->getHtmlBuilder();
+
+        $table->columns($this->getColumns('products'));
+        $table->ajax($this->getAjaxOptions('products', 'embedded'));
+        $table->parameters($this->getTableParameters());
+
         $categories = CategoryModel::getTree();
 
         return view('admin.module.articles::pages.articles.form', [
             'item' => new ArticleModel(),
             'categories' => $categories,
+            'productsTable' => $table,
         ]);
     }
 
@@ -131,17 +153,25 @@ class ArticlesController extends Controller
     /**
      * Редактирование статьи.
      *
+     * @param Datatables $dataTable
      * @param null $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id = null)
+    public function edit(Datatables $dataTable, $id = null)
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
             $categories = CategoryModel::getTree();
 
+            $table = $dataTable->getHtmlBuilder();
+
+            $table->columns($this->getColumns('products'));
+            $table->ajax($this->getAjaxOptions('products', 'embedded'));
+            $table->parameters($this->getTableParameters());
+
             return view('admin.module.articles::pages.articles.form', [
                 'item' => $item,
                 'categories' => $categories,
+                'productsTable' => $table,
             ]);
         } else {
             abort(404);
@@ -187,6 +217,7 @@ class ArticlesController extends Controller
         $this->saveCategories($item, $request);
         $this->saveIngredients($item, $request);
         $this->saveTags($item, $request);
+        $this->saveProducts($item, $request);
         $this->saveImages($item, $request, ['og_image', 'preview', 'content']);
 
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
@@ -252,6 +283,27 @@ class ArticlesController extends Controller
             $item->syncTags(TagModel::whereIn('id', (array) $request->get('tags'))->get());
         } else {
             $item->detachTags($item->tags);
+        }
+    }
+
+    /**
+     * Сохраняем продукты.
+     *
+     * @param ArticleModel $item
+     * @param SaveArticleRequest $request
+     */
+    private function saveProducts($item, $request)
+    {
+        if ($request->has('products')) {
+            $ids = [];
+
+            foreach ($request->get('products') as $product) {
+                $ids[] = $product['id'];
+            }
+
+            $item->syncProducts($ids)->get();
+        } else {
+            $item->detachProducts($item->products);
         }
     }
 

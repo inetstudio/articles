@@ -8,6 +8,7 @@ use Phoenix\EloquentMeta\MetaTrait;
 use InetStudio\Tags\Models\TagModel;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use InetStudio\Products\Traits\HasProducts;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Categories\Traits\HasCategories;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -64,6 +65,7 @@ class ArticleModel extends Model implements HasMediaConversions
     use HasTags;
     use MetaTrait;
     use Sluggable;
+    use HasProducts;
     use SoftDeletes;
     use HasCategories;
     use HasMediaTrait;

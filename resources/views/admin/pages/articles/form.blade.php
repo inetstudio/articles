@@ -18,6 +18,12 @@
 
     <!-- SELECT2 -->
     <link href="{!! asset('admin/css/plugins/select2/select2.min.css') !!}" rel="stylesheet">
+
+    <!-- DATATABLES -->
+    <link href="{!! asset('admin/css/plugins/datatables/datatables.min.css') !!}" rel="stylesheet">
+
+    <!-- CUSTOM STYLE -->
+    <link href="{!! asset('admin/css/modules/products/custom.css') !!}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -266,6 +272,8 @@
                 </div>
             </div>
 
+            {!! Form::products('products', $item->products, ['table' => $productsTable])!!}
+
             {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}
 
         {!! Form::close()!!}
@@ -298,4 +306,12 @@
 
     <!-- TINYMCE -->
     <script src="{!! asset('admin/js/plugins/tinymce/tinymce.min.js') !!}"></script>
+
+    <!-- DATATABLES -->
+    <script src="{!! asset('admin/js/plugins/datatables/datatables.min.js') !!}"></script>
+
+    {!! $productsTable->scripts() !!}
+
+    <!-- CUSTOM SCRIPT -->
+    <script src="{!! asset('admin/js/modules/products/custom.js') !!}"></script>
 @endsection
