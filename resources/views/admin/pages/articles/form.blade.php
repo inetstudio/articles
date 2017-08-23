@@ -226,7 +226,7 @@
                                                             @include('admin.module.categories::pages.categories.partials.form_category', [
                                                                 'id' => 'сategoryId',
                                                                 'item' => $category,
-                                                                'currentId' => $item->id,
+                                                                'currentId' => null,
                                                                 'selected' => $item->categories()->pluck('id')->toArray(),
                                                             ])
                                                         @endforeach
