@@ -24,7 +24,7 @@
 @section('content')
 
     @push('breadcrumbs')
-        @include('admin.module.articles::partials.breadcrumbs')
+        @include('admin.module.articles::partials.articles.breadcrumbs')
         <li>
             <a href="{{ route('back.articles.index') }}">Статьи</a>
         </li>
