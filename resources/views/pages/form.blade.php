@@ -206,7 +206,7 @@
                                                     <ul>
                                                         @foreach ($categories as $category)
                                                             @include('admin.module.categories::partials.tree.form_category', [
-                                                                'id' => 'сategoryId',
+                                                                'id' => 'parentCategoryId',
                                                                 'item' => $category,
                                                                 'currentId' => null,
                                                                 'selected' => $item->categories()->pluck('id')->toArray(),
