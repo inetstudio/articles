@@ -1,52 +1,34 @@
+@extends('admin::layouts.app')
+
 @php
     $title = ($item->id) ? 'Редактирование статьи' : 'Добавление статьи';
 @endphp
 
-@extends('admin::layouts.app')
-
 @section('title', $title)
 
-@section('styles')
-    <!-- CROPPER -->
-    <link href="{!! asset('admin/css/plugins/cropper/cropper.min.css') !!}" rel="stylesheet">
-
-    <!-- DATETIMEPICKER -->
-    <link href="{!! asset('admin/css/plugins/datetimepicker/jquery.datetimepicker.css') !!}" rel="stylesheet">
-
+@pushonce('styles:jstree')
     <!-- JSTREE -->
     <link href="{!! asset('admin/css/plugins/jstree/style.min.css') !!}" rel="stylesheet">
+@endpushonce
 
-    <!-- SELECT2 -->
-    <link href="{!! asset('admin/css/plugins/select2/select2.min.css') !!}" rel="stylesheet">
-
+@pushonce('styles:datatables')
     <!-- DATATABLES -->
     <link href="{!! asset('admin/css/plugins/datatables/datatables.min.css') !!}" rel="stylesheet">
+@endpushonce
 
+@pushonce('styles:articles_custom')
     <!-- CUSTOM STYLE -->
     <link href="{!! asset('admin/css/modules/products/custom.css') !!}" rel="stylesheet">
-@endsection
+@endpushonce
 
 @section('content')
-    <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-sm-12">
-            <h2>
-                {{ $title }}
-            </h2>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="{{ url('/back/') }}">Главная</a>
-                </li>
-                <li>
-                    <a href="{{ route('back.articles.index') }}">Статьи</a>
-                </li>
-                <li class="active">
-                    <strong>
-                        {{ $title }}
-                    </strong>
-                </li>
-            </ol>
-        </div>
-    </div>
+
+    @push('breadcrumbs')
+        @include('admin.module.articles::partials.breadcrumbs')
+        <li>
+            <a href="{{ route('back.articles.index') }}">Статьи</a>
+        </li>
+    @endpush
 
     @if ($item->id)
         <div class="row m-sm">
@@ -278,40 +260,23 @@
 
         {!! Form::close()!!}
     </div>
-
-    {!! Form::modals_crop() !!}
-
-    {!! Form::modals_uploader('', '', '') !!}
-
-    {!! Form::modals_edit_image('', '', '') !!}
-
 @endsection
 
-@section('scripts')
-    <!-- CROPPER -->
-    <script src="{!! asset('admin/js/plugins/cropper/cropper.min.js') !!}"></script>
-
-    <!-- DATETIMEPICKER -->
-    <script src="{!! asset('admin/js/plugins/datetimepicker/jquery.datetimepicker.full.min.js') !!}"></script>
-
+@pushonce('scripts:jstree')
     <!-- JSTREE -->
     <script src="{!! asset('admin/js/plugins/jstree/jstree.min.js') !!}"></script>
+@endpushonce
 
-    <!-- PLUPLOAD -->
-    <script src="{!! asset('admin/js/plugins/plupload/plupload.full.min.js') !!}"></script>
-
-    <!-- SELECT2 -->
-    <script src="{!! asset('admin/js/plugins/select2/select2.full.min.js') !!}"></script>
-    <script src="{!! asset('admin/js/plugins/select2/i18n/ru.js') !!}"></script>
-
-    <!-- TINYMCE -->
-    <script src="{!! asset('admin/js/plugins/tinymce/tinymce.min.js') !!}"></script>
-
+@pushonce('scripts:datatables')
     <!-- DATATABLES -->
     <script src="{!! asset('admin/js/plugins/datatables/datatables.min.js') !!}"></script>
+@endpushonce
 
+@pushonce('scripts:datatable_products_embedded')
     {!! $productsTable->scripts() !!}
+@endpushonce
 
+@pushonce('scripts:articles_custom')
     <!-- CUSTOM SCRIPT -->
     <script src="{!! asset('admin/js/modules/products/custom.js') !!}"></script>
-@endsection
+@endpushonce
