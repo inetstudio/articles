@@ -87,7 +87,7 @@ class SaveArticleRequest extends FormRequest
             'preview.copyright' => 'max:255',
             'preview.alt' => 'required|max:255',
             'tags' => 'array',
-            'publish_date' => 'date_format:d.m.Y H:i',
+            'publish_date' => 'nullable|date_format:d.m.Y H:i',
         ];
     }
 }
