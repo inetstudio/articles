@@ -36,7 +36,7 @@ class ArticlesController extends Controller
         $table->ajax($this->getAjaxOptions('articles'));
         $table->parameters($this->getTableParameters());
 
-        return view('admin.module.articles::pages.articles.index', compact('table'));
+        return view('admin.module.articles::pages.index', compact('table'));
     }
 
     /**
@@ -132,7 +132,7 @@ class ArticlesController extends Controller
 
         $categories = CategoryModel::getTree();
 
-        return view('admin.module.articles::pages.articles.form', [
+        return view('admin.module.articles::pages.form', [
             'item' => new ArticleModel(),
             'categories' => $categories,
             'productsTable' => $table,
@@ -168,7 +168,7 @@ class ArticlesController extends Controller
             $table->ajax($this->getAjaxOptions('products', 'embedded'));
             $table->parameters($this->getTableParameters());
 
-            return view('admin.module.articles::pages.articles.form', [
+            return view('admin.module.articles::pages.form', [
                 'item' => $item,
                 'categories' => $categories,
                 'productsTable' => $table,

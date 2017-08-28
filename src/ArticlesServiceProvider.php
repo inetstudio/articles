@@ -8,7 +8,7 @@ class ArticlesServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views/admin', 'admin.module.articles');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin.module.articles');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         $this->publishes([

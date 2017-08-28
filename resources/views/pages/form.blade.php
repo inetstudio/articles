@@ -24,7 +24,7 @@
 @section('content')
 
     @push('breadcrumbs')
-        @include('admin.module.articles::partials.articles.breadcrumbs')
+        @include('admin.module.articles::partials.breadcrumbs')
         <li>
             <a href="{{ route('back.articles.index') }}">Статьи</a>
         </li>
@@ -205,7 +205,7 @@
                                                 <div class="jstree-list" data-target="categories" data-multiple="true" data-cascade="up">
                                                     <ul>
                                                         @foreach ($categories as $category)
-                                                            @include('admin.module.categories::pages.categories.partials.form_category', [
+                                                            @include('admin.module.categories::partials.tree.form_category', [
                                                                 'id' => 'сategoryId',
                                                                 'item' => $category,
                                                                 'currentId' => null,

@@ -18,7 +18,7 @@ class ArticleTransformer extends TransformerAbstract
             'title' => $article->title,
             'created_at' => (string) $article->created_at,
             'updated_at' => (string) $article->updated_at,
-            'actions' => view('admin.module.articles::pages.articles.datatables.actions', [
+            'actions' => view('admin.module.articles::partials.datatables.actions', [
                 'id' => $article->id,
                 'href' => $article->href,
             ])->render(),
