@@ -10,12 +10,12 @@
       }
     ],
     "require": {
-      "inetstudio/admin-panel": "1.*",
-      "inetstudio/categories": "1.*",
-      "inetstudio/tags": "1.*",
-      "inetstudio/ingredients": "1.*",
-      "inetstudio/polls": "1.*",
-      "inetstudio/products": "1.*"
+      "inetstudio/admin-panel": "1.4.*",
+      "inetstudio/categories": "1.4.*",
+      "inetstudio/tags": "1.4.*",
+      "inetstudio/ingredients": "1.4.*",
+      "inetstudio/polls": "1.4.*",
+      "inetstudio/products": "1.4.*"
     },
     "autoload": {
       "psr-4": {
