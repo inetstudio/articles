@@ -260,6 +260,9 @@
 
         {!! Form::close()!!}
     </div>
+
+    @include('admin.module.polls::pages.modals.form')
+
 @endsection
 
 @pushonce('scripts:jstree')
