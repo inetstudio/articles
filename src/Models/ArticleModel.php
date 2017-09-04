@@ -9,6 +9,7 @@ use InetStudio\Tags\Models\TagModel;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use InetStudio\Products\Traits\HasProducts;
+use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Categories\Traits\HasCategories;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -89,7 +90,7 @@ class ArticleModel extends Model implements HasMediaConversions
      */
     protected $fillable = [
         'title', 'slug', 'description', 'content',
-        'publish_date', 'webmaster_id',
+        'publish_date', 'webmaster_id', 'status_id',
     ];
 
     /**
@@ -102,6 +103,11 @@ class ArticleModel extends Model implements HasMediaConversions
         'updated_at',
         'deleted_at',
     ];
+
+    public function status()
+    {
+        return $this->hasOne(StatusModel::class, 'id', 'status_id');
+    }
 
     /**
      * Return the sluggable configuration array for this model.

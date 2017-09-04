@@ -64,7 +64,6 @@ class SetupCommand extends Command
             'params' => [
                 '--provider' => 'InetStudio\Articles\ArticlesServiceProvider',
                 '--tag' => 'config',
-                '--force' => true,
             ],
         ],
     ];

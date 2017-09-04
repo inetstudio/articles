@@ -50,6 +50,7 @@ class ArticlesController extends Controller
         if ($model == 'articles') {
             return [
                 ['data' => 'title', 'name' => 'title', 'title' => 'Заголовок'],
+                ['data' => 'status', 'name' => 'status.name', 'title' => 'Статус'],
                 ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
                 ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
                 ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
@@ -108,7 +109,7 @@ class ArticlesController extends Controller
      */
     public function data()
     {
-        $items = ArticleModel::query();
+        $items = ArticleModel::with('status');
 
         return Datatables::of($items)
             ->setTransformer(new ArticleTransformer)
@@ -211,6 +212,7 @@ class ArticlesController extends Controller
         $item->description = strip_tags($request->input('description.text'));
         $item->content = $request->input('content.text');
         $item->publish_date = ($request->has('publish_date')) ? date('Y-m-d H:i', \DateTime::createFromFormat('!d.m.Y H:i', $request->get('publish_date'))->getTimestamp()) : null;
+        $item->status_id = $request->get('status_id');
         $item->save();
 
         $this->saveMeta($item, $request);

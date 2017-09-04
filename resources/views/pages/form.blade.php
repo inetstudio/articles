@@ -30,16 +30,24 @@
         </li>
     @endpush
 
-    @if ($item->id)
-        <div class="row m-sm">
+
+    <div class="row m-sm">
+        <a class="btn btn-white" href="{{ route('back.articles.index') }}">
+            <i class="fa fa-arrow-left"></i> Вернуться назад
+        </a>
+        @if ($item->id)
             <a class="btn btn-white" href="{{ $item->href }}" target="_blank">
                 <i class="fa fa-eye"></i> Посмотреть на сайте
             </a>
-        </div>
-    @endif
+        @endif
+        @php
+            $status = (! $item->id or ! $item->status) ? \InetStudio\Statuses\Models\StatusModel::get()->first() : $item->status;
+        @endphp
+        <div class="bg-{{ $status->color_class }} p-xs b-r-sm pull-right">{{ $status->name }}</div>
+    </div>
+
 
     <div class="wrapper wrapper-content">
-
         {!! Form::info() !!}
 
         {!! Form::open(['url' => (!$item->id) ? route('back.articles.store') : route('back.articles.update', [$item->id]), 'id' => 'mainForm', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) !!}
@@ -245,6 +253,18 @@
                                         'field' => [
                                             'class' => 'datetimepicker form-control',
                                         ],
+                                    ]) !!}
+
+                                    {!! Form::dropdown('status_id', $item->status_id, [
+                                        'label' => [
+                                            'title' => 'Статус материала',
+                                        ],
+                                        'field' => [
+                                            'class' => 'select2 form-control',
+                                            'data-placeholder' => 'Выберите статус',
+                                            'style' => 'width: 100%',
+                                        ],
+                                        'options' => [null => ''] + \InetStudio\Statuses\Models\StatusModel::select('id', 'name')->pluck('name', 'id')->toArray(),
                                     ]) !!}
 
                                 </div>
