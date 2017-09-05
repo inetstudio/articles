@@ -166,13 +166,15 @@ class ArticleModel extends Model implements HasMediaConversions
         $quality = (config('articles.images.quality')) ? config('articles.images.quality') : 75;
 
         if (config('articles.images.conversions')) {
-            foreach (config('articles.images.conversions') as $collection => $conversions) {
-                foreach ($conversions as $conversion) {
-                    $this->addMediaConversion($conversion['name'])
-                        ->quality($quality)
-                        ->width($conversion['size']['width'])
-                        ->height($conversion['size']['height'])
-                        ->performOnCollections($collection);
+            foreach (config('articles.images.conversions') as $collection => $image) {
+                foreach ($image as $crop) {
+                    foreach ($crop as $conversion) {
+                        $this->addMediaConversion($conversion['name'])
+                            ->quality($quality)
+                            ->width($conversion['size']['width'])
+                            ->height($conversion['size']['height'])
+                            ->performOnCollections($collection);
+                    }
                 }
             }
         }

@@ -348,18 +348,20 @@ class ArticlesController extends Controller
             } else {
                 $manipulations = [];
 
-                if (isset($properties['crop'])) {
+                if (isset($properties['crop']) and config('articles.images.conversions')) {
                     foreach ($properties['crop'] as $key => $cropJSON) {
                         $cropData = json_decode($cropJSON, true);
 
-                        $manipulations[$name.'_'.$key] = [
-                            'manualCrop' => implode(',', [
-                                round($cropData['width']),
-                                round($cropData['height']),
-                                round($cropData['x']),
-                                round($cropData['y']),
-                            ]),
-                        ];
+                        foreach (config('articles.images.conversions.'.$name.'.'.$key) as $conversion) {
+                            $manipulations[$conversion['name']] = [
+                                'manualCrop' => implode(',', [
+                                    round($cropData['width']),
+                                    round($cropData['height']),
+                                    round($cropData['x']),
+                                    round($cropData['y']),
+                                ]),
+                            ];
+                        }
                     }
                 }
 
