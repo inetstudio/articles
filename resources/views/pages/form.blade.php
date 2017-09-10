@@ -279,6 +279,9 @@
         {!! Form::close()!!}
     </div>
 
+    @include('admin.module.articles::pages.modals.suggestion')
+    @include('admin.module.experts::pages.modals.suggestion')
+    @include('admin.module.ingredients::pages.modals.suggestion')
     @include('admin.module.polls::pages.modals.form')
 
 @endsection

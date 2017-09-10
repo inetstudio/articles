@@ -434,4 +434,39 @@ class ArticlesController extends Controller
 
         return response()->json($slug);
     }
+
+    /**
+     * Возвращаем статьи для поля.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSuggestions(Request $request)
+    {
+        if ($request->has('type') and $request->get('type') == 'autocomplete') {
+            $search = $request->get('query');
+            $data['suggestions'] = [];
+
+            $articles = ArticleModel::where('title', 'LIKE', '%'.$search.'%')->get();
+
+            foreach ($articles as $article) {
+                $data['suggestions'][] = [
+                    'value' => $article->title,
+                    'data' => [
+                        'id' => $article->id,
+                        'title' => $article->title,
+                        'href' => url($article->href),
+                        'preview' => ($article->getFirstMedia('preview')) ? url($article->getFirstMedia('preview')->getUrl('preview_sidebar')) : '',
+                    ]
+                ];
+            }
+        } else {
+            $search = $request->get('q');
+            $data = [];
+
+            $data['items'] = ArticleModel::select(['id', 'title as name'])->where('title', 'LIKE', '%'.$search.'%')->get()->toArray();
+        }
+
+        return response()->json($data);
+    }
 }
