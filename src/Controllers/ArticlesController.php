@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Categories\Models\CategoryModel;
+//use InetStudio\Classifiers\Models\ClassifierModel;
 use InetStudio\Ingredients\Models\IngredientModel;
 use InetStudio\Articles\Requests\SaveArticleRequest;
 use Cviebrock\EloquentSluggable\Services\SlugService;
@@ -77,7 +78,7 @@ class ArticlesController extends Controller
     private function getAjaxOptions($model, $type = '')
     {
         return [
-            'url' => route('back.'.$model.'.data', ['type' => $type]),
+            'url' => (! $type) ? route('back.'.$model.'.data') : route('back.'.$model.'.data', ['type' => $type]),
             'type' => 'POST',
             'data' => 'function(data) { data._token = $(\'meta[name="csrf-token"]\').attr(\'content\'); }',
         ];
@@ -113,7 +114,7 @@ class ArticlesController extends Controller
 
         return Datatables::of($items)
             ->setTransformer(new ArticleTransformer)
-            ->escapeColumns(['actions'])
+            ->escapeColumns(['status', 'actions'])
             ->make();
     }
 
@@ -212,11 +213,12 @@ class ArticlesController extends Controller
         $item->description = strip_tags($request->input('description.text'));
         $item->content = $request->input('content.text');
         $item->publish_date = ($request->has('publish_date')) ? date('Y-m-d H:i', \DateTime::createFromFormat('!d.m.Y H:i', $request->get('publish_date'))->getTimestamp()) : null;
-        $item->status_id = $request->get('status_id');
+        $item->status_id = ($request->has('status_id')) ? $request->get('status_id') : 1;
         $item->save();
 
         $this->saveMeta($item, $request);
         $this->saveCategories($item, $request);
+        //$this->saveClassifiers($item, $request);
         $this->saveIngredients($item, $request);
         $this->saveTags($item, $request);
         $this->saveProducts($item, $request);
@@ -257,6 +259,23 @@ class ArticlesController extends Controller
             $item->uncategorize($item->categories);
         }
     }
+
+    /**
+     * Сохраняем классификаторы.
+     *
+     * @param ArticleModel $item
+     * @param SaveArticleRequest $request
+     */
+    /*
+    private function saveClassifiers($item, $request)
+    {
+        if ($request->has('classifiers')) {
+            $item->syncIngredients(IngredientModel::whereIn('id', (array) $request->get('classifiers'))->get());
+        } else {
+            $item->detachIngredients($item->categories);
+        }
+    }
+    */
 
     /**
      * Сохраняем ингредиенты.
