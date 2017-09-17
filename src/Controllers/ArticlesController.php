@@ -51,7 +51,7 @@ class ArticlesController extends Controller
         if ($model == 'articles') {
             return [
                 ['data' => 'title', 'name' => 'title', 'title' => 'Заголовок'],
-                ['data' => 'status', 'name' => 'status.name', 'title' => 'Статус'],
+                ['data' => 'status', 'name' => 'status.name', 'title' => 'Статус', 'orderable' => false],
                 ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
                 ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
                 ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
