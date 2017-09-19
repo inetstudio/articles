@@ -224,7 +224,7 @@
                                                 <p>Список категорий пуст.</p>
                                             @endif
 
-                                            {!! Form::hidden('categories', '') !!}
+                                            {!! Form::hidden('categories', implode($item->categories()->pluck('id')->toArray(), ',')) !!}
 
                                         </div>
                                     </div>
