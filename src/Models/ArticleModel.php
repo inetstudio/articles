@@ -12,6 +12,7 @@ use InetStudio\Products\Traits\HasProducts;
 use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Categories\Traits\HasCategories;
+//use InetStudio\Classifiers\Traits\HasClassifiers;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Ingredients\Traits\HasIngredients;
@@ -86,6 +87,7 @@ class ArticleModel extends Model implements HasMediaConversions
     use SoftDeletes;
     use HasCategories;
     use HasMediaTrait;
+//    use HasClassifiers;
     use HasIngredients;
     use RevisionableTrait;
     use SluggableScopeHelpers;
@@ -198,7 +200,7 @@ class ArticleModel extends Model implements HasMediaConversions
             foreach (config('articles.images.conversions') as $collection => $image) {
                 foreach ($image as $crop) {
                     foreach ($crop as $conversion) {
-                        $imageConversion = $this->addMediaConversion($conversion['name'])->quality($quality);
+                        $imageConversion = $this->addMediaConversion($conversion['name']);
 
                         if (isset($conversion['size']['width'])) {
                             $imageConversion->width($conversion['size']['width']);
@@ -206,6 +208,17 @@ class ArticleModel extends Model implements HasMediaConversions
 
                         if (isset($conversion['size']['height'])) {
                             $imageConversion->height($conversion['size']['height']);
+                        }
+
+                        if (isset($conversion['fit']['width']) && isset($conversion['fit']['height'])) {
+                            $imageConversion->fit('max', $conversion['fit']['width'], $conversion['fit']['height']);
+                        }
+
+                        if (isset($conversion['quality'])) {
+                            $imageConversion->quality($conversion['quality']);
+                            $imageConversion->optimize();
+                        } else {
+                            $imageConversion->quality($quality);
                         }
 
                         $imageConversion->performOnCollections($collection);
