@@ -17,6 +17,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Ingredients\Traits\HasIngredients;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use InetStudio\SimpleCounters\Traits\HasSimpleCountersTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
@@ -91,6 +92,7 @@ class ArticleModel extends Model implements HasMediaConversions
     use HasIngredients;
     use RevisionableTrait;
     use SluggableScopeHelpers;
+    use HasSimpleCountersTrait;
 
     const HREF = '/article/';
 
