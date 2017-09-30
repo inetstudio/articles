@@ -12,6 +12,7 @@
     "require": {
       "inetstudio/admin-panel": "1.4.*",
       "inetstudio/categories": "1.4.*",
+      "inetstudio/experts": "1.4.*",
       "inetstudio/tags": "1.4.*",
       "inetstudio/ingredients": "1.4.*",
       "inetstudio/polls": "1.4.*",

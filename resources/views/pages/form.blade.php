@@ -56,6 +56,8 @@
 
             {!! Form::hidden('article_id', (!$item->id) ? '' : $item->id) !!}
 
+            {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}
+
             {!! Form::meta('', $item) !!}
 
             {!! Form::social_meta('', $item) !!}
