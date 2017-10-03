@@ -224,7 +224,7 @@ class ArticlesController extends Controller
         $this->saveProducts($item, $request);
         $this->saveImages($item, $request, ['og_image', 'preview', 'content']);
 
-        \Event::fire('inetstudio.articles.cache.clear', $item);
+        \Event::fire('inetstudio.articles.cache.clear');
 
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
 
@@ -438,6 +438,8 @@ class ArticlesController extends Controller
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
             $item->delete();
+
+            \Event::fire('inetstudio.articles.cache.clear');
 
             return response()->json([
                 'success' => true,
