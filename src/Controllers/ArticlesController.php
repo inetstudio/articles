@@ -3,7 +3,7 @@
 namespace InetStudio\Articles\Controllers;
 
 use Illuminate\Http\Request;
-use Yajra\Datatables\Datatables;
+use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Articles\Models\ArticleModel;
@@ -38,10 +38,10 @@ class ArticlesController extends Controller
     /**
      * Список статей.
      *
-     * @param Datatables $dataTable
+     * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Datatables $dataTable)
+    public function index(DataTables $dataTable)
     {
         $table = $this->generateTable($dataTable, 'articles', 'index');
 
@@ -57,19 +57,19 @@ class ArticlesController extends Controller
     {
         $items = ArticleModel::with('status');
 
-        return Datatables::of($items)
+        return DataTables::of($items)
             ->setTransformer(new ArticleTransformer)
-            ->escapeColumns(['status', 'actions'])
+            ->rawColumns(['status', 'actions'])
             ->make();
     }
 
     /**
      * Добавление статьи.
      *
-     * @param Datatables $dataTable
+     * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(Datatables $dataTable)
+    public function create(DataTables $dataTable)
     {
         $table = $this->generateTable($dataTable, 'products', 'embedded');
 
@@ -96,11 +96,11 @@ class ArticlesController extends Controller
     /**
      * Редактирование статьи.
      *
-     * @param Datatables $dataTable
+     * @param DataTables $dataTable
      * @param null $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Datatables $dataTable, $id = null)
+    public function edit(DataTables $dataTable, $id = null)
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
             $categories = CategoryModel::getTree();

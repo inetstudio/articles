@@ -4,6 +4,7 @@ namespace InetStudio\Articles\Models;
 
 use Spatie\Tags\HasTags;
 use Cocur\Slugify\Slugify;
+use Spatie\MediaLibrary\Media;
 use Phoenix\EloquentMeta\MetaTrait;
 use InetStudio\Tags\Models\TagModel;
 use Illuminate\Database\Eloquent\Model;
@@ -193,8 +194,10 @@ class ArticleModel extends Model implements HasMediaConversions
 
     /**
      * Регистрируем преобразования изображений.
+     *
+     * @param Media|null $media
      */
-    public function registerMediaConversions()
+    public function registerMediaConversions(Media $media = null)
     {
         $quality = (config('articles.images.quality')) ? config('articles.images.quality') : 75;
 
