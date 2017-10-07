@@ -22,7 +22,7 @@ use InetStudio\SimpleCounters\Traits\HasSimpleCountersTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
- * InetStudio\Articles\Models\ArticleModel
+ * InetStudio\Articles\Models\ArticleModel.
  *
  * @property int $id
  * @property string $title
@@ -179,7 +179,7 @@ class ArticleModel extends Model implements HasMediaConversions
      */
     public function getHrefAttribute()
     {
-        return url(self::HREF . (!empty($this->slug) ? $this->slug : $this->id));
+        return url(self::HREF.(! empty($this->slug) ? $this->slug : $this->id));
     }
 
     /**
