@@ -41,6 +41,5 @@ class ArticlesServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
     }
 }

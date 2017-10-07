@@ -246,7 +246,7 @@ class ArticlesController extends Controller
                         'title' => $article->title,
                         'href' => url($article->href),
                         'preview' => ($article->getFirstMedia('preview')) ? url($article->getFirstMedia('preview')->getUrl('preview_sidebar')) : '',
-                    ]
+                    ],
                 ];
             }
         } else {
