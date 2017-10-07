@@ -230,6 +230,8 @@ class ArticlesController extends Controller
      */
     public function getSuggestions(Request $request)
     {
+        $data = [];
+
         if ($request->filled('type') and $request->get('type') == 'autocomplete') {
             $search = $request->get('query');
             $data['suggestions'] = [];
@@ -249,7 +251,6 @@ class ArticlesController extends Controller
             }
         } else {
             $search = $request->get('q');
-            $data = [];
 
             $data['items'] = ArticleModel::select(['id', 'title as name'])->where('title', 'LIKE', '%'.$search.'%')->get()->toArray();
         }
