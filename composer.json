@@ -10,18 +10,25 @@
       }
     ],
     "require": {
-      "inetstudio/admin-panel": "1.4.*",
-      "inetstudio/categories": "1.4.*",
-      "inetstudio/experts": "1.4.*",
-      "inetstudio/tags": "1.4.*",
-      "inetstudio/ingredients": "1.4.*",
-      "inetstudio/polls": "1.4.*",
-      "inetstudio/products": "1.4.*",
-      "inetstudio/statuses": "1.4.*"
+      "inetstudio/admin-panel": "1.5.*",
+      "inetstudio/categories": "1.5.*",
+      "inetstudio/experts": "1.5.*",
+      "inetstudio/tags": "1.5.*",
+      "inetstudio/ingredients": "1.5.*",
+      "inetstudio/polls": "1.5.*",
+      "inetstudio/products": "1.5.*",
+      "inetstudio/statuses": "1.5.*"
     },
     "autoload": {
       "psr-4": {
         "InetStudio\\Articles\\": "src/"
+      }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "InetStudio\\Articles\\ArticlesServiceProvider"
+        ]
       }
     }
 }
