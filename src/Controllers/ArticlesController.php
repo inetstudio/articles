@@ -161,6 +161,9 @@ class ArticlesController extends Controller
         $this->saveProducts($item, $request);
         $this->saveImages($item, $request, ['og_image', 'preview', 'content'], 'articles');
 
+        // Обновление поискового индекса.
+        $item->searchable();
+
         \Event::fire('inetstudio.articles.cache.clear');
 
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
