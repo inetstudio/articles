@@ -11,6 +11,7 @@ use InetStudio\Tags\Models\TagModel;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use InetStudio\Products\Traits\HasProducts;
+use InetStudio\Comments\Traits\HasComments;
 use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Categories\Traits\HasCategories;
@@ -87,6 +88,7 @@ class ArticleModel extends Model implements HasMediaConversions
     use MetaTrait;
     use Sluggable;
     use Searchable;
+    use HasComments;
     use HasProducts;
     use SoftDeletes;
     use HasCategories;
