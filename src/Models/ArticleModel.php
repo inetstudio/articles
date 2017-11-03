@@ -15,11 +15,11 @@ use InetStudio\Comments\Traits\HasComments;
 use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Categories\Traits\HasCategories;
-//use InetStudio\Classifiers\Traits\HasClassifiers;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Ingredients\Traits\HasIngredients;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use InetStudio\Classifiers\Models\Traits\HasClassifiers;
 use InetStudio\SimpleCounters\Traits\HasSimpleCountersTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
@@ -93,7 +93,7 @@ class ArticleModel extends Model implements HasMediaConversions
     use SoftDeletes;
     use HasCategories;
     use HasMediaTrait;
-//    use HasClassifiers;
+    use HasClassifiers;
     use HasIngredients;
     use RevisionableTrait;
     use SluggableScopeHelpers;

@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Categories\Models\CategoryModel;
-//use InetStudio\Classifiers\Models\ClassifierModel;
 use InetStudio\AdminPanel\Traits\DatatablesTrait;
 use InetStudio\Tags\Traits\TagsManipulationsTrait;
 use InetStudio\Articles\Requests\SaveArticleRequest;
@@ -19,6 +18,7 @@ use InetStudio\AdminPanel\Traits\ImagesManipulationsTrait;
 use InetStudio\Products\Traits\ProductsManipulationsTrait;
 use InetStudio\Categories\Traits\CategoriesManipulationsTrait;
 use InetStudio\Ingredients\Traits\IngredientsManipulationsTrait;
+use InetStudio\Classifiers\Http\Controllers\Back\Traits\ClassifiersManipulationsTrait;
 
 /**
  * Контроллер для управления статьями.
@@ -33,6 +33,7 @@ class ArticlesController extends Controller
     use ImagesManipulationsTrait;
     use ProductsManipulationsTrait;
     use CategoriesManipulationsTrait;
+    use ClassifiersManipulationsTrait;
     use IngredientsManipulationsTrait;
 
     /**
@@ -155,9 +156,9 @@ class ArticlesController extends Controller
 
         $this->saveMeta($item, $request);
         $this->saveCategories($item, $request);
-        //$this->saveClassifiers($item, $request);
         $this->saveIngredients($item, $request);
         $this->saveTags($item, $request);
+        $this->saveClassifiers($item, $request);
         $this->saveProducts($item, $request);
         $this->saveImages($item, $request, ['og_image', 'preview', 'content'], 'articles');
 
@@ -170,23 +171,6 @@ class ArticlesController extends Controller
 
         return redirect()->to(route('back.articles.edit', $item->fresh()->id));
     }
-
-    /**
-     * Сохраняем классификаторы.
-     *
-     * @param ArticleModel $item
-     * @param SaveArticleRequest $request
-     */
-    /*
-    private function saveClassifiers($item, $request)
-    {
-        if ($request->filled('classifiers')) {
-            $item->syncIngredients(IngredientModel::whereIn('id', (array) $request->get('classifiers'))->get());
-        } else {
-            $item->detachIngredients($item->categories);
-        }
-    }
-    */
 
     /**
      * Удаление статьи.
