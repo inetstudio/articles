@@ -8,16 +8,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Categories\Models\CategoryModel;
-use InetStudio\AdminPanel\Traits\DatatablesTrait;
 use InetStudio\Tags\Traits\TagsManipulationsTrait;
 use InetStudio\Articles\Requests\SaveArticleRequest;
 use Cviebrock\EloquentSluggable\Services\SlugService;
-use InetStudio\AdminPanel\Traits\MetaManipulationsTrait;
 use InetStudio\Articles\Transformers\ArticleTransformer;
-use InetStudio\AdminPanel\Traits\ImagesManipulationsTrait;
 use InetStudio\Products\Traits\ProductsManipulationsTrait;
 use InetStudio\Categories\Traits\CategoriesManipulationsTrait;
 use InetStudio\Ingredients\Traits\IngredientsManipulationsTrait;
+use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
+use InetStudio\AdminPanel\Http\Controllers\Back\Traits\MetaManipulationsTrait;
+use InetStudio\AdminPanel\Http\Controllers\Back\Traits\ImagesManipulationsTrait;
 use InetStudio\Classifiers\Http\Controllers\Back\Traits\ClassifiersManipulationsTrait;
 
 /**
