@@ -54,6 +54,14 @@ class SetupCommand extends Command
     private function initCommands()
     {
         $this->calls = [
+            (! class_exists('CreateLikeCounterTable')) ? [
+                'description' => 'Likeable setup',
+                'command' => 'vendor:publish',
+                'params' => [
+                    '--provider' => 'Cog\Likeable\Providers\LikeableServiceProvider',
+                    '--tag' => 'migrations',
+                ],
+            ] : [],
             [
                 'description' => 'Publish migrations',
                 'command' => 'vendor:publish',

@@ -6,19 +6,21 @@ use Spatie\Tags\HasTags;
 use Cocur\Slugify\Slugify;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\Media;
+use Cog\Likeable\Traits\Likeable;
 use Phoenix\EloquentMeta\MetaTrait;
 use InetStudio\Tags\Models\TagModel;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use InetStudio\Products\Traits\HasProducts;
-use InetStudio\Comments\Models\Traits\HasComments;
 use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Categories\Traits\HasCategories;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Ingredients\Traits\HasIngredients;
+use InetStudio\Comments\Models\Traits\HasComments;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use Cog\Likeable\Contracts\Likeable as LikeableContract;
 use InetStudio\Classifiers\Models\Traits\HasClassifiers;
 use InetStudio\SimpleCounters\Traits\HasSimpleCountersTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
@@ -82,9 +84,10 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel withoutTrashed()
  * @mixin \Eloquent
  */
-class ArticleModel extends Model implements HasMediaConversions
+class ArticleModel extends Model implements HasMediaConversions, LikeableContract
 {
     use HasTags;
+    use Likeable;
     use MetaTrait;
     use Sluggable;
     use Searchable;

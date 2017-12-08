@@ -10,6 +10,7 @@
       }
     ],
     "require": {
+      "cybercog/laravel-likeable": "^3.0",
       "inetstudio/admin-panel": "1.5.*",
       "inetstudio/categories": "1.5.*",
       "inetstudio/classifiers": "1.5.*",
