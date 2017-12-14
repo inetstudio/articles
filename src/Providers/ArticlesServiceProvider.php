@@ -57,7 +57,7 @@ class ArticlesServiceProvider extends ServiceProvider
     protected function registerPublishes(): void
     {
         $this->publishes([
-            __DIR__.'/../../config/comments.php' => config_path('articles.php'),
+            __DIR__.'/../../config/articles.php' => config_path('articles.php'),
         ], 'config');
 
         $this->mergeConfigFrom(
