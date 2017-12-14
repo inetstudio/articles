@@ -14,15 +14,17 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use InetStudio\Products\Traits\HasProducts;
 use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use InetStudio\Categories\Traits\HasCategories;
+use InetStudio\Rating\Models\Traits\Rateable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Venturecraft\Revisionable\RevisionableTrait;
-use InetStudio\Ingredients\Traits\HasIngredients;
 use InetStudio\Comments\Models\Traits\HasComments;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use InetStudio\Categories\Models\Traits\HasCategories;
 use Cog\Likeable\Contracts\Likeable as LikeableContract;
 use InetStudio\Classifiers\Models\Traits\HasClassifiers;
+use InetStudio\Ingredients\Models\Traits\HasIngredients;
 use InetStudio\SimpleCounters\Traits\HasSimpleCountersTrait;
+use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 /**
@@ -84,10 +86,11 @@ use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel withoutTrashed()
  * @mixin \Eloquent
  */
-class ArticleModel extends Model implements HasMediaConversions, LikeableContract
+class ArticleModel extends Model implements HasMediaConversions, LikeableContract, RateableContract
 {
     use HasTags;
     use Likeable;
+    use Rateable;
     use MetaTrait;
     use Sluggable;
     use Searchable;

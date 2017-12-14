@@ -1,6 +1,6 @@
 <?php
 
-namespace InetStudio\Articles\Requests;
+namespace InetStudio\Articles\Http\Requests\Back;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class SaveArticleRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Определить, авторизован ли пользователь для этого запроса.
      *
      * @return bool
      */

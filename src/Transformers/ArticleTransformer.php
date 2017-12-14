@@ -1,6 +1,6 @@
 <?php
 
-namespace Inetstudio\Articles\Transformers;
+namespace InetStudio\Articles\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use InetStudio\Articles\Models\ArticleModel;
@@ -8,20 +8,22 @@ use InetStudio\Articles\Models\ArticleModel;
 class ArticleTransformer extends TransformerAbstract
 {
     /**
+     * Подготовка данных для отображения в таблице.
+     *
      * @param ArticleModel $article
      * @return array
      */
-    public function transform(ArticleModel $article)
+    public function transform(ArticleModel $article): array
     {
         return [
             'id' => (int) $article->id,
             'title' => $article->title,
-            'status' => view('admin.module.ingredients::partials.datatables.status', [
+            'status' => view('admin.module.articles::back.partials.datatables.status', [
                 'status' => $article->status,
             ])->render(),
             'created_at' => (string) $article->created_at,
             'updated_at' => (string) $article->updated_at,
-            'actions' => view('admin.module.articles::partials.datatables.actions', [
+            'actions' => view('admin.module.articles::back.partials.datatables.actions', [
                 'id' => $article->id,
                 'href' => $article->href,
             ])->render(),

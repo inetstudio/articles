@@ -2,6 +2,7 @@
 
 @php
     $title = ($item->id) ? 'Редактирование статьи' : 'Добавление статьи';
+    $item->rate(4);
 @endphp
 
 @section('title', $title)
@@ -24,7 +25,7 @@
 @section('content')
 
     @push('breadcrumbs')
-        @include('admin.module.articles::partials.breadcrumbs')
+        @include('admin.module.articles::back.partials.breadcrumbs')
         <li>
             <a href="{{ route('back.articles.index') }}">Статьи</a>
         </li>
@@ -213,7 +214,7 @@
                                                 <div class="jstree-list" data-target="categories" data-multiple="true" data-cascade="up">
                                                     <ul>
                                                         @foreach ($categories as $category)
-                                                            @include('admin.module.categories::partials.tree.form_category', [
+                                                            @include('admin.module.categories::back.partials.tree.form_category', [
                                                                 'id' => 'parentCategoryId',
                                                                 'item' => $category,
                                                                 'currentId' => null,
@@ -295,9 +296,9 @@
         {!! Form::close()!!}
     </div>
 
-    @include('admin.module.articles::pages.modals.suggestion')
+    @include('admin.module.articles::back.pages.modals.suggestion')
     @include('admin.module.experts::pages.modals.suggestion')
-    @include('admin.module.ingredients::pages.modals.suggestion')
+    @include('admin.module.ingredients::back.pages.modals.suggestion')
     @include('admin.module.polls::pages.modals.form')
 
 @endsection

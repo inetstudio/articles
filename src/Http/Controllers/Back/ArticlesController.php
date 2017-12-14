@@ -1,24 +1,28 @@
 <?php
 
-namespace InetStudio\Articles\Controllers;
+namespace InetStudio\Articles\Http\Controllers\Back;
 
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Categories\Models\CategoryModel;
+use InetStudio\Articles\Events\ModifyArticleEvent;
 use InetStudio\Tags\Traits\TagsManipulationsTrait;
-use InetStudio\Articles\Requests\SaveArticleRequest;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use InetStudio\Articles\Transformers\ArticleTransformer;
 use InetStudio\Products\Traits\ProductsManipulationsTrait;
-use InetStudio\Categories\Traits\CategoriesManipulationsTrait;
-use InetStudio\Ingredients\Traits\IngredientsManipulationsTrait;
+use InetStudio\Articles\Http\Requests\Back\SaveArticleRequest;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\MetaManipulationsTrait;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\ImagesManipulationsTrait;
+use InetStudio\Categories\Http\Controllers\Back\Traits\CategoriesManipulationsTrait;
 use InetStudio\Classifiers\Http\Controllers\Back\Traits\ClassifiersManipulationsTrait;
+use InetStudio\Ingredients\Http\Controllers\Back\Traits\IngredientsManipulationsTrait;
 
 /**
  * Контроллер для управления статьями.
@@ -42,11 +46,11 @@ class ArticlesController extends Controller
      * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(DataTables $dataTable)
+    public function index(DataTables $dataTable): View
     {
         $table = $this->generateTable($dataTable, 'articles', 'index');
 
-        return view('admin.module.articles::pages.index', compact('table'));
+        return view('admin.module.articles::back.pages.index', compact('table'));
     }
 
     /**
@@ -70,13 +74,13 @@ class ArticlesController extends Controller
      * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(DataTables $dataTable)
+    public function create(DataTables $dataTable): View
     {
         $table = $this->generateTable($dataTable, 'products', 'embedded');
 
         $categories = CategoryModel::getTree();
 
-        return view('admin.module.articles::pages.form', [
+        return view('admin.module.articles::back.pages.form', [
             'item' => new ArticleModel(),
             'categories' => $categories,
             'productsTable' => $table,
@@ -89,7 +93,7 @@ class ArticlesController extends Controller
      * @param SaveArticleRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(SaveArticleRequest $request)
+    public function store(SaveArticleRequest $request): RedirectResponse
     {
         return $this->save($request);
     }
@@ -101,14 +105,14 @@ class ArticlesController extends Controller
      * @param null $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(DataTables $dataTable, $id = null)
+    public function edit(DataTables $dataTable, $id = null): View
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
             $categories = CategoryModel::getTree();
 
             $table = $this->generateTable($dataTable, 'products', 'embedded');
 
-            return view('admin.module.articles::pages.form', [
+            return view('admin.module.articles::back.pages.form', [
                 'item' => $item,
                 'categories' => $categories,
                 'productsTable' => $table,
@@ -125,7 +129,7 @@ class ArticlesController extends Controller
      * @param null $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(SaveArticleRequest $request, $id = null)
+    public function update(SaveArticleRequest $request, $id = null): RedirectResponse
     {
         return $this->save($request, $id);
     }
@@ -137,7 +141,7 @@ class ArticlesController extends Controller
      * @param null $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function save($request, $id = null)
+    private function save(SaveArticleRequest $request, $id = null): RedirectResponse
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
             $action = 'отредактирована';
@@ -165,11 +169,11 @@ class ArticlesController extends Controller
         // Обновление поискового индекса.
         $item->searchable();
 
-        \Event::fire('inetstudio.articles.cache.clear');
+        event(new ModifyArticleEvent($item));
 
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
 
-        return redirect()->to(route('back.articles.edit', $item->fresh()->id));
+        return response()->redirectToRoute('back.articles.edit', $item->fresh()->id);
     }
 
     /**
@@ -178,12 +182,13 @@ class ArticlesController extends Controller
      * @param null $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id = null)
+    public function destroy($id = null): JsonResponse
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
+
             $item->delete();
 
-            \Event::fire('inetstudio.articles.cache.clear');
+            event(new ModifyArticleEvent($item));
 
             return response()->json([
                 'success' => true,
@@ -201,7 +206,7 @@ class ArticlesController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSlug(Request $request)
+    public function getSlug(Request $request): JsonResponse
     {
         $name = $request->get('name');
         $slug = SlugService::createSlug(ArticleModel::class, 'slug', $name);
@@ -215,7 +220,7 @@ class ArticlesController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSuggestions(Request $request)
+    public function getSuggestions(Request $request): JsonResponse
     {
         $data = [];
 
