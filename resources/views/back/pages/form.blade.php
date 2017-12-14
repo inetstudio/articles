@@ -2,7 +2,6 @@
 
 @php
     $title = ($item->id) ? 'Редактирование статьи' : 'Добавление статьи';
-    $item->rate(4);
 @endphp
 
 @section('title', $title)
