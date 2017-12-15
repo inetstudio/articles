@@ -23,9 +23,9 @@ use InetStudio\Categories\Models\Traits\HasCategories;
 use Cog\Likeable\Contracts\Likeable as LikeableContract;
 use InetStudio\Classifiers\Models\Traits\HasClassifiers;
 use InetStudio\Ingredients\Models\Traits\HasIngredients;
-use InetStudio\SimpleCounters\Traits\HasSimpleCountersTrait;
 use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
+use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
 
 /**
  * InetStudio\Articles\Models\ArticleModel.
