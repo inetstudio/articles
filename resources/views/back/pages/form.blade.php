@@ -296,9 +296,9 @@
     </div>
 
     @include('admin.module.articles::back.pages.modals.suggestion')
-    @include('admin.module.experts::pages.modals.suggestion')
+    @include('admin.module.experts::back.pages.modals.suggestion')
     @include('admin.module.ingredients::back.pages.modals.suggestion')
-    @include('admin.module.polls::pages.modals.form')
+    @include('admin.module.polls::back.pages.modals.form')
 
 @endsection
 
