@@ -29,8 +29,9 @@ use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
 
+
 /**
- * InetStudio\Articles\Models\ArticleModel.
+ * InetStudio\Articles\Models\ArticleModel
  *
  * @property int $id
  * @property string $title
@@ -39,50 +40,78 @@ use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
  * @property string|null $content
  * @property string|null $publish_date
  * @property string $webmaster_id
- * @property int|null $status_id
+ * @property int $status_id
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
  * @property \Kalnoy\Nestedset\Collection|\InetStudio\Categories\Models\CategoryModel[] $categories
+ * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Classifiers\Models\ClassifierModel[] $classifiers
+ * @property-read \Kalnoy\Nestedset\Collection|\InetStudio\Comments\Models\CommentModel[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\SimpleCounters\Models\SimpleCounterModel[] $counters
+ * @property-read \Cog\Likeable\Models\LikeCounter $dislikesCounter
+ * @property-read bool $disliked
+ * @property-read int $dislikes_count
  * @property-read \Illuminate\Contracts\Routing\UrlGenerator|string $href
+ * @property-read bool $liked
+ * @property-read int $likes_count
+ * @property-read int $likes_diff_dislikes_count
+ * @property-read bool $rated
+ * @property-read float $rating
+ * @property-read string $type
+ * @property-read float $user_rate
  * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Ingredients\Models\IngredientModel[] $ingredients
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Cog\Likeable\Models\Like[] $likesAndDislikes
+ * @property-read \Cog\Likeable\Models\LikeCounter $likesCounter
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
- * @property-read \Illuminate\Database\Eloquent\Collection|\Phoenix\EloquentMeta\Meta[] $meta
+ * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\Meta\Models\MetaModel[] $meta
  * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Products\Models\ProductModel[] $products
+ * @property-read \InetStudio\Rating\Models\RatingTotalModel $ratingTotal
+ * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\Rating\Models\RatingModel[] $ratings
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Tags\Models\TagModel[] $tags
  * @property-read \InetStudio\Statuses\Models\StatusModel $status
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel findSimilarSlugs(\Illuminate\Database\Eloquent\Model $model, $attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel orderByDislikesCount($direction = 'desc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel orderByLikesCount($direction = 'desc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel orderByRating($direction = 'desc')
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereDislikedBy($userId = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereLikedBy($userId = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel wherePublishDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereRatedBy($userId = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereWebmasterId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAllCategories($categories, $column = 'slug')
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAllClassifiers($classifiers, $column = 'id')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAllIngredients($ingredients, $column = 'slug')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAllProducts($products, $column = 'id')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAllTags($tags, $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAnyCategories($categories, $column = 'slug')
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAnyClassifiers($classifiers, $column = 'id')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAnyIngredients($ingredients, $column = 'slug')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAnyProducts($products, $column = 'id')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withAnyTags($tags, $type = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withCategories($categories, $column = 'slug')
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withClassifiers($classifiers, $column = 'id')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withIngredients($ingredients, $column = 'slug')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withProducts($products, $column = 'id')
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutAnyCategories()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutAnyClassifiers()
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutAnyIngredients()
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutAnyProducts()
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutCategories($categories, $column = 'slug')
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutClassifiers($classifiers, $column = 'slug')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutIngredients($ingredients, $column = 'slug')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel withoutProducts($products, $column = 'id')
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel withoutTrashed()

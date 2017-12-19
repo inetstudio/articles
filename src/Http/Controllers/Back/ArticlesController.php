@@ -27,7 +27,8 @@ use InetStudio\Ingredients\Http\Controllers\Back\Traits\IngredientsManipulations
 /**
  * Контроллер для управления статьями.
  *
- * Class ContestByTagStatusesController
+ * Class ArticlesController
+ * @package InetStudio\Articles\Http\Controllers\Back
  */
 class ArticlesController extends Controller
 {
