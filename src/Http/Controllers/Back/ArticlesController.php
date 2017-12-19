@@ -16,8 +16,8 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 use InetStudio\Articles\Transformers\ArticleTransformer;
 use InetStudio\Articles\Http\Requests\Back\SaveArticleRequest;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
+use InetStudio\Meta\Http\Controllers\Back\Traits\MetaManipulationsTrait;
 use InetStudio\Tags\Http\Controllers\Back\Traits\TagsManipulationsTrait;
-use InetStudio\AdminPanel\Http\Controllers\Back\Traits\MetaManipulationsTrait;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\ImagesManipulationsTrait;
 use InetStudio\Products\Http\Controllers\Back\Traits\ProductsManipulationsTrait;
 use InetStudio\Categories\Http\Controllers\Back\Traits\CategoriesManipulationsTrait;
@@ -45,6 +45,7 @@ class ArticlesController extends Controller
      *
      * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
      */
     public function index(DataTables $dataTable): View
     {
@@ -54,9 +55,10 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Datatables serverside.
+     * DataTables ServerSide.
      *
      * @return mixed
+     * @throws \Exception
      */
     public function data()
     {
@@ -73,6 +75,7 @@ class ArticlesController extends Controller
      *
      * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
      */
     public function create(DataTables $dataTable): View
     {
@@ -104,6 +107,7 @@ class ArticlesController extends Controller
      * @param DataTables $dataTable
      * @param null $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
      */
     public function edit(DataTables $dataTable, $id = null): View
     {
@@ -173,7 +177,9 @@ class ArticlesController extends Controller
 
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
 
-        return response()->redirectToRoute('back.articles.edit', $item->fresh()->id);
+        return response()->redirectToRoute('back.articles.edit', [
+            $item->fresh()->id,
+        ]);
     }
 
     /**

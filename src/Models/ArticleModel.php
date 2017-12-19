@@ -7,14 +7,15 @@ use Cocur\Slugify\Slugify;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\Media;
 use Cog\Likeable\Traits\Likeable;
-use Phoenix\EloquentMeta\MetaTrait;
 use InetStudio\Tags\Models\TagModel;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use InetStudio\Meta\Models\Traits\Metable;
 use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Rating\Models\Traits\Rateable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Comments\Models\Traits\HasComments;
 use InetStudio\Products\Models\Traits\HasProducts;
@@ -23,6 +24,7 @@ use InetStudio\Categories\Models\Traits\HasCategories;
 use Cog\Likeable\Contracts\Likeable as LikeableContract;
 use InetStudio\Classifiers\Models\Traits\HasClassifiers;
 use InetStudio\Ingredients\Models\Traits\HasIngredients;
+use InetStudio\Meta\Contracts\Models\Traits\MetableContract;
 use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
@@ -86,12 +88,12 @@ use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel withoutTrashed()
  * @mixin \Eloquent
  */
-class ArticleModel extends Model implements HasMediaConversions, LikeableContract, RateableContract
+class ArticleModel extends Model implements MetableContract, HasMediaConversions, LikeableContract, RateableContract
 {
     use HasTags;
+    use Metable;
     use Likeable;
     use Rateable;
-    use MetaTrait;
     use Sluggable;
     use Searchable;
     use HasComments;
@@ -245,6 +247,7 @@ class ArticleModel extends Model implements HasMediaConversions, LikeableContrac
      * Регистрируем преобразования изображений.
      *
      * @param Media|null $media
+     * @throws InvalidManipulation
      */
     public function registerMediaConversions(Media $media = null)
     {
