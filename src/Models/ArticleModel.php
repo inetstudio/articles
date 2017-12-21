@@ -6,7 +6,6 @@ use Spatie\Tags\HasTags;
 use Cocur\Slugify\Slugify;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\Media;
-use Cog\Likeable\Traits\Likeable;
 use InetStudio\Tags\Models\TagModel;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -19,16 +18,16 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Comments\Models\Traits\HasComments;
 use InetStudio\Products\Models\Traits\HasProducts;
+use InetStudio\Favorites\Models\Traits\Favoritable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use InetStudio\Categories\Models\Traits\HasCategories;
-use Cog\Likeable\Contracts\Likeable as LikeableContract;
 use InetStudio\Classifiers\Models\Traits\HasClassifiers;
 use InetStudio\Ingredients\Models\Traits\HasIngredients;
 use InetStudio\Meta\Contracts\Models\Traits\MetableContract;
 use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
-
+use InetStudio\Favorites\Contracts\Models\Traits\FavoritableContract;
 
 /**
  * InetStudio\Articles\Models\ArticleModel
@@ -48,20 +47,15 @@ use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
  * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Classifiers\Models\ClassifierModel[] $classifiers
  * @property-read \Kalnoy\Nestedset\Collection|\InetStudio\Comments\Models\CommentModel[] $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\SimpleCounters\Models\SimpleCounterModel[] $counters
- * @property-read \Cog\Likeable\Models\LikeCounter $dislikesCounter
- * @property-read bool $disliked
- * @property-read int $dislikes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\Favorites\Models\FavoriteModel[] $favorites
+ * @property-read \InetStudio\Favorites\Models\FavoriteTotalModel $favoritesTotal
+ * @property-read bool $favorited
  * @property-read \Illuminate\Contracts\Routing\UrlGenerator|string $href
- * @property-read bool $liked
- * @property-read int $likes_count
- * @property-read int $likes_diff_dislikes_count
  * @property-read bool $rated
  * @property-read float $rating
  * @property-read string $type
  * @property-read float $user_rate
  * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Ingredients\Models\IngredientModel[] $ingredients
- * @property-read \Illuminate\Database\Eloquent\Collection|\Cog\Likeable\Models\Like[] $likesAndDislikes
- * @property-read \Cog\Likeable\Models\LikeCounter $likesCounter
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Media[] $media
  * @property-read \Illuminate\Database\Eloquent\Collection|\InetStudio\Meta\Models\MetaModel[] $meta
  * @property \Illuminate\Database\Eloquent\Collection|\InetStudio\Products\Models\ProductModel[] $products
@@ -73,17 +67,15 @@ use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel findSimilarSlugs($attribute, $config, $slug)
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel orderByDislikesCount($direction = 'desc')
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel orderByLikesCount($direction = 'desc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel orderByFavorites($collection = 'default', $direction = 'desc')
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel orderByRating($direction = 'desc')
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereDislikedBy($userId = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereFavoritedBy($collection = 'default', $userId = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereLikedBy($userId = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel wherePublishDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereRatedBy($userId = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Articles\Models\ArticleModel whereSlug($value)
@@ -117,14 +109,14 @@ use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Articles\Models\ArticleModel withoutTrashed()
  * @mixin \Eloquent
  */
-class ArticleModel extends Model implements MetableContract, HasMediaConversions, LikeableContract, RateableContract
+class ArticleModel extends Model implements MetableContract, HasMediaConversions, FavoritableContract, RateableContract
 {
     use HasTags;
     use Metable;
-    use Likeable;
     use Rateable;
     use Sluggable;
     use Searchable;
+    use Favoritable;
     use HasComments;
     use HasProducts;
     use SoftDeletes;

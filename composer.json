@@ -10,12 +10,12 @@
       }
     ],
     "require": {
-      "cybercog/laravel-likeable": "^3.0",
       "inetstudio/admin-panel": "1.5.*",
       "inetstudio/categories": "1.5.*",
       "inetstudio/classifiers": "1.5.*",
       "inetstudio/comments": "1.5.*",
       "inetstudio/experts": "1.5.*",
+      "inetstudio/favorites": "1.5.*",
       "inetstudio/tags": "1.5.*",
       "inetstudio/ingredients": "1.5.*",
       "inetstudio/polls": "1.5.*",
