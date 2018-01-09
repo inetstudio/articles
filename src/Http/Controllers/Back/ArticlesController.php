@@ -216,7 +216,7 @@ class ArticlesController extends Controller
     public function getSlug(Request $request): JsonResponse
     {
         $name = $request->get('name');
-        $slug = SlugService::createSlug(ArticleModel::class, 'slug', $name);
+        $slug = ($name) ? SlugService::createSlug(ArticleModel::class, 'slug', $name) : '';
 
         return response()->json($slug);
     }
