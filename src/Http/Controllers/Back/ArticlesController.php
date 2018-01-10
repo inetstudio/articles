@@ -13,7 +13,7 @@ use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Categories\Models\CategoryModel;
 use InetStudio\Articles\Events\ModifyArticleEvent;
 use Cviebrock\EloquentSluggable\Services\SlugService;
-use InetStudio\Articles\Transformers\ArticleTransformer;
+use InetStudio\Articles\Transformers\Back\ArticleTransformer;
 use InetStudio\Articles\Http\Requests\Back\SaveArticleRequest;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 use InetStudio\Meta\Http\Controllers\Back\Traits\MetaManipulationsTrait;

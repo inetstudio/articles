@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use InetStudio\Articles\Events\ModifyArticleEvent;
 use InetStudio\Articles\Console\Commands\SetupCommand;
+use InetStudio\Articles\Services\Front\ArticlesService;
 use InetStudio\Articles\Listeners\ClearArticlesCacheListener;
 use InetStudio\Articles\Console\Commands\CreateFoldersCommand;
+use InetStudio\Articles\Contracts\Services\ArticlesServiceContract;
 
 class ArticlesServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,7 @@ class ArticlesServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->registerBindings();
     }
 
     /**
@@ -102,5 +105,15 @@ class ArticlesServiceProvider extends ServiceProvider
     protected function registerEvents(): void
     {
         Event::listen(ModifyArticleEvent::class, ClearArticlesCacheListener::class);
+    }
+
+    /**
+     * Регистрация привязок, алиасов и сторонних провайдеров сервисов.
+     *
+     * @return void
+     */
+    protected function registerBindings(): void
+    {
+        $this->app->singleton(ArticlesServiceContract::class, ArticlesService::class);
     }
 }

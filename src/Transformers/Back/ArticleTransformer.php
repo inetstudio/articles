@@ -1,6 +1,6 @@
 <?php
 
-namespace InetStudio\Articles\Transformers;
+namespace InetStudio\Articles\Transformers\Back;
 
 use League\Fractal\TransformerAbstract;
 use InetStudio\Articles\Models\ArticleModel;
