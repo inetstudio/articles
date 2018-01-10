@@ -58,7 +58,9 @@ class ArticlesFeedItemsTransformer extends TransformerAbstract
     {
         foreach ($article->revisionHistory as $history) {
             if ($history->key == 'created_at' && ! $history->old_value) {
-                return $history->userResponsible()->name;
+                $user = $history->userResponsible();
+
+                return ($user) ? $user->name : '';
             }
         }
 
