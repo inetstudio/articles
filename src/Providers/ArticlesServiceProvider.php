@@ -11,6 +11,10 @@ use InetStudio\Articles\Listeners\ClearArticlesCacheListener;
 use InetStudio\Articles\Console\Commands\CreateFoldersCommand;
 use InetStudio\Articles\Contracts\Services\ArticlesServiceContract;
 
+/**
+ * Class ArticlesServiceProvider
+ * @package InetStudio\Articles\Providers
+ */
 class ArticlesServiceProvider extends ServiceProvider
 {
     /**
@@ -114,6 +118,6 @@ class ArticlesServiceProvider extends ServiceProvider
      */
     protected function registerBindings(): void
     {
-        $this->app->singleton(ArticlesServiceContract::class, ArticlesService::class);
+        $this->app->bind(ArticlesServiceContract::class, ArticlesService::class);
     }
 }
