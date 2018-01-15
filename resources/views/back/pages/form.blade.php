@@ -6,21 +6,6 @@
 
 @section('title', $title)
 
-@pushonce('styles:jstree')
-    <!-- JSTREE -->
-    <link href="{!! asset('admin/css/plugins/jstree/style.min.css') !!}" rel="stylesheet">
-@endpushonce
-
-@pushonce('styles:datatables')
-    <!-- DATATABLES -->
-    <link href="{!! asset('admin/css/plugins/datatables/datatables.min.css') !!}" rel="stylesheet">
-@endpushonce
-
-@pushonce('styles:products_custom')
-    <!-- CUSTOM STYLE -->
-    <link href="{!! asset('admin/css/modules/products/custom.css') !!}" rel="stylesheet">
-@endpushonce
-
 @section('content')
 
     @push('breadcrumbs')
@@ -191,73 +176,20 @@
                                         ],
                                     ]) !!}
 
-                                    {!! Form::dropdown('ingredients[]', $item->ingredients()->pluck('id')->toArray(), [
-                                        'label' => [
-                                            'title' => 'Ингредиенты',
-                                        ],
-                                        'field' => [
-                                            'class' => 'select2 form-control',
-                                            'data-placeholder' => 'Выберите ингредиенты',
-                                            'style' => 'width: 100%',
-                                            'multiple' => 'multiple',
-                                            'data-source' => route('back.ingredients.getSuggestions'),
-                                        ],
-                                        'options' => (old('ingredients')) ? \InetStudio\Ingredients\Models\IngredientModel::whereIn('id', old('ingredients'))->pluck('title', 'id')->toArray() : $item->ingredients()->pluck('title', 'id')->toArray(),
-                                    ]) !!}
+                                    {!! Form::ingredients('', $item) !!}
 
-                                    <div class="form-group ">
-                                        <label for="title" class="col-sm-2 control-label">Категории</label>
+                                    {!! Form::categories('', $item) !!}
 
-                                        <div class="col-sm-10">
-                                            @if (count($categories) > 0)
-                                                <div class="jstree-list" data-target="categories" data-multiple="true" data-cascade="up">
-                                                    <ul>
-                                                        @foreach ($categories as $category)
-                                                            @include('admin.module.categories::back.partials.tree.form_category', [
-                                                                'id' => 'parentCategoryId',
-                                                                'item' => $category,
-                                                                'currentId' => null,
-                                                                'selected' => $item->categories()->pluck('id')->toArray(),
-                                                            ])
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            @else
-                                                <p>Список категорий пуст.</p>
-                                            @endif
+                                    {!! Form::tags('', $item) !!}
 
-                                            {!! Form::hidden('categories', implode($item->categories()->pluck('id')->toArray(), ',')) !!}
-
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-
-                                    {!! Form::dropdown('tags[]', $item->tags()->pluck('id')->toArray(), [
-                                        'label' => [
-                                            'title' => 'Теги',
-                                        ],
-                                        'field' => [
-                                            'class' => 'select2 form-control',
-                                            'data-placeholder' => 'Выберите теги',
-                                            'style' => 'width: 100%',
-                                            'multiple' => 'multiple',
-                                            'data-source' => route('back.tags.getSuggestions'),
-                                        ],
-                                        'options' => (old('tags')) ? \InetStudio\Tags\Models\TagModel::whereIn('id', old('tags'))->pluck('name', 'id')->toArray() : $item->tags()->pluck('name', 'id')->toArray(),
-                                    ]) !!}
-
-                                    {!! Form::dropdown('classifiers[]', $item->classifiers()->where('type', 'Тип кожи')->pluck('classifiers.id')->toArray(), [
+                                    {!! Form::classifiers('', $item, [
                                         'label' => [
                                             'title' => 'Тип кожи',
                                         ],
                                         'field' => [
-                                            'class' => 'select2 form-control',
-                                            'data-placeholder' => 'Выберите типы кожи',
-                                            'style' => 'width: 100%',
-                                            'multiple' => 'multiple',
-                                            'data-source' => route('back.classifiers.getSuggestions', ['type' => 'Тип кожи']),
+                                            'placeholder' => 'Выберите типы кожи',
+                                            'type' => 'Тип кожи',
                                         ],
-                                        'options' => (old('classifiers')) ? \InetStudio\Classifiers\Models\ClassifierModel::whereIn('id', old('classifiers'))->where('type', 'Тип кожи')->pluck('classifiers.value', 'classifiers.id')->toArray() : $item->classifiers()->where('type', 'Тип кожи')->pluck('classifiers.value', 'classifiers.id')->toArray(),
                                     ]) !!}
 
                                     {!! Form::datepicker('publish_date', ($item->publish_date) ? date('d.m.Y H:i', strtotime($item->publish_date)) : '', [
@@ -269,17 +201,7 @@
                                         ],
                                     ]) !!}
 
-                                    {!! Form::dropdown('status_id', $item->status_id, [
-                                        'label' => [
-                                            'title' => 'Статус материала',
-                                        ],
-                                        'field' => [
-                                            'class' => 'select2 form-control',
-                                            'data-placeholder' => 'Выберите статус',
-                                            'style' => 'width: 100%',
-                                        ],
-                                        'options' => [null => ''] + \InetStudio\Statuses\Models\StatusModel::select('id', 'name')->pluck('name', 'id')->toArray(),
-                                    ]) !!}
+                                    {!! Form::status('', $item) !!}
 
                                 </div>
                             </div>
@@ -301,22 +223,3 @@
     @include('admin.module.polls::back.pages.modals.form')
 
 @endsection
-
-@pushonce('scripts:jstree')
-    <!-- JSTREE -->
-    <script src="{!! asset('admin/js/plugins/jstree/jstree.min.js') !!}"></script>
-@endpushonce
-
-@pushonce('scripts:datatables')
-    <!-- DATATABLES -->
-    <script src="{!! asset('admin/js/plugins/datatables/datatables.min.js') !!}"></script>
-@endpushonce
-
-@pushonce('scripts:datatable_products_embedded')
-    {!! $productsTable->scripts() !!}
-@endpushonce
-
-@pushonce('scripts:products_custom')
-    <!-- CUSTOM SCRIPT -->
-    <script src="{!! asset('admin/js/modules/products/custom.js') !!}"></script>
-@endpushonce

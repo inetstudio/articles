@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Articles\Models\ArticleModel;
-use InetStudio\Categories\Models\CategoryModel;
 use InetStudio\Articles\Events\ModifyArticleEvent;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use InetStudio\Articles\Transformers\Back\ArticleTransformer;
@@ -45,7 +44,9 @@ class ArticlesController extends Controller
      * Список статей.
      *
      * @param DataTables $dataTable
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \Exception
      */
     public function index(DataTables $dataTable): View
@@ -59,6 +60,7 @@ class ArticlesController extends Controller
      * DataTables ServerSide.
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function data()
@@ -75,18 +77,17 @@ class ArticlesController extends Controller
      * Добавление статьи.
      *
      * @param DataTables $dataTable
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \Exception
      */
     public function create(DataTables $dataTable): View
     {
         $table = $this->generateTable($dataTable, 'products', 'embedded');
 
-        $categories = CategoryModel::getTree();
-
         return view('admin.module.articles::back.pages.form', [
             'item' => new ArticleModel(),
-            'categories' => $categories,
             'productsTable' => $table,
         ]);
     }
@@ -95,6 +96,7 @@ class ArticlesController extends Controller
      * Создание статьи.
      *
      * @param SaveArticleRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(SaveArticleRequest $request): RedirectResponse
@@ -107,19 +109,18 @@ class ArticlesController extends Controller
      *
      * @param DataTables $dataTable
      * @param null $id
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws \Exception
      */
     public function edit(DataTables $dataTable, $id = null): View
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
-            $categories = CategoryModel::getTree();
-
             $table = $this->generateTable($dataTable, 'products', 'embedded');
 
             return view('admin.module.articles::back.pages.form', [
                 'item' => $item,
-                'categories' => $categories,
                 'productsTable' => $table,
             ]);
         } else {
@@ -132,6 +133,7 @@ class ArticlesController extends Controller
      *
      * @param SaveArticleRequest $request
      * @param null $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(SaveArticleRequest $request, $id = null): RedirectResponse
@@ -144,6 +146,7 @@ class ArticlesController extends Controller
      *
      * @param SaveArticleRequest $request
      * @param null $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     private function save(SaveArticleRequest $request, $id = null): RedirectResponse
@@ -187,6 +190,7 @@ class ArticlesController extends Controller
      * Удаление статьи.
      *
      * @param null $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id = null): JsonResponse
@@ -211,6 +215,7 @@ class ArticlesController extends Controller
      * Получаем slug для модели по строке.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getSlug(Request $request): JsonResponse
@@ -225,6 +230,7 @@ class ArticlesController extends Controller
      * Возвращаем статьи для поля.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getSuggestions(Request $request): JsonResponse
