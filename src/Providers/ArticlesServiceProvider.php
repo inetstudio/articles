@@ -2,8 +2,10 @@
 
 namespace InetStudio\Articles\Providers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Articles\Events\ModifyArticleEvent;
 use InetStudio\Articles\Console\Commands\SetupCommand;
 use InetStudio\Articles\Services\Front\ArticlesService;
@@ -29,6 +31,7 @@ class ArticlesServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerViews();
         $this->registerEvents();
+        $this->registerViewComposers();
     }
 
     /**
@@ -109,6 +112,20 @@ class ArticlesServiceProvider extends ServiceProvider
     protected function registerEvents(): void
     {
         Event::listen(ModifyArticleEvent::class, ClearArticlesCacheListener::class);
+    }
+
+    /**
+     * Register Article's view composers.
+     *
+     * @return void
+     */
+    public function registerViewComposers(): void
+    {
+        view()->composer('admin.module.articles::back.partials.analytics.materials.statistic', function ($view) {
+            $articles = ArticleModel::with('status')->select(['status_id', DB::raw('count(*) as total')])->groupBy('status_id')->get();
+
+            $view->with('articles', $articles);
+        });
     }
 
     /**
