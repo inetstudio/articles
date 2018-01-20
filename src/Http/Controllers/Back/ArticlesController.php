@@ -43,15 +43,13 @@ class ArticlesController extends Controller
     /**
      * Список статей.
      *
-     * @param DataTables $dataTable
-     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
      * @throws \Exception
      */
-    public function index(DataTables $dataTable): View
+    public function index(): View
     {
-        $table = $this->generateTable($dataTable, 'articles', 'index');
+        $table = $this->generateTable('articles', 'index');
 
         return view('admin.module.articles::back.pages.index', compact('table'));
     }
@@ -76,15 +74,13 @@ class ArticlesController extends Controller
     /**
      * Добавление статьи.
      *
-     * @param DataTables $dataTable
-     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
      * @throws \Exception
      */
-    public function create(DataTables $dataTable): View
+    public function create(): View
     {
-        $table = $this->generateTable($dataTable, 'products', 'embedded');
+        $table = $this->generateTable('products', 'embedded');
 
         return view('admin.module.articles::back.pages.form', [
             'item' => new ArticleModel(),
@@ -107,17 +103,16 @@ class ArticlesController extends Controller
     /**
      * Редактирование статьи.
      *
-     * @param DataTables $dataTable
      * @param null $id
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
      * @throws \Exception
      */
-    public function edit(DataTables $dataTable, $id = null): View
+    public function edit($id = null): View
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
-            $table = $this->generateTable($dataTable, 'products', 'embedded');
+            $table = $this->generateTable('products', 'embedded');
 
             return view('admin.module.articles::back.pages.form', [
                 'item' => $item,
