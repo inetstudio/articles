@@ -64,7 +64,7 @@
                                             'title' => 'Заголовок',
                                         ],
                                         'field' => [
-                                            'class' => 'form-control slugify',
+                                            'class' => 'form-control '.((in_array($status->alias, ['seo_check', 'published']) ? '' : 'slugify')),
                                             'data-slug-url' => route('back.articles.getSlug'),
                                             'data-slug-target' => 'slug',
                                         ],
