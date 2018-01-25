@@ -10,6 +10,7 @@
       }
     ],
     "require": {
+      "inetstudio/access": "1.5.*",
       "inetstudio/admin-panel": "1.5.*",
       "inetstudio/categories": "1.5.*",
       "inetstudio/classifiers": "1.5.*",

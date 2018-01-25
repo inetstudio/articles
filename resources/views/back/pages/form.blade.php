@@ -210,7 +210,9 @@
                 </div>
             </div>
 
-            {!! Form::products('products', $item->products, ['table' => $productsTable])!!}
+            {!! Form::products('products', $item->products, ['table' => $productsTable]) !!}
+
+            {!! Form::access('articles', $item) !!}
 
             {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}
 

@@ -17,6 +17,7 @@ use InetStudio\Articles\Http\Requests\Back\SaveArticleRequest;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 use InetStudio\Meta\Http\Controllers\Back\Traits\MetaManipulationsTrait;
 use InetStudio\Tags\Http\Controllers\Back\Traits\TagsManipulationsTrait;
+use InetStudio\Access\Http\Controllers\Back\Traits\AccessManipulationsTrait;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\ImagesManipulationsTrait;
 use InetStudio\Products\Http\Controllers\Back\Traits\ProductsManipulationsTrait;
 use InetStudio\Categories\Http\Controllers\Back\Traits\CategoriesManipulationsTrait;
@@ -34,6 +35,7 @@ class ArticlesController extends Controller
     use DatatablesTrait;
     use MetaManipulationsTrait;
     use TagsManipulationsTrait;
+    use AccessManipulationsTrait;
     use ImagesManipulationsTrait;
     use ProductsManipulationsTrait;
     use CategoriesManipulationsTrait;
@@ -161,6 +163,7 @@ class ArticlesController extends Controller
         $item->status_id = ($request->filled('status_id')) ? $request->get('status_id') : 1;
         $item->save();
 
+        $this->saveAccess($item, $request);
         $this->saveMeta($item, $request);
         $this->saveCategories($item, $request);
         $this->saveIngredients($item, $request);

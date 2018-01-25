@@ -13,6 +13,7 @@ use InetStudio\Meta\Models\Traits\Metable;
 use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Rating\Models\Traits\Rateable;
+use InetStudio\Access\Models\Traits\Accessable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Venturecraft\Revisionable\RevisionableTrait;
@@ -115,6 +116,7 @@ class ArticleModel extends Model implements MetableContract, HasMediaConversions
     use Metable;
     use Rateable;
     use Sluggable;
+    use Accessable;
     use Searchable;
     use Favoritable;
     use HasComments;
