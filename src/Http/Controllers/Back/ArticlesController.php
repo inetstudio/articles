@@ -233,29 +233,37 @@ class ArticlesController extends Controller
      */
     public function getSuggestions(Request $request): JsonResponse
     {
-        $data = [];
+        $search = $request->get('q');
 
-        if ($request->filled('type') and $request->get('type') == 'autocomplete') {
-            $search = $request->get('query');
-            $data['suggestions'] = [];
+        $items = ArticleModel::select(['id', 'title', 'slug'])->where('title', 'LIKE', '%'.$search.'%')->get();
 
-            $articles = ArticleModel::where('title', 'LIKE', '%'.$search.'%')->get();
+        if ($request->filled('type') && $request->get('type') == 'autocomplete') {
+            $type = get_class(new ArticleModel());
 
-            foreach ($articles as $article) {
-                $data['suggestions'][] = [
-                    'value' => $article->title,
-                    'data' => [
-                        'id' => $article->id,
-                        'title' => $article->title,
-                        'href' => url($article->href),
-                        'preview' => ($article->getFirstMedia('preview')) ? url($article->getFirstMedia('preview')->getUrl('preview_sidebar')) : '',
+            $data = $items->mapToGroups(function ($item) use ($type) {
+                return [
+                    'suggestions' => [
+                        'value' => $item->title,
+                        'data' => [
+                            'id' => $item->id,
+                            'type' => $type,
+                            'title' => $item->title,
+                            'path' => parse_url($item->href, PHP_URL_PATH),
+                            'href' => $item->href,
+                            'preview' => ($item->getFirstMedia('preview')) ? url($item->getFirstMedia('preview')->getUrl('preview_sidebar')) : '',
+                        ],
                     ],
                 ];
-            }
+            });
         } else {
-            $search = $request->get('q');
-
-            $data['items'] = ArticleModel::select(['id', 'title as name'])->where('title', 'LIKE', '%'.$search.'%')->get()->toArray();
+            $data = $items->mapToGroups(function ($item) {
+                return [
+                    'items' => [
+                        'id' => $item->id,
+                        'name' => $item->title,
+                    ],
+                ];
+            });
         }
 
         return response()->json($data);
