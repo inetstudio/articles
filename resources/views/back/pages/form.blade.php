@@ -59,12 +59,22 @@
                             <div id="collapseMain" class="panel-collapse collapse in" aria-expanded="true">
                                 <div class="panel-body">
 
+                                    {!! Form::classifiers('', $item, [
+                                        'label' => [
+                                            'title' => 'Тип материала',
+                                        ],
+                                        'field' => [
+                                            'placeholder' => 'Выберите типы материала',
+                                            'type' => 'Тип материала',
+                                        ],
+                                    ]) !!}
+
                                     {!! Form::string('title', $item->title, [
                                         'label' => [
                                             'title' => 'Заголовок',
                                         ],
                                         'field' => [
-                                            'class' => 'form-control '.((in_array($status->alias, ['seo_check', 'published']) ? '' : 'slugify')),
+                                            'class' => 'form-control '.(($status->classifiers->contains('alias', 'display_for_users')) ? '' : 'slugify'),
                                             'data-slug-url' => route('back.articles.getSlug'),
                                             'data-slug-target' => 'slug',
                                         ],

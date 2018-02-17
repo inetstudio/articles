@@ -3,8 +3,9 @@
 namespace InetStudio\Articles\Events;
 
 use Illuminate\Queue\SerializesModels;
+use InetStudio\Articles\Contracts\Events\ModifyArticleEventContract;
 
-class ModifyArticleEvent
+class ModifyArticleEvent implements ModifyArticleEventContract
 {
     use SerializesModels;
 

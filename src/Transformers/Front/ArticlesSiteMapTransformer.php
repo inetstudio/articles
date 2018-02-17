@@ -7,8 +7,7 @@ use InetStudio\Articles\Models\ArticleModel;
 use League\Fractal\Resource\Collection as FractalCollection;
 
 /**
- * Class ArticlesSiteMapTransformer
- * @package InetStudio\Articles\Transformers\Front
+ * Class ArticlesSiteMapTransformer.
  */
 class ArticlesSiteMapTransformer extends TransformerAbstract
 {

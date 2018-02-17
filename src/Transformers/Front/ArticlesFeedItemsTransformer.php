@@ -7,8 +7,7 @@ use InetStudio\Articles\Models\ArticleModel;
 use League\Fractal\Resource\Collection as FractalCollection;
 
 /**
- * Class ArticlesFeedItemsTransformer
- * @package InetStudio\Articles\Transformers\Front
+ * Class ArticlesFeedItemsTransformer.
  */
 class ArticlesFeedItemsTransformer extends TransformerAbstract
 {

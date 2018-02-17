@@ -5,13 +5,12 @@ namespace InetStudio\Articles\Services\Front;
 use League\Fractal\Manager;
 use InetStudio\Articles\Models\ArticleModel;
 use League\Fractal\Serializer\DataArraySerializer;
-use InetStudio\Articles\Contracts\Services\ArticlesServiceContract;
+use InetStudio\Articles\Contracts\Services\Front\ArticlesServiceContract;
 use InetStudio\Articles\Transformers\Front\ArticlesSiteMapTransformer;
 use InetStudio\Articles\Transformers\Front\ArticlesFeedItemsTransformer;
 
 /**
- * Class ArticlesService
- * @package InetStudio\Articles\Services\Front
+ * Class ArticlesService.
  */
 class ArticlesService implements ArticlesServiceContract
 {
@@ -23,7 +22,9 @@ class ArticlesService implements ArticlesServiceContract
     public function getFeedItems(): array
     {
         $articles = ArticleModel::with('categories')->whereHas('status', function ($statusQuery) {
-            $statusQuery->whereIn('alias', ['seo_check', 'published']);
+            $statusQuery->whereHas('classifiers', function ($classifiersQuery) {
+                $classifiersQuery->where('classifiers.alias', 'status_display_for_users');
+            });
         })->whereNotNull('publish_date')->orderBy('publish_date', 'desc')->limit(500)->get();
 
         $resource = (new ArticlesFeedItemsTransformer())->transformCollection($articles);
@@ -40,7 +41,9 @@ class ArticlesService implements ArticlesServiceContract
     {
         $articles = ArticleModel::select(['slug', 'created_at', 'status_id', 'updated_at'])
             ->whereHas('status', function ($statusQuery) {
-                $statusQuery->whereIn('alias', ['seo_check', 'published']);
+                $statusQuery->whereHas('classifiers', function ($classifiersQuery) {
+                    $classifiersQuery->where('classifiers.alias', 'status_display_for_users');
+                });
             })
             ->orderBy('created_at', 'desc')
             ->get();

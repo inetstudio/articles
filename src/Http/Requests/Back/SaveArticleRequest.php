@@ -4,8 +4,12 @@ namespace InetStudio\Articles\Http\Requests\Back;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 
-class SaveArticleRequest extends FormRequest
+/**
+ * Class SaveArticleRequest.
+ */
+class SaveArticleRequest extends FormRequest implements SaveArticleRequestContract
 {
     /**
      * Определить, авторизован ли пользователь для этого запроса.

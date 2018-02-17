@@ -3,34 +3,28 @@
 namespace InetStudio\Articles\Http\Controllers\Back;
 
 use Illuminate\View\View;
-use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Articles\Models\ArticleModel;
 use InetStudio\Articles\Events\ModifyArticleEvent;
-use Cviebrock\EloquentSluggable\Services\SlugService;
-use InetStudio\Articles\Transformers\Back\ArticleTransformer;
-use InetStudio\Articles\Http\Requests\Back\SaveArticleRequest;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 use InetStudio\Meta\Http\Controllers\Back\Traits\MetaManipulationsTrait;
 use InetStudio\Tags\Http\Controllers\Back\Traits\TagsManipulationsTrait;
 use InetStudio\Access\Http\Controllers\Back\Traits\AccessManipulationsTrait;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\ImagesManipulationsTrait;
+use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 use InetStudio\Products\Http\Controllers\Back\Traits\ProductsManipulationsTrait;
+use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesControllerContract;
 use InetStudio\Categories\Http\Controllers\Back\Traits\CategoriesManipulationsTrait;
 use InetStudio\Classifiers\Http\Controllers\Back\Traits\ClassifiersManipulationsTrait;
 use InetStudio\Ingredients\Http\Controllers\Back\Traits\IngredientsManipulationsTrait;
 
 /**
- * Контроллер для управления статьями.
- *
- * Class ArticlesController
- * @package InetStudio\Articles\Http\Controllers\Back
+ * Class ArticlesController.
  */
-class ArticlesController extends Controller
+class ArticlesController extends Controller implements ArticlesControllerContract
 {
     use DatatablesTrait;
     use MetaManipulationsTrait;
@@ -57,23 +51,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * DataTables ServerSide.
-     *
-     * @return mixed
-     *
-     * @throws \Exception
-     */
-    public function data()
-    {
-        $items = ArticleModel::with('status');
-
-        return DataTables::of($items)
-            ->setTransformer(new ArticleTransformer)
-            ->rawColumns(['status', 'actions'])
-            ->make();
-    }
-
-    /**
      * Добавление статьи.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -93,11 +70,11 @@ class ArticlesController extends Controller
     /**
      * Создание статьи.
      *
-     * @param SaveArticleRequest $request
+     * @param SaveArticleRequestContract $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(SaveArticleRequest $request): RedirectResponse
+    public function store(SaveArticleRequestContract $request): RedirectResponse
     {
         return $this->save($request);
     }
@@ -128,12 +105,12 @@ class ArticlesController extends Controller
     /**
      * Обновление статьи.
      *
-     * @param SaveArticleRequest $request
+     * @param SaveArticleRequestContract $request
      * @param null $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(SaveArticleRequest $request, $id = null): RedirectResponse
+    public function update(SaveArticleRequestContract $request, $id = null): RedirectResponse
     {
         return $this->save($request, $id);
     }
@@ -141,12 +118,12 @@ class ArticlesController extends Controller
     /**
      * Сохранение статьи.
      *
-     * @param SaveArticleRequest $request
+     * @param SaveArticleRequestContract $request
      * @param null $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function save(SaveArticleRequest $request, $id = null): RedirectResponse
+    private function save(SaveArticleRequestContract $request, $id = null): RedirectResponse
     {
         if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
             $action = 'отредактирована';
@@ -207,65 +184,5 @@ class ArticlesController extends Controller
                 'success' => false,
             ]);
         }
-    }
-
-    /**
-     * Получаем slug для модели по строке.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getSlug(Request $request): JsonResponse
-    {
-        $name = $request->get('name');
-        $slug = ($name) ? SlugService::createSlug(ArticleModel::class, 'slug', $name) : '';
-
-        return response()->json($slug);
-    }
-
-    /**
-     * Возвращаем статьи для поля.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getSuggestions(Request $request): JsonResponse
-    {
-        $search = $request->get('q');
-
-        $items = ArticleModel::select(['id', 'title', 'slug'])->where('title', 'LIKE', '%'.$search.'%')->get();
-
-        if ($request->filled('type') && $request->get('type') == 'autocomplete') {
-            $type = get_class(new ArticleModel());
-
-            $data = $items->mapToGroups(function ($item) use ($type) {
-                return [
-                    'suggestions' => [
-                        'value' => $item->title,
-                        'data' => [
-                            'id' => $item->id,
-                            'type' => $type,
-                            'title' => $item->title,
-                            'path' => parse_url($item->href, PHP_URL_PATH),
-                            'href' => $item->href,
-                            'preview' => ($item->getFirstMedia('preview')) ? url($item->getFirstMedia('preview')->getUrl('preview_sidebar')) : '',
-                        ],
-                    ],
-                ];
-            });
-        } else {
-            $data = $items->mapToGroups(function ($item) {
-                return [
-                    'items' => [
-                        'id' => $item->id,
-                        'name' => $item->title,
-                    ],
-                ];
-            });
-        }
-
-        return response()->json($data);
     }
 }

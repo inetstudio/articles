@@ -6,8 +6,7 @@ use League\Fractal\TransformerAbstract;
 use InetStudio\Articles\Models\ArticleModel;
 
 /**
- * Class ArticleTransformer
- * @package InetStudio\Articles\Transformers
+ * Class ArticleTransformer.
  */
 class ArticleTransformer extends TransformerAbstract
 {

@@ -11,11 +11,19 @@ use InetStudio\Articles\Console\Commands\SetupCommand;
 use InetStudio\Articles\Services\Front\ArticlesService;
 use InetStudio\Articles\Listeners\ClearArticlesCacheListener;
 use InetStudio\Articles\Console\Commands\CreateFoldersCommand;
-use InetStudio\Articles\Contracts\Services\ArticlesServiceContract;
+use InetStudio\Articles\Http\Requests\Back\SaveArticleRequest;
+use InetStudio\Articles\Http\Controllers\Back\ArticlesController;
+use InetStudio\Articles\Contracts\Events\ModifyArticleEventContract;
+use InetStudio\Articles\Http\Controllers\Back\ArticlesDataController;
+use InetStudio\Articles\Http\Controllers\Back\ArticlesUtilityController;
+use InetStudio\Articles\Contracts\Services\Front\ArticlesServiceContract;
+use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
+use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesControllerContract;
+use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesDataControllerContract;
+use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesUtilityControllerContract;
 
 /**
- * Class ArticlesServiceProvider
- * @package InetStudio\Articles\Providers
+ * Class ArticlesServiceProvider.
  */
 class ArticlesServiceProvider extends ServiceProvider
 {
@@ -111,7 +119,7 @@ class ArticlesServiceProvider extends ServiceProvider
      */
     protected function registerEvents(): void
     {
-        Event::listen(ModifyArticleEvent::class, ClearArticlesCacheListener::class);
+        Event::listen(ModifyArticleEventContract::class, ClearArticlesCacheListener::class);
     }
 
     /**
@@ -135,6 +143,18 @@ class ArticlesServiceProvider extends ServiceProvider
      */
     protected function registerBindings(): void
     {
+        // Controllers
+        $this->app->bind(ArticlesControllerContract::class, ArticlesController::class);
+        $this->app->bind(ArticlesDataControllerContract::class, ArticlesDataController::class);
+        $this->app->bind(ArticlesUtilityControllerContract::class, ArticlesUtilityController::class);
+
+        // Events
+        $this->app->bind(ModifyArticleEventContract::class, ModifyArticleEvent::class);
+
+        // Requests
+        $this->app->bind(SaveArticleRequestContract::class, SaveArticleRequest::class);
+
+        // Services
         $this->app->bind(ArticlesServiceContract::class, ArticlesService::class);
     }
 }
