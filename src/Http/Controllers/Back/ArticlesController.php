@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Articles\Models\ArticleModel;
-use InetStudio\Articles\Events\ModifyArticleEvent;
+use InetStudio\Articles\Contracts\Events\ModifyArticleEventContract;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 use InetStudio\Meta\Http\Controllers\Back\Traits\MetaManipulationsTrait;
 use InetStudio\Tags\Http\Controllers\Back\Traits\TagsManipulationsTrait;
@@ -152,7 +152,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
         // Обновление поискового индекса.
         $item->searchable();
 
-        event(new ModifyArticleEvent($item));
+        event(app()->makeWith(ModifyArticleEventContract::class, ['object' => $item]));
 
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
 
@@ -174,7 +174,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
 
             $item->delete();
 
-            event(new ModifyArticleEvent($item));
+            event(app()->makeWith(ModifyArticleEventContract::class, ['object' => $item]));
 
             return response()->json([
                 'success' => true,
