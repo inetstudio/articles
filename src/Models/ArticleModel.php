@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use InetStudio\Meta\Models\Traits\Metable;
 use InetStudio\Tags\Models\Traits\HasTags;
-use InetStudio\Statuses\Models\StatusModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\Rating\Models\Traits\Rateable;
 use InetStudio\Statuses\Models\Traits\Status;
@@ -56,7 +55,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         'config' => 'articles',
         'model' => 'article',
     ];
-    
+
     /**
      * Связанная с моделью таблица.
      *

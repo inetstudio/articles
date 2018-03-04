@@ -36,7 +36,7 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
 
             'meta.og:title.max' => 'Поле «og:itle» не должно превышать 255 символов',
             'meta.og:description.max' => 'Поле «og:description» не должно превышать 255 символов',
-            
+
             'og_image.crop.default.json' => 'Область отображения должна быть представлена в виде JSON',
 
             'title.required' => 'Поле «Заголовок» обязательно для заполнения',
@@ -80,7 +80,7 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
 
             'og_image.crop.default' => [
                 'nullable', 'json',
-                new CropSize(968,475,'min', ''),
+                new CropSize(968, 475, 'min', ''),
             ],
 
             'title' => 'required|max:255',
@@ -88,11 +88,11 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
 
             'preview.crop.3_2' => [
                 'nullable', 'json',
-                new CropSize(768,512,'min', '3x2'),
+                new CropSize(768, 512, 'min', '3x2'),
             ],
             'preview.crop.3_4' => [
                 'nullable', 'json',
-                new CropSize(384,512,'min', '3x4'),
+                new CropSize(384, 512, 'min', '3x4'),
             ],
             'preview.description' => 'max:255',
             'preview.copyright' => 'max:255',

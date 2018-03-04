@@ -7,5 +7,4 @@ namespace InetStudio\Articles\Contracts\Transformers\Front;
  */
 interface ArticlesFeedItemsTransformerContract
 {
-
 }

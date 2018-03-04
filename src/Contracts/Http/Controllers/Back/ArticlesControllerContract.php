@@ -7,5 +7,4 @@ namespace InetStudio\Articles\Contracts\Http\Controllers\Back;
  */
 interface ArticlesControllerContract
 {
-
 }
