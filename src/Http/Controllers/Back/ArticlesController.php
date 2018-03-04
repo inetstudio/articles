@@ -2,187 +2,134 @@
 
 namespace InetStudio\Articles\Http\Controllers\Back;
 
-use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Session;
-use InetStudio\Articles\Models\ArticleModel;
-use InetStudio\Articles\Contracts\Events\ModifyArticleEventContract;
-use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
-use InetStudio\Meta\Http\Controllers\Back\Traits\MetaManipulationsTrait;
-use InetStudio\Tags\Http\Controllers\Back\Traits\TagsManipulationsTrait;
-use InetStudio\Access\Http\Controllers\Back\Traits\AccessManipulationsTrait;
-use InetStudio\AdminPanel\Http\Controllers\Back\Traits\ImagesManipulationsTrait;
 use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
-use InetStudio\Products\Http\Controllers\Back\Traits\ProductsManipulationsTrait;
 use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesControllerContract;
-use InetStudio\Categories\Http\Controllers\Back\Traits\CategoriesManipulationsTrait;
-use InetStudio\Classifiers\Http\Controllers\Back\Traits\ClassifiersManipulationsTrait;
-use InetStudio\Ingredients\Http\Controllers\Back\Traits\IngredientsManipulationsTrait;
+use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract;
+use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\SaveResponseContract;
+use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\IndexResponseContract;
+use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\DestroyResponseContract;
 
 /**
  * Class ArticlesController.
  */
 class ArticlesController extends Controller implements ArticlesControllerContract
 {
-    use DatatablesTrait;
-    use MetaManipulationsTrait;
-    use TagsManipulationsTrait;
-    use AccessManipulationsTrait;
-    use ImagesManipulationsTrait;
-    use ProductsManipulationsTrait;
-    use CategoriesManipulationsTrait;
-    use ClassifiersManipulationsTrait;
-    use IngredientsManipulationsTrait;
+    /**
+     * Используемые сервисы.
+     *
+     * @var array
+     */
+    protected $services;
 
     /**
-     * Список статей.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     *
-     * @throws \Exception
+     * ArticlesController constructor.
      */
-    public function index(): View
+    public function __construct()
     {
-        $table = $this->generateTable('articles', 'index');
-
-        return view('admin.module.articles::back.pages.index', compact('table'));
+        $this->services['articles'] = app()->make('InetStudio\Articles\Contracts\Services\Back\ArticlesServiceContract');
+        $this->services['dataTables'] = app()->make('InetStudio\Articles\Contracts\Services\Back\ArticlesDataTableServiceContract');
     }
 
     /**
-     * Добавление статьи.
+     * Список объектов.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     *
-     * @throws \Exception
+     * @return IndexResponseContract
      */
-    public function create(): View
+    public function index(): IndexResponseContract
     {
-        $table = $this->generateTable('products', 'embedded');
+        $table = $this->services['dataTables']->html();
 
-        return view('admin.module.articles::back.pages.form', [
-            'item' => new ArticleModel(),
-            'productsTable' => $table,
+        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\IndexResponseContract', [
+            'data' => compact('table'),
         ]);
     }
 
     /**
-     * Создание статьи.
+     * Добавление объекта.
+     *
+     * @return FormResponseContract
+     */
+    public function create(): FormResponseContract
+    {
+        $item = $this->services['articles']->getArticleObject();
+
+        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract', [
+            'data' => compact('item'),
+        ]);
+    }
+
+    /**
+     * Создание объекта.
      *
      * @param SaveArticleRequestContract $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return SaveResponseContract
      */
-    public function store(SaveArticleRequestContract $request): RedirectResponse
+    public function store(SaveArticleRequestContract $request): SaveResponseContract
     {
         return $this->save($request);
     }
 
     /**
-     * Редактирование статьи.
+     * Редактирование объекта.
      *
-     * @param null $id
+     * @param int $id
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     *
-     * @throws \Exception
+     * @return FormResponseContract
      */
-    public function edit($id = null): View
+    public function edit($id = 0): FormResponseContract
     {
-        if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
-            $table = $this->generateTable('products', 'embedded');
+        $item = $this->services['articles']->getArticleObject($id);
 
-            return view('admin.module.articles::back.pages.form', [
-                'item' => $item,
-                'productsTable' => $table,
-            ]);
-        } else {
-            abort(404);
-        }
+        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract', [
+            'data' => compact('item'),
+        ]);
     }
 
     /**
-     * Обновление статьи.
+     * Обновление объекта.
      *
      * @param SaveArticleRequestContract $request
-     * @param null $id
+     * @param int $id
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return SaveResponseContract
      */
-    public function update(SaveArticleRequestContract $request, $id = null): RedirectResponse
+    public function update(SaveArticleRequestContract $request, int $id = 0): SaveResponseContract
     {
         return $this->save($request, $id);
     }
 
     /**
-     * Сохранение статьи.
+     * Сохранение объекта.
      *
      * @param SaveArticleRequestContract $request
-     * @param null $id
+     * @param int $id
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return SaveResponseContract
      */
-    private function save(SaveArticleRequestContract $request, $id = null): RedirectResponse
+    private function save(SaveArticleRequestContract $request, int $id = 0): SaveResponseContract
     {
-        if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
-            $action = 'отредактирована';
-        } else {
-            $action = 'создана';
-            $item = new ArticleModel();
-        }
+        $item = $this->services['articles']->save($request, $id);
 
-        $item->title = strip_tags($request->get('title'));
-        $item->slug = strip_tags($request->get('slug'));
-        $item->description = strip_tags($request->input('description.text'));
-        $item->content = $request->input('content.text');
-        $item->publish_date = ($request->filled('publish_date')) ? date('Y-m-d H:i', \DateTime::createFromFormat('!d.m.Y H:i', $request->get('publish_date'))->getTimestamp()) : null;
-        $item->status_id = ($request->filled('status_id')) ? $request->get('status_id') : 1;
-        $item->save();
-
-        $this->saveAccess($item, $request);
-        $this->saveMeta($item, $request);
-        $this->saveCategories($item, $request);
-        $this->saveIngredients($item, $request);
-        $this->saveTags($item, $request);
-        $this->saveClassifiers($item, $request);
-        $this->saveProducts($item, $request);
-        $this->saveImages($item, $request, ['og_image', 'preview', 'content'], 'articles');
-
-        // Обновление поискового индекса.
-        $item->searchable();
-
-        event(app()->makeWith(ModifyArticleEventContract::class, ['object' => $item]));
-
-        Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
-
-        return response()->redirectToRoute('back.articles.edit', [
-            $item->fresh()->id,
+        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\SaveResponseContract', [
+            'item' => $item,
         ]);
     }
 
     /**
-     * Удаление статьи.
+     * Удаление объекта.
      *
-     * @param null $id
+     * @param int $id
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return DestroyResponseContract
      */
-    public function destroy($id = null): JsonResponse
+    public function destroy(int $id = 0): DestroyResponseContract
     {
-        if (! is_null($id) && $id > 0 && $item = ArticleModel::find($id)) {
+        $result = $this->services['articles']->destroy($id);
 
-            $item->delete();
-
-            event(app()->makeWith(ModifyArticleEventContract::class, ['object' => $item]));
-
-            return response()->json([
-                'success' => true,
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-            ]);
-        }
+        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\DestroyResponseContract', [
+            'result' => ($result === null) ? false : $result,
+        ]);
     }
 }

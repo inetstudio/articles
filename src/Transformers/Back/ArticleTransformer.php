@@ -3,36 +3,37 @@
 namespace InetStudio\Articles\Transformers\Back;
 
 use League\Fractal\TransformerAbstract;
-use InetStudio\Articles\Models\ArticleModel;
+use InetStudio\Articles\Contracts\Models\ArticleModelContract;
+use InetStudio\Articles\Contracts\Transformers\Back\ArticleTransformerContract;
 
 /**
  * Class ArticleTransformer.
  */
-class ArticleTransformer extends TransformerAbstract
+class ArticleTransformer extends TransformerAbstract implements ArticleTransformerContract
 {
     /**
      * Подготовка данных для отображения в таблице.
      *
-     * @param ArticleModel $article
+     * @param ArticleModelContract $item
      *
      * @return array
      *
      * @throws \Throwable
      */
-    public function transform(ArticleModel $article): array
+    public function transform(ArticleModelContract $item): array
     {
         return [
-            'id' => (int) $article->id,
-            'title' => $article->title,
+            'id' => (int) $item->id,
+            'title' => $item->title,
             'status' => view('admin.module.articles::back.partials.datatables.status', [
-                'status' => $article->status,
+                'status' => $item->status,
             ])->render(),
-            'created_at' => (string) $article->created_at,
-            'updated_at' => (string) $article->updated_at,
-            'publish_date' => (string) $article->publish_date,
+            'created_at' => (string) $item->created_at,
+            'updated_at' => (string) $item->updated_at,
+            'publish_date' => (string) $item->publish_date,
             'actions' => view('admin.module.articles::back.partials.datatables.actions', [
-                'id' => $article->id,
-                'href' => $article->href,
+                'id' => $item->id,
+                'href' => $item->href,
             ])->render(),
         ];
     }

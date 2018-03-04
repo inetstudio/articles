@@ -2,10 +2,7 @@
 
 namespace InetStudio\Articles\Http\Controllers\Back;
 
-use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
-use InetStudio\Articles\Models\ArticleModel;
-use InetStudio\Articles\Transformers\Back\ArticleTransformer;
 use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesDataControllerContract;
 
 /**
@@ -14,19 +11,27 @@ use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesDataControllerCo
 class ArticlesDataController extends Controller implements ArticlesDataControllerContract
 {
     /**
-     * DataTables ServerSide.
+     * Используемые сервисы.
+     *
+     * @var array
+     */
+    private $services;
+
+    /**
+     * ArticlesController constructor.
+     */
+    public function __construct()
+    {
+        $this->services['dataTables'] = app()->make('InetStudio\Articles\Contracts\Services\Back\ArticlesDataTableServiceContract');
+    }
+
+    /**
+     * Получаем данные для отображения в таблице.
      *
      * @return mixed
-     *
-     * @throws \Exception
      */
     public function data()
     {
-        $items = ArticleModel::with('status');
-
-        return DataTables::of($items)
-            ->setTransformer(new ArticleTransformer)
-            ->rawColumns(['status', 'actions'])
-            ->make();
+        return $this->services['dataTables']->ajax();
     }
 }

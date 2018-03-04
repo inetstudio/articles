@@ -3,11 +3,9 @@
 namespace InetStudio\Articles\Services\Front;
 
 use League\Fractal\Manager;
-use InetStudio\Articles\Models\ArticleModel;
 use League\Fractal\Serializer\DataArraySerializer;
 use InetStudio\Articles\Contracts\Services\Front\ArticlesServiceContract;
-use InetStudio\Articles\Transformers\Front\ArticlesSiteMapTransformer;
-use InetStudio\Articles\Transformers\Front\ArticlesFeedItemsTransformer;
+use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 
 /**
  * Class ArticlesService.
@@ -15,53 +13,81 @@ use InetStudio\Articles\Transformers\Front\ArticlesFeedItemsTransformer;
 class ArticlesService implements ArticlesServiceContract
 {
     /**
-     * Получаем информацию по статьям для фида.
+     * @var ArticlesRepositoryContract
+     */
+    private $repository;
+
+    /**
+     * ArticlesService constructor.
+     *
+     * @param ArticlesRepositoryContract $repository
+     */
+    public function __construct(ArticlesRepositoryContract $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Получаем объект по slug.
+     *
+     * @param string $slug
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getArticleBySlug(string $slug, bool $returnBuilder = false)
+    {
+        return $this->repository->getItemBySlug($slug, $returnBuilder);
+    }
+
+    /**
+     * Получаем все объекты.
+     *
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getAllArticles(bool $returnBuilder = false)
+    {
+        return $this->repository->getAllItems($returnBuilder);
+    }
+
+    /**
+     * Получаем информацию по ингредиентам для фида.
      *
      * @return array
      */
     public function getFeedItems(): array
     {
-        $articles = ArticleModel::with('categories')->whereHas('status', function ($statusQuery) {
-            $statusQuery->whereHas('classifiers', function ($classifiersQuery) {
-                $classifiersQuery->where('classifiers.alias', 'status_display_for_users');
-            });
-        })->whereNotNull('publish_date')->orderBy('publish_date', 'desc')->limit(500)->get();
+        $items = $this->repository->getAllItems(true)
+            ->whereNotNull('publish_date')
+            ->orderBy('publish_date', 'desc')
+            ->limit(500)
+            ->get();
 
-        $resource = (new ArticlesFeedItemsTransformer())->transformCollection($articles);
+        $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\ArticlesFeedItemsTransformerContract')
+            ->transformCollection($items);
 
-        return $this->serializeToArray($resource);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+
+        $transformation = $manager->createData($resource)->toArray();
+
+        return $transformation['data'];
     }
 
     /**
-     * Получаем информацию по статьям для карты сайта.
+     * Получаем информацию по ингредиентам для карты сайта.
      *
      * @return array
      */
     public function getSiteMapItems(): array
     {
-        $articles = ArticleModel::select(['slug', 'created_at', 'status_id', 'updated_at'])
-            ->whereHas('status', function ($statusQuery) {
-                $statusQuery->whereHas('classifiers', function ($classifiersQuery) {
-                    $classifiersQuery->where('classifiers.alias', 'status_display_for_users');
-                });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $items = $this->repository->getAllItems();
 
-        $resource = (new ArticlesSiteMapTransformer())->transformCollection($articles);
+        $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\ArticlesSiteMapTransformerContract')
+            ->transformCollection($items);
 
-        return $this->serializeToArray($resource);
-    }
-
-    /**
-     * Преобразовываем данные в массив.
-     *
-     * @param $resource
-     *
-     * @return array
-     */
-    private function serializeToArray($resource): array
-    {
         $manager = new Manager();
         $manager->setSerializer(new DataArraySerializer());
 

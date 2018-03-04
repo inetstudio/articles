@@ -1,9 +1,9 @@
 <?php
 
-namespace InetStudio\Articles\Events;
+namespace InetStudio\Articles\Events\Back;
 
 use Illuminate\Queue\SerializesModels;
-use InetStudio\Articles\Contracts\Events\ModifyArticleEventContract;
+use InetStudio\Articles\Contracts\Events\Back\ModifyArticleEventContract;
 
 class ModifyArticleEvent implements ModifyArticleEventContract
 {
@@ -12,9 +12,8 @@ class ModifyArticleEvent implements ModifyArticleEventContract
     public $object;
 
     /**
-     * Create a new event instance.
-     *
      * ModifyArticleEvent constructor.
+     *
      * @param $object
      */
     public function __construct($object)

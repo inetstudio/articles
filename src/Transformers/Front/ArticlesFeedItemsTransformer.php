@@ -3,59 +3,60 @@
 namespace InetStudio\Articles\Transformers\Front;
 
 use League\Fractal\TransformerAbstract;
-use InetStudio\Articles\Models\ArticleModel;
 use League\Fractal\Resource\Collection as FractalCollection;
+use InetStudio\Articles\Contracts\Models\ArticleModelContract;
+use InetStudio\Articles\Contracts\Transformers\Front\ArticlesFeedItemsTransformerContract;
 
 /**
  * Class ArticlesFeedItemsTransformer.
  */
-class ArticlesFeedItemsTransformer extends TransformerAbstract
+class ArticlesFeedItemsTransformer extends TransformerAbstract implements ArticlesFeedItemsTransformerContract
 {
     /**
      * Подготовка данных для отображения в фиде.
      *
-     * @param ArticleModel $article
+     * @param ArticleModelContract $item
      *
      * @return array
      *
      * @throws \Throwable
      */
-    public function transform(ArticleModel $article): array
+    public function transform(ArticleModelContract $item): array
     {
         return [
-            'title' => $article->title,
-            'author' => $this->getAuthor($article),
-            'link' => $article->href,
-            'pubdate' => $article->publish_date,
-            'description' => $article->description,
-            'content' => $article->content,
+            'title' => $item->title,
+            'author' => $this->getAuthor($item),
+            'link' => $item->href,
+            'pubdate' => $item->publish_date,
+            'description' => $item->description,
+            'content' => $item->content,
             'enclosure' => [],
-            'category' => ($article->categories->count() > 0) ? $article->categories->first()->title : '',
+            'category' => ($item->categories->count() > 0) ? $item->categories->first()->title : '',
         ];
     }
 
     /**
      * Обработка коллекции статей.
      *
-     * @param $articles
+     * @param $items
      *
      * @return FractalCollection
      */
-    public function transformCollection($articles): FractalCollection
+    public function transformCollection($items): FractalCollection
     {
-        return new FractalCollection($articles, $this);
+        return new FractalCollection($items, $this);
     }
 
     /**
      * Получаем автора статьи.
      *
-     * @param ArticleModel $article
+     * @param ArticleModelContract $item
      *
      * @return string
      */
-    private function getAuthor(ArticleModel $article): string
+    private function getAuthor(ArticleModelContract $item): string
     {
-        foreach ($article->revisionHistory as $history) {
+        foreach ($item->revisionHistory as $history) {
             if ($history->key == 'created_at' && ! $history->old_value) {
                 $user = $history->userResponsible();
 

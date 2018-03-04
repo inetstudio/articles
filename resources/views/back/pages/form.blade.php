@@ -9,10 +9,7 @@
 @section('content')
 
     @push('breadcrumbs')
-        @include('admin.module.articles::back.partials.breadcrumbs')
-        <li>
-            <a href="{{ route('back.articles.index') }}">Статьи</a>
-        </li>
+        @include('admin.module.articles::back.partials.breadcrumbs.form')
     @endpush
 
     <div class="row m-sm">
@@ -33,13 +30,13 @@
     <div class="wrapper wrapper-content">
         {!! Form::info() !!}
 
-        {!! Form::open(['url' => (!$item->id) ? route('back.articles.store') : route('back.articles.update', [$item->id]), 'id' => 'mainForm', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) !!}
+        {!! Form::open(['url' => (! $item->id) ? route('back.articles.store') : route('back.articles.update', [$item->id]), 'id' => 'mainForm', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) !!}
 
             @if ($item->id)
                 {{ method_field('PUT') }}
             @endif
 
-            {!! Form::hidden('article_id', (!$item->id) ? '' : $item->id) !!}
+            {!! Form::hidden('article_id', (! $item->id) ? '' : $item->id) !!}
 
             {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}
 
@@ -100,7 +97,8 @@
                                             'title' => 'Превью',
                                         ],
                                         'image' => [
-                                            'src' => isset($previewImageMedia) ? url($previewImageMedia->getUrl()) : '',
+                                            'filepath' => isset($previewImageMedia) ? url($previewImageMedia->getUrl()) : '',
+                                            'filename' => isset($previewImageMedia) ? $previewImageMedia->file_name : '',
                                         ],
                                         'crops' => [
                                             [
@@ -220,7 +218,7 @@
                 </div>
             </div>
 
-            {!! Form::products('products', $item->products, ['table' => $productsTable]) !!}
+            {!! Form::products('products', $item->products)!!}
 
             {!! Form::access('articles', $item) !!}
 

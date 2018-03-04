@@ -3,28 +3,29 @@
 namespace InetStudio\Articles\Transformers\Front;
 
 use League\Fractal\TransformerAbstract;
-use InetStudio\Articles\Models\ArticleModel;
 use League\Fractal\Resource\Collection as FractalCollection;
+use InetStudio\Articles\Contracts\Models\ArticleModelContract;
+use InetStudio\Articles\Contracts\Transformers\Front\ArticlesSiteMapTransformerContract;
 
 /**
  * Class ArticlesSiteMapTransformer.
  */
-class ArticlesSiteMapTransformer extends TransformerAbstract
+class ArticlesSiteMapTransformer extends TransformerAbstract implements ArticlesSiteMapTransformerContract
 {
     /**
      * Подготовка данных для отображения в карте сайта.
      *
-     * @param ArticleModel $article
+     * @param ArticleModelContract $item
      *
      * @return array
      *
      * @throws \Throwable
      */
-    public function transform(ArticleModel $article): array
+    public function transform(ArticleModelContract $item): array
     {
         return [
-            'loc' => $article->href,
-            'lastmod' => $article->updated_at->toW3cString(),
+            'loc' => $item->href,
+            'lastmod' => $item->updated_at->toW3cString(),
             'priority' => '1.0',
             'freq' => 'daily',
         ];
@@ -33,12 +34,12 @@ class ArticlesSiteMapTransformer extends TransformerAbstract
     /**
      * Обработка коллекции статей.
      *
-     * @param $articles
+     * @param $items
      *
      * @return FractalCollection
      */
-    public function transformCollection($articles): FractalCollection
+    public function transformCollection($items): FractalCollection
     {
-        return new FractalCollection($articles, $this);
+        return new FractalCollection($items, $this);
     }
 }

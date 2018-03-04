@@ -1,6 +1,6 @@
 <?php
 
-namespace InetStudio\Articles\Contracts\Events;
+namespace InetStudio\Articles\Contracts\Events\Back;
 
 /**
  * Interface ModifyArticleEventContract.

@@ -1,17 +1,15 @@
 <?php
 
-use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesControllerContract;
-use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesDataControllerContract;
-use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesUtilityControllerContract;
-
 Route::group([
+    'namespace' => 'InetStudio\Articles\Contracts\Http\Controllers\Back',
     'middleware' => ['web', 'back.auth'],
     'prefix' => 'back',
 ], function () {
-    Route::post('articles/slug', ArticlesUtilityControllerContract::class.'@getSlug')->name('back.articles.getSlug');
-    Route::post('articles/suggestions', ArticlesUtilityControllerContract::class.'@getSuggestions')->name('back.articles.getSuggestions');
-    Route::any('articles/data', ArticlesDataControllerContract::class.'@data')->name('back.articles.data');
-    Route::resource('articles', ArticlesControllerContract::class, ['except' => [
+    Route::any('articles/data', 'ArticlesDataControllerContract@data')->name('back.articles.data.index');
+    Route::post('articles/slug', 'ArticlesUtilityControllerContract@getSlug')->name('back.articles.getSlug');
+    Route::post('articles/suggestions', 'ArticlesUtilityControllerContract@getSuggestions')->name('back.articles.getSuggestions');
+
+    Route::resource('articles', 'ArticlesControllerContract', ['except' => [
         'show',
     ], 'as' => 'back']);
 });
