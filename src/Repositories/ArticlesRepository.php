@@ -110,7 +110,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
     public function searchItemsByField(string $field, string $value, bool $returnBuilder = false)
     {
         $builder = $this->getItemsQuery(['title'])->where($field, 'LIKE', '%'.$value.'%');
-        
+
         if ($returnBuilder) {
             return $builder;
         }
@@ -128,7 +128,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
     public function getAllItems(bool $returnBuilder = false)
     {
         $builder = $this->getItemsQuery(['created_at', 'updated_at']);
-        
+
         if ($returnBuilder) {
             return $builder;
         }
@@ -149,9 +149,9 @@ class ArticlesRepository implements ArticlesRepositoryContract
         $builder = $this->getItemsQuery([
             'description', 'content', 'status_id', 'publish_date',
         ], [
-            'meta', 'media', 'tags', 'categories', 'products' , 'ingredients',
+            'meta', 'media', 'tags', 'categories', 'products', 'ingredients',
         ])->whereSlug($slug);
-        
+
         if ($returnBuilder) {
             return $builder;
         }
@@ -171,7 +171,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
      */
     public function getItemsFavoritedByUser(int $userID, bool $returnBuilder = false)
     {
-        $builder = $this->getItemsQuery(['publish_date'], ['media', 'tags', 'categories', 'products' , 'ingredients'])
+        $builder = $this->getItemsQuery(['publish_date'], ['media', 'tags', 'categories', 'products', 'ingredients'])
             ->orderBy('publish_date', 'DESC')
             ->whereFavoritedBy('article', $userID);
 

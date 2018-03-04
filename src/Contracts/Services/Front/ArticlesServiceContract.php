@@ -7,5 +7,4 @@ namespace InetStudio\Articles\Contracts\Services\Front;
  */
 interface ArticlesServiceContract
 {
-
 }
