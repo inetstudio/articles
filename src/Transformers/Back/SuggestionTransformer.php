@@ -49,6 +49,7 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
                     'title' => $item->title,
                     'path' => parse_url($item->href, PHP_URL_PATH),
                     'href' => $item->href,
+                    'preview' => ($item->getFirstMedia('preview')) ? url($item->getFirstMedia('preview')->getUrl('preview_sidebar')) : '',
                 ],
             ];
         } else {
