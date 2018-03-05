@@ -105,7 +105,7 @@ class ArticlesServiceProvider extends ServiceProvider
         view()->composer('admin.module.articles::back.partials.analytics.materials.statistic', function ($view) {
             $articles = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract')
                 ->getAllItems(true)
-                ->addSelect(['status_id', DB::raw('count(*) as total')])
+                ->select(['status_id', DB::raw('count(*) as total')])
                 ->with('status')
                 ->groupBy('status_id')
                 ->get();
