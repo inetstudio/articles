@@ -10,19 +10,19 @@
       }
     ],
     "require": {
-      "inetstudio/access": "1.5.*",
-      "inetstudio/admin-panel": "1.5.*",
-      "inetstudio/categories": "1.5.*",
-      "inetstudio/classifiers": "1.5.*",
-      "inetstudio/comments": "1.5.*",
-      "inetstudio/experts": "1.5.*",
-      "inetstudio/favorites": "1.5.*",
-      "inetstudio/tags": "1.5.*",
-      "inetstudio/ingredients": "1.5.*",
-      "inetstudio/polls": "1.5.*",
-      "inetstudio/products": "1.5.*",
-      "inetstudio/rating": "1.5.*",
-      "inetstudio/statuses": "1.5.*"
+      "inetstudio/access": "1.6.*",
+      "inetstudio/admin-panel": "1.6.*",
+      "inetstudio/categories": "1.6.*",
+      "inetstudio/classifiers": "1.6.*",
+      "inetstudio/comments": "1.6.*",
+      "inetstudio/experts": "1.6.*",
+      "inetstudio/favorites": "1.6.*",
+      "inetstudio/tags": "1.6.*",
+      "inetstudio/ingredients": "1.6.*",
+      "inetstudio/polls": "1.6.*",
+      "inetstudio/products": "1.6.*",
+      "inetstudio/rating": "1.6.*",
+      "inetstudio/statuses": "1.6.*"
     },
     "autoload": {
       "psr-4": {
