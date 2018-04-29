@@ -84,6 +84,11 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         'deleted_at',
     ];
 
+    public function getContentAttribute($value)
+    {
+        return blade_string($value);
+    }
+
     protected $revisionCreationsEnabled = true;
 
     use Status;
