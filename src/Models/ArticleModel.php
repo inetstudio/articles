@@ -82,6 +82,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         'created_at',
         'updated_at',
         'deleted_at',
+        'publish_date',
     ];
 
     public function getContentAttribute($value)
