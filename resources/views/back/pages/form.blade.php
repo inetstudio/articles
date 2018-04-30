@@ -200,7 +200,7 @@
                                         ],
                                     ]) !!}
 
-                                    {!! Form::datepicker('publish_date', ($item->publish_date) ? date('d.m.Y H:i', strtotime($item->publish_date)) : '', [
+                                    {!! Form::datepicker('publish_date', ($item->publish_date) ? $item->publish_date->fornat('d.m.Y H:i') : '', [
                                         'label' => [
                                             'title' => 'Дата публикации',
                                         ],

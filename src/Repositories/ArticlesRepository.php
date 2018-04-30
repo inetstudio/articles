@@ -2,6 +2,7 @@
 
 namespace InetStudio\Articles\Repositories;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
@@ -76,7 +77,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
         $item->content = $request->input('content.text');
         $item->webmaster_id = '';
         $item->status_id = ($request->filled('status_id')) ? $request->get('status_id') : 1;
-        $item->publish_date = ($request->filled('publish_date')) ? date('Y-m-d H:i', \DateTime::createFromFormat('!d.m.Y H:i', $request->get('publish_date'))->getTimestamp()) : null;
+        $item->publish_date = ($request->filled('publish_date')) ? Carbon::createFromFormat('d.m.Y H:i', $request->get('publish_date')) : null;
         $item->save();
 
         return $item;
