@@ -85,11 +85,6 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         'publish_date',
     ];
 
-    public function getContentAttribute($value)
-    {
-        return blade_string($value);
-    }
-
     protected $revisionCreationsEnabled = true;
 
     use Status;

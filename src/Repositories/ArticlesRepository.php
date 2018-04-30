@@ -75,7 +75,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
         $item->slug = strip_tags($request->get('slug'));
         $item->description = $request->input('description.text');
         $item->content = $request->input('content.text');
-        $item->webmaster_id = '';
+        $item->webmaster_id = $item->webmaster_id;
         $item->status_id = ($request->filled('status_id')) ? $request->get('status_id') : 1;
         $item->publish_date = ($request->filled('publish_date')) ? Carbon::createFromFormat('d.m.Y H:i', $request->get('publish_date')) : null;
         $item->save();
