@@ -75,6 +75,24 @@ return [
                         ],
                     ],
                 ],
+                'corrections' => [
+                    'default' => [
+                        [
+                            'name' => 'corrections_admin',
+                            'size' => [
+                                'width' => 140,
+                            ],
+                        ],
+                        [
+                            'name' => 'corrections_front',
+                            'quality' => 70,
+                            'fit' => [
+                                'width' => 768,
+                                'height' => 512,
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
     ],

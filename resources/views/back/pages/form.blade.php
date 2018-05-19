@@ -222,6 +222,48 @@
 
             {!! Form::access('articles', $item) !!}
 
+            <hr/>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel-group float-e-margins" id="correctionsAccordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#correctionsAccordion" href="#collapseCorrections" aria-expanded="false" class="collapsed">Доработки</a>
+                                </h5>
+                            </div>
+                            <div id="collapseCorrections" class="panel-collapse collapse" aria-expanded="false">
+                                <div class="panel-body">
+                                    {!! Form::wysiwyg('corrections', $item->corrections, [
+                                        'label' => [
+                                            'title' => 'Доработки',
+                                        ],
+                                        'field' => [
+                                            'class' => 'tinymce',
+                                            'id' => 'corrections',
+                                            'hasImages' => true,
+                                        ],
+                                        'images' => [
+                                            'media' => $item->getMedia('corrections'),
+                                            'fields' => [
+                                                [
+                                                    'title' => 'Описание',
+                                                    'name' => 'description',
+                                                ],
+                                                [
+                                                    'title' => 'Alt',
+                                                    'name' => 'alt',
+                                                ],
+                                            ]
+                                        ],
+                                    ]) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}
 
         {!! Form::close()!!}

@@ -70,7 +70,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     protected $fillable = [
         'title', 'slug', 'description', 'content',
-        'publish_date', 'webmaster_id', 'status_id',
+        'publish_date', 'webmaster_id', 'status_id', 'corrections',
     ];
 
     /**

@@ -78,6 +78,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
         $item->webmaster_id = ($item->webmaster_id) ? $item->webmaster_id : '';
         $item->status_id = ($request->filled('status_id')) ? $request->get('status_id') : 1;
         $item->publish_date = ($request->filled('publish_date')) ? Carbon::createFromFormat('d.m.Y H:i', $request->get('publish_date')) : null;
+        $item->corrections = $request->input('corrections.text');
         $item->save();
 
         return $item;
