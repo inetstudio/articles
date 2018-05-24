@@ -37,6 +37,7 @@
             @endif
 
             {!! Form::hidden('article_id', (! $item->id) ? '' : $item->id, ['id' => 'object-id']) !!}
+
             {!! Form::hidden('article_type', get_class($item), ['id' => 'object-type']) !!}
 
             {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}

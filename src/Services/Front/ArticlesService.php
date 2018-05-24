@@ -28,6 +28,18 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
+     * Получаем объект по id.
+     *
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public function getArticleById(int $id = 0)
+    {
+        return $this->repository->getItemByID($id);
+    }
+
+    /**
      * Получаем объект по slug.
      *
      * @param string $slug
