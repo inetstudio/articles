@@ -36,7 +36,8 @@
                 {{ method_field('PUT') }}
             @endif
 
-            {!! Form::hidden('article_id', (! $item->id) ? '' : $item->id) !!}
+            {!! Form::hidden('article_id', (! $item->id) ? '' : $item->id, ['id' => 'object-id']) !!}
+            {!! Form::hidden('article_type', get_class($item), ['id' => 'object-type']) !!}
 
             {!! Form::buttons('', '', ['back' => 'back.articles.index']) !!}
 
@@ -122,7 +123,7 @@
                                                     'width' => 768,
                                                     'height' => 512,
                                                     'type' => 'min',
-                                                    'description' => 'Минимальный размер области 3x4 — 768x512 пикселей'
+                                                    'description' => 'Минимальный размер области 3x2 — 768x512 пикселей'
                                                 ],
                                             ],
                                         ],
@@ -183,6 +184,8 @@
                                             ],
                                         ],
                                     ]) !!}
+
+                                    {!! Form::widgets('', $item) !!}
 
                                     {!! Form::ingredients('', $item) !!}
 

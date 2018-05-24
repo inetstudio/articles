@@ -22,7 +22,8 @@
       "inetstudio/polls": "1.6.*",
       "inetstudio/products": "1.6.*",
       "inetstudio/rating": "1.6.*",
-      "inetstudio/statuses": "1.6.*"
+      "inetstudio/statuses": "1.6.*",
+      "inetstudio/widgets": "1.6.*"
     },
     "autoload": {
       "psr-4": {

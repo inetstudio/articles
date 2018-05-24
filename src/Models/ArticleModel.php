@@ -14,6 +14,7 @@ use InetStudio\Statuses\Models\Traits\Status;
 use InetStudio\Access\Models\Traits\Accessable;
 use InetStudio\Uploads\Models\Traits\HasImages;
 use Venturecraft\Revisionable\RevisionableTrait;
+use InetStudio\Widgets\Models\Traits\HasWidgets;
 use InetStudio\Comments\Models\Traits\HasComments;
 use InetStudio\Products\Models\Traits\HasProducts;
 use InetStudio\Favorites\Models\Traits\Favoritable;
@@ -36,6 +37,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     use HasImages;
     use Sluggable;
     use Accessable;
+    use HasWidgets;
     use Searchable;
     use Favoritable;
     use HasComments;

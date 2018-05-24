@@ -93,6 +93,9 @@ class ArticlesService implements ArticlesServiceContract
         app()->make('InetStudio\Access\Contracts\Services\Back\AccessServiceContract')
             ->attachToObject($request, $item);
 
+        app()->make('InetStudio\Widgets\Contracts\Services\Back\WidgetsServiceContract')
+            ->attachToObject($request, $item);
+
         $item->searchable();
 
         event(app()->makeWith('InetStudio\Articles\Contracts\Events\Back\ModifyArticleEventContract', [
