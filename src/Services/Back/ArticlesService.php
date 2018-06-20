@@ -129,7 +129,7 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getSuggestions(string $search, $type): array
     {
-        $items = $this->repository->searchItemsByField('title', $search);
+        $items = $this->repository->searchItems([['title', 'LIKE', '%'.$search.'%']]);
 
         $resource = (app()->makeWith('InetStudio\Articles\Contracts\Transformers\Back\SuggestionTransformerContract', [
             'type' => $type,
