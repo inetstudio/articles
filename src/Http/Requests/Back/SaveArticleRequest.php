@@ -17,7 +17,7 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -27,9 +27,18 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
      *
      * @return array
      */
-    public function messages()
+    public function messages(): array
     {
-        return [
+        $previewCrops = config('articles.images.crops.article.preview') ?? [];
+
+        $cropMessages = [];
+
+        foreach ($previewCrops as $previewCrop) {
+            $cropMessages['preview.crop.'.$previewCrop['name'].'.required'] = 'Необходимо выбрать область отображения '.$previewCrop['ratio'];
+            $cropMessages['preview.crop.'.$previewCrop['name'].'.json'] = 'Область отображения '.$previewCrop['ratio'].' должна быть представлена в виде JSON';
+        }
+
+        return array_merge([
             'meta.title.max' => 'Поле «Title» не должно превышать 255 символов',
             'meta.description.max' => 'Поле «Description» не должно превышать 255 символов',
             'meta.keywords.max' => 'Поле «Keywords» не должно превышать 255 символов',
@@ -48,10 +57,6 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
             'slug.unique' => 'Такое значение поля «URL» уже существует',
 
             'preview.file.required' => 'Поле «Превью» обязательно для заполнения',
-            'preview.crop.3_2.required' => 'Необходимо выбрать область отображения 3x2',
-            'preview.crop.3_4.required' => 'Необходимо выбрать область отображения 3x4',
-            'preview.crop.3_2.json' => 'Область отображения 3x2 должна быть представлена в виде JSON',
-            'preview.crop.3_4.json' => 'Область отображения 3x4 должна быть представлена в виде JSON',
             'preview.description.max' => 'Поле «Описание» не должно превышать 255 символов',
             'preview.copyright.max' => 'Поле «Copyright» не должно превышать 255 символов',
             'preview.alt.required' => 'Поле «Alt» обязательно для заполнения',
@@ -60,18 +65,30 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
             'tags.array' => 'Поле «Теги» должно содержать значение в виде массива',
 
             'publish_date.date_format' => 'Поле «Время публикации» должно быть в формате дд.мм.гггг чч:мм',
-        ];
+        ], $cropMessages);
     }
 
     /**
      * Правила проверки запроса.
      *
      * @param Request $request
+     *
      * @return array
      */
-    public function rules(Request $request)
+    public function rules(Request $request): array
     {
-        return [
+        $previewCrops = config('articles.images.crops.article.preview') ?? [];
+
+        $cropRules = [];
+
+        foreach ($previewCrops as $previewCrop) {
+            $cropRules['preview.crop.'.$previewCrop['name']] = [
+                'nullable', 'json',
+                new CropSize($previewCrop['size']['width'], $previewCrop['size']['height'], $previewCrop['size']['type'], $previewCrop['ratio']),
+            ];
+        }
+
+        return array_merge([
             'meta.title' => 'max:255',
             'meta.description' => 'max:255',
             'meta.keywords' => 'max:255',
@@ -86,19 +103,11 @@ class SaveArticleRequest extends FormRequest implements SaveArticleRequestContra
             'title' => 'required|max:255',
             'slug' => 'required|alpha_dash|max:255|unique:articles,slug,'.$request->get('article_id'),
 
-            'preview.crop.3_2' => [
-                'nullable', 'json',
-                new CropSize(768, 512, 'min', '3x2'),
-            ],
-            'preview.crop.3_4' => [
-                'nullable', 'json',
-                new CropSize(384, 512, 'min', '3x4'),
-            ],
             'preview.description' => 'max:255',
             'preview.copyright' => 'max:255',
             'preview.alt' => 'required|max:255',
             'tags' => 'array',
             'publish_date' => 'nullable|date_format:d.m.Y H:i',
-        ];
+        ], $cropRules);
     }
 }

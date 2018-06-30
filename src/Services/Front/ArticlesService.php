@@ -5,7 +5,6 @@ namespace InetStudio\Articles\Services\Front;
 use League\Fractal\Manager;
 use League\Fractal\Serializer\DataArraySerializer;
 use InetStudio\Articles\Contracts\Services\Front\ArticlesServiceContract;
-use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 
 /**
  * Class ArticlesService.
@@ -13,18 +12,16 @@ use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 class ArticlesService implements ArticlesServiceContract
 {
     /**
-     * @var ArticlesRepositoryContract
+     * @var
      */
-    private $repository;
+    public $repository;
 
     /**
      * ArticlesService constructor.
-     *
-     * @param ArticlesRepositoryContract $repository
      */
-    public function __construct(ArticlesRepositoryContract $repository)
+    public function __construct()
     {
-        $this->repository = $repository;
+        $this->repository = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract');
     }
 
     /**
@@ -40,28 +37,47 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем объект по slug.
+     * Получаем объекты по id.
      *
-     * @param string $slug
+     * @param $ids
+     * @param array $extColumns
+     * @param array $with
      * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getArticleBySlug(string $slug, bool $returnBuilder = false)
+    public function getArticlesByIds($ids, array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
-        return $this->repository->getItemBySlug($slug, $returnBuilder);
+        return $this->repository->getItemsByIDs($ids, $extColumns, $with, $returnBuilder);
+    }
+
+    /**
+     * Получаем объект по slug.
+     *
+     * @param string $slug
+     * @param array $extColumns
+     * @param array $with
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getArticleBySlug(string $slug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    {
+        return $this->repository->getItemBySlug($slug, $extColumns, $with, $returnBuilder);
     }
 
     /**
      * Получаем все объекты.
      *
+     * @param array $extColumns
+     * @param array $with
      * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getAllArticles(bool $returnBuilder = false)
+    public function getAllArticles(array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
-        return $this->repository->getAllItems($returnBuilder);
+        return $this->repository->getAllItems($extColumns, $with, $returnBuilder);
     }
 
     /**
@@ -71,7 +87,7 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getFeedItems(): array
     {
-        $items = $this->repository->getAllItems(true)
+        $items = $this->repository->getAllItems(['title', 'description', 'content', 'publish_date'], ['categories'], true)
             ->whereNotNull('publish_date')
             ->orderBy('publish_date', 'desc')
             ->limit(500)

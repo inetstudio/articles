@@ -5,7 +5,6 @@ namespace InetStudio\Articles\Services\Back;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Services\DataTable;
-use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 use InetStudio\Articles\Contracts\Services\Back\ArticlesDataTableServiceContract;
 
 /**
@@ -14,18 +13,16 @@ use InetStudio\Articles\Contracts\Services\Back\ArticlesDataTableServiceContract
 class ArticlesDataTableService extends DataTable implements ArticlesDataTableServiceContract
 {
     /**
-     * @var ArticlesRepositoryContract
+     * @var
      */
-    private $repository;
+    public $repository;
 
     /**
      * ArticlesDataTableService constructor.
-     *
-     * @param ArticlesRepositoryContract $repository
      */
-    public function __construct(ArticlesRepositoryContract $repository)
+    public function __construct()
     {
-        $this->repository = $repository;
+        $this->repository = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract');
     }
 
     /**
@@ -52,7 +49,7 @@ class ArticlesDataTableService extends DataTable implements ArticlesDataTableSer
      */
     public function query()
     {
-        $query = $this->repository->getAllItems(true)
+        $query = $this->repository->getAllItems([], [], true)
             ->addSelect(['status_id', 'publish_date'])
             ->with(['status']);
 

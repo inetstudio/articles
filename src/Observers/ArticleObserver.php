@@ -15,7 +15,7 @@ class ArticleObserver implements ArticleObserverContract
      *
      * @var array
      */
-    protected $services;
+    public $services;
 
     /**
      * ArticleObserver constructor.

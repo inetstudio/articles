@@ -15,7 +15,7 @@ class ArticlesDataController extends Controller implements ArticlesDataControlle
      *
      * @var array
      */
-    private $services;
+    public $services;
 
     /**
      * ArticlesController constructor.

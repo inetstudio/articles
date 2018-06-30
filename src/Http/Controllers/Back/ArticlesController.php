@@ -7,6 +7,7 @@ use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesControllerContract;
 use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract;
 use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\SaveResponseContract;
+use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\ShowResponseContract;
 use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\IndexResponseContract;
 use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\DestroyResponseContract;
 
@@ -20,7 +21,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
      *
      * @var array
      */
-    protected $services;
+    public $services;
 
     /**
      * ArticlesController constructor.
@@ -42,6 +43,22 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
 
         return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\IndexResponseContract', [
             'data' => compact('table'),
+        ]);
+    }
+
+    /**
+     * Получение объекта.
+     *
+     * @param int $id
+     *
+     * @return ShowResponseContract
+     */
+    public function show(int $id = 0): ShowResponseContract
+    {
+        $item = $this->services['articles']->getArticleObject($id);
+
+        return app()->makeWith(ShowResponseContract::class, [
+            'item' => $item,
         ]);
     }
 
@@ -78,7 +95,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
      *
      * @return FormResponseContract
      */
-    public function edit($id = 0): FormResponseContract
+    public function edit(int $id = 0): FormResponseContract
     {
         $item = $this->services['articles']->getArticleObject($id);
 
@@ -129,7 +146,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
         $result = $this->services['articles']->destroy($id);
 
         return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\DestroyResponseContract', [
-            'result' => ($result === null) ? false : $result,
+            'result' => (!! $result),
         ]);
     }
 }

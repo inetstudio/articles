@@ -104,7 +104,7 @@ class ArticlesServiceProvider extends ServiceProvider
     {
         view()->composer('admin.module.articles::back.partials.analytics.materials.statistic', function ($view) {
             $articles = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract')
-                ->getAllItems(true)
+                ->getAllItems([], [], true)
                 ->select(['status_id', DB::raw('count(*) as total')])
                 ->with('status')
                 ->groupBy('status_id')
@@ -156,6 +156,7 @@ class ArticlesServiceProvider extends ServiceProvider
         $this->app->bind('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract', 'InetStudio\Articles\Http\Responses\Back\Articles\FormResponse');
         $this->app->bind('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\IndexResponseContract', 'InetStudio\Articles\Http\Responses\Back\Articles\IndexResponse');
         $this->app->bind('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\SaveResponseContract', 'InetStudio\Articles\Http\Responses\Back\Articles\SaveResponse');
+        $this->app->bind('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\ShowResponseContract', 'InetStudio\Articles\Http\Responses\Back\Articles\ShowResponse');
         $this->app->bind('InetStudio\Articles\Contracts\Http\Responses\Back\Utility\SlugResponseContract', 'InetStudio\Articles\Http\Responses\Back\Utility\SlugResponse');
         $this->app->bind('InetStudio\Articles\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract', 'InetStudio\Articles\Http\Responses\Back\Utility\SuggestionsResponse');
 

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Session;
 use League\Fractal\Serializer\DataArraySerializer;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Articles\Contracts\Services\Back\ArticlesServiceContract;
-use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 
 /**
@@ -16,18 +15,16 @@ use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 class ArticlesService implements ArticlesServiceContract
 {
     /**
-     * @var ArticlesRepositoryContract
+     * @var
      */
-    private $repository;
+    public $repository;
 
     /**
      * ArticlesService constructor.
-     *
-     * @param ArticlesRepositoryContract $repository
      */
-    public function __construct(ArticlesRepositoryContract $repository)
+    public function __construct()
     {
-        $this->repository = $repository;
+        $this->repository = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract');
     }
 
     /**
@@ -52,7 +49,7 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getArticlesByIDs($ids, bool $returnBuilder = false)
     {
-        return $this->repository->getItemsByIDs($ids, $returnBuilder);
+        return $this->repository->getItemsByIDs($ids, [], [], $returnBuilder);
     }
 
     /**
@@ -66,7 +63,7 @@ class ArticlesService implements ArticlesServiceContract
     public function save(SaveArticleRequestContract $request, int $id): ArticleModelContract
     {
         $action = ($id) ? 'отредактирована' : 'создана';
-        $item = $this->repository->save($request, $id);
+        $item = $this->repository->save($request->only($this->repository->getModel()->getFillable()), $id);
 
         app()->make('InetStudio\Meta\Contracts\Services\Back\MetaServiceContract')
             ->attachToObject($request, $item);
@@ -84,8 +81,10 @@ class ArticlesService implements ArticlesServiceContract
         app()->make('InetStudio\Classifiers\Contracts\Services\Back\ClassifiersServiceContract')
             ->attachToObject($request, $item);
 
+        /*
         app()->make('InetStudio\Ingredients\Contracts\Services\Back\IngredientsServiceContract')
             ->attachToObject($request, $item);
+        */
 
         app()->make('InetStudio\Categories\Contracts\Services\Back\CategoriesServiceContract')
             ->attachToObject($request, $item);
@@ -110,9 +109,9 @@ class ArticlesService implements ArticlesServiceContract
     /**
      * Удаляем модель.
      *
-     * @param $id
+     * @param int $id
      *
-     * @return bool
+     * @return bool|null
      */
     public function destroy(int $id): ?bool
     {

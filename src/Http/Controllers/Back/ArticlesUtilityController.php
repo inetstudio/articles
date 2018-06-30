@@ -3,10 +3,10 @@
 namespace InetStudio\Articles\Http\Controllers\Back;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use InetStudio\Articles\Models\ArticleModel;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use InetStudio\Articles\Contracts\Http\Responses\Back\Utility\SlugResponseContract;
+use InetStudio\Articles\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract;
 use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesUtilityControllerContract;
 
 /**
@@ -15,18 +15,37 @@ use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesUtilityControlle
 class ArticlesUtilityController extends Controller implements ArticlesUtilityControllerContract
 {
     /**
+     * Используемые сервисы.
+     *
+     * @var array
+     */
+    public $services;
+
+    /**
+     * ArticlesUtilityController constructor.
+     */
+    public function __construct()
+    {
+        $this->services['articles'] = app()->make('InetStudio\Articles\Contracts\Services\Back\ArticlesServiceContract');
+    }
+
+    /**
      * Получаем slug для модели по строке.
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return SlugResponseContract
      */
-    public function getSlug(Request $request): JsonResponse
+    public function getSlug(Request $request): SlugResponseContract
     {
         $name = $request->get('name');
-        $slug = ($name) ? SlugService::createSlug(ArticleModel::class, 'slug', $name) : '';
+        $model = app()->make('InetStudio\Articles\Contracts\Models\ArticleModelContract');
 
-        return response()->json($slug);
+        $slug = ($name) ? SlugService::createSlug($model, 'slug', $name) : '';
+
+        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Utility\SlugResponseContract', [
+            'slug' => $slug,
+        ]);
     }
 
     /**
@@ -34,42 +53,17 @@ class ArticlesUtilityController extends Controller implements ArticlesUtilityCon
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return SuggestionsResponseContract
      */
-    public function getSuggestions(Request $request): JsonResponse
+    public function getSuggestions(Request $request): SuggestionsResponseContract
     {
         $search = $request->get('q');
+        $type = $request->get('type');
 
-        $items = ArticleModel::select(['id', 'title', 'slug'])->where('title', 'LIKE', '%'.$search.'%')->get();
+        $data = $this->services['articles']->getSuggestions($search, $type);
 
-        if ($request->filled('type') && $request->get('type') == 'autocomplete') {
-            $type = get_class(new ArticleModel());
-
-            $data = $items->mapToGroups(function ($item) use ($type) {
-                return [
-                    'suggestions' => [
-                        'value' => $item->title,
-                        'data' => [
-                            'id' => $item->id,
-                            'type' => $type,
-                            'title' => $item->title,
-                            'path' => parse_url($item->href, PHP_URL_PATH),
-                            'href' => $item->href,
-                        ],
-                    ],
-                ];
-            });
-        } else {
-            $data = $items->mapToGroups(function ($item) {
-                return [
-                    'items' => [
-                        'id' => $item->id,
-                        'name' => $item->title,
-                    ],
-                ];
-            });
-        }
-
-        return response()->json($data);
+        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract', [
+            'suggestions' => $data,
+        ]);
     }
 }

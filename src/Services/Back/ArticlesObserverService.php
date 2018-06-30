@@ -3,7 +3,6 @@
 namespace InetStudio\Articles\Services\Back;
 
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
-use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 use InetStudio\Articles\Contracts\Services\Back\ArticlesObserverServiceContract;
 
 /**
@@ -12,18 +11,16 @@ use InetStudio\Articles\Contracts\Services\Back\ArticlesObserverServiceContract;
 class ArticlesObserverService implements ArticlesObserverServiceContract
 {
     /**
-     * @var ArticlesRepositoryContract
+     * @var
      */
-    private $repository;
+    public $repository;
 
     /**
-     * ArticlesService constructor.
-     *
-     * @param ArticlesRepositoryContract $repository
+     * ArticlesObserverService constructor.
      */
-    public function __construct(ArticlesRepositoryContract $repository)
+    public function __construct()
     {
-        $this->repository = $repository;
+        $this->repository = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract');
     }
 
     /**

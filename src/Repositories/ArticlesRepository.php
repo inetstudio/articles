@@ -2,11 +2,9 @@
 
 namespace InetStudio\Articles\Repositories;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
-use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 
 /**
  * Class ArticlesRepository.
@@ -16,7 +14,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
     /**
      * @var ArticleModelContract
      */
-    private $model;
+    public $model;
 
     /**
      * ArticlesRepository constructor.
@@ -26,6 +24,16 @@ class ArticlesRepository implements ArticlesRepositoryContract
     public function __construct(ArticleModelContract $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * Получаем модель репозитория.
+     *
+     * @return ArticleModelContract
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 
     /**
@@ -44,13 +52,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Возвращаем объекты по списку id.
      *
      * @param $ids
+     * @param array $extColumns
+     * @param array $with
      * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getItemsByIDs($ids, bool $returnBuilder = false)
+    public function getItemsByIDs($ids, array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
-        $builder = $this->getItemsQuery()->whereIn('id', (array) $ids);
+        $builder = $this->getItemsQuery($extColumns, $with)->whereIn('id', (array) $ids);
 
         if ($returnBuilder) {
             return $builder;
@@ -62,23 +72,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
     /**
      * Сохраняем объект.
      *
-     * @param SaveArticleRequestContract $request
+     * @param array $data
      * @param int $id
      *
      * @return ArticleModelContract
      */
-    public function save(SaveArticleRequestContract $request, int $id): ArticleModelContract
+    public function save(array $data, int $id): ArticleModelContract
     {
         $item = $this->getItemByID($id);
-
-        $item->title = strip_tags($request->get('title'));
-        $item->slug = strip_tags($request->get('slug'));
-        $item->description = $request->input('description.text');
-        $item->content = $request->input('content.text');
-        $item->webmaster_id = ($item->webmaster_id) ? $item->webmaster_id : '';
-        $item->status_id = ($request->filled('status_id')) ? $request->get('status_id') : 1;
-        $item->publish_date = ($request->filled('publish_date')) ? Carbon::createFromFormat('d.m.Y H:i', $request->get('publish_date')) : null;
-        $item->corrections = $request->input('corrections.text');
+        $item->fill($data);
         $item->save();
 
         return $item;
@@ -100,13 +102,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Ищем объекты.
      *
      * @param array $conditions
+     * @param array $extColumns
+     * @param array $with
      * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function searchItems(array $conditions, bool $returnBuilder = false)
+    public function searchItems(array $conditions, array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
-        $builder = $this->getItemsQuery([])->where($conditions);
+        $builder = $this->getItemsQuery($extColumns, $with)->where($conditions);
 
         if ($returnBuilder) {
             return $builder;
@@ -118,13 +122,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
     /**
      * Получаем все объекты.
      *
+     * @param array $extColumns
+     * @param array $with
      * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getAllItems(bool $returnBuilder = false)
+    public function getAllItems(array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
-        $builder = $this->getItemsQuery(['created_at', 'updated_at']);
+        $builder = $this->getItemsQuery(array_merge($extColumns, ['created_at', 'updated_at']), $with);
 
         if ($returnBuilder) {
             return $builder;
@@ -137,17 +143,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Получаем объекты по slug.
      *
      * @param string $slug
+     * @param array $extColumns
+     * @param array $with
      * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getItemBySlug(string $slug, bool $returnBuilder = false)
+    public function getItemBySlug(string $slug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
-        $builder = $this->getItemsQuery([
-            'description', 'content', 'status_id', 'publish_date',
-        ], [
-            'meta', 'media', 'tags', 'categories', 'products', 'ingredients',
-        ])->whereSlug($slug);
+        $builder = $this->getItemsQuery($extColumns, $with)->whereSlug($slug);
 
         if ($returnBuilder) {
             return $builder;
@@ -162,13 +166,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Получаем сохраненные объекты пользователя.
      *
      * @param int $userID
+     * @param array $extColumns
+     * @param array $with
      * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getItemsFavoritedByUser(int $userID, bool $returnBuilder = false)
+    public function getItemsFavoritedByUser(int $userID, array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
-        $builder = $this->getItemsQuery(['publish_date'], ['media', 'tags', 'categories', 'products', 'ingredients'])
+        $builder = $this->getItemsQuery(array_merge($extColumns, ['publish_date']), $with)
             ->orderBy('publish_date', 'DESC')
             ->whereFavoritedBy('article', $userID);
 
@@ -217,23 +223,6 @@ class ArticlesRepository implements ArticlesRepositoryContract
                     }, 'links' => function ($linksQuery) {
                         $linksQuery->select(['id', 'product_id', 'link']);
                     }]);
-            },
-
-            'ingredients' => function ($query) {
-                $query->select(['id', 'title', 'slug', 'status_id'])
-                    ->with(['media' => function ($query) {
-                        $query->select(['id', 'model_id', 'model_type', 'collection_name', 'file_name', 'disk']);
-                    }]);
-
-                /*
-                if ($this->role == 'user') {
-                    $query->whereHas('status', function ($statusQuery) {
-                        $statusQuery->whereHas('classifiers', function ($classifiersQuery) {
-                            $classifiersQuery->where('classifiers.alias', 'status_display_for_users');
-                        });
-                    });
-                }
-                */
             },
 
             'counters' => function ($query) {

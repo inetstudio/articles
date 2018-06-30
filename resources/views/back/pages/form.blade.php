@@ -1,7 +1,7 @@
 @extends('admin::back.layouts.app')
 
 @php
-    $title = ($item->id) ? 'Редактирование статьи' : 'Добавление статьи';
+    $title = ($item->id) ? 'Редактирование статьи' : 'Создание статьи';
 @endphp
 
 @section('title', $title)
@@ -63,8 +63,18 @@
                                             'title' => 'Тип материала',
                                         ],
                                         'field' => [
-                                            'placeholder' => 'Выберите типы материала',
+                                            'placeholder' => 'Выберите тип материала',
                                             'type' => 'Тип материала',
+                                        ],
+                                    ]) !!}
+
+                                    {!! Form::classifiers('', $item, [
+                                        'label' => [
+                                            'title' => 'Тип публикации',
+                                        ],
+                                        'field' => [
+                                            'placeholder' => 'Выберите типы публикации',
+                                            'type' => 'Тип публикации',
                                         ],
                                     ]) !!}
 
@@ -92,6 +102,11 @@
 
                                     @php
                                         $previewImageMedia = $item->getFirstMedia('preview');
+                                        $previewCrops = config('articles.images.crops.article.preview') ?? [];
+
+                                        foreach ($previewCrops as &$previewCrop) {
+                                            $previewCrop['value'] = isset($previewImageMedia) ? $previewImageMedia->getCustomProperty('crop.'.$previewCrop['name']) : '';
+                                        }
                                     @endphp
 
                                     {!! Form::crop('preview', $previewImageMedia, [
@@ -102,32 +117,7 @@
                                             'filepath' => isset($previewImageMedia) ? url($previewImageMedia->getUrl()) : '',
                                             'filename' => isset($previewImageMedia) ? $previewImageMedia->file_name : '',
                                         ],
-                                        'crops' => [
-                                            [
-                                                'title' => 'Размер 3х4',
-                                                'name' => '3_4',
-                                                'ratio' => '3/4',
-                                                'value' => isset($previewImageMedia) ? $previewImageMedia->getCustomProperty('crop.3_4') : '',
-                                                'size' => [
-                                                    'width' => 384,
-                                                    'height' => 512,
-                                                    'type' => 'min',
-                                                    'description' => 'Минимальный размер области 3x4 — 384x512 пикселей'
-                                                ],
-                                            ],
-                                            [
-                                                'title' => 'Размер 3х2',
-                                                'name' => '3_2',
-                                                'ratio' => '3/2',
-                                                'value' => isset($previewImageMedia) ? $previewImageMedia->getCustomProperty('crop.3_2') : '',
-                                                'size' => [
-                                                    'width' => 768,
-                                                    'height' => 512,
-                                                    'type' => 'min',
-                                                    'description' => 'Минимальный размер области 3x2 — 768x512 пикселей'
-                                                ],
-                                            ],
-                                        ],
+                                        'crops' => $previewCrops,
                                         'additional' => [
                                             [
                                                 'title' => 'Описание',
@@ -188,21 +178,9 @@
 
                                     {!! Form::widgets('', $item) !!}
 
-                                    {!! Form::ingredients('', $item) !!}
-
                                     {!! Form::categories('', $item) !!}
 
                                     {!! Form::tags('', $item) !!}
-
-                                    {!! Form::classifiers('', $item, [
-                                        'label' => [
-                                            'title' => 'Тип кожи',
-                                        ],
-                                        'field' => [
-                                            'placeholder' => 'Выберите типы кожи',
-                                            'type' => 'Тип кожи',
-                                        ],
-                                    ]) !!}
 
                                     {!! Form::datepicker('publish_date', ($item->publish_date) ? $item->publish_date->fornat('d.m.Y H:i') : '', [
                                         'label' => [
@@ -274,7 +252,5 @@
     </div>
 
     @include('admin.module.articles::back.pages.modals.suggestion')
-    @include('admin.module.ingredients::back.pages.modals.suggestion')
     @include('admin.module.products::back.pages.modals.suggestion')
-    @include('admin.module.quizzes::back.pages.modals.suggestion')
 @endsection

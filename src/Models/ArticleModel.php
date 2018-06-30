@@ -3,52 +3,38 @@
 namespace InetStudio\Articles\Models;
 
 use Cocur\Slugify\Slugify;
-use Laravel\Scout\Searchable;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
-use InetStudio\Meta\Models\Traits\Metable;
-use InetStudio\Tags\Models\Traits\HasTags;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use InetStudio\Rating\Models\Traits\Rateable;
 use InetStudio\Statuses\Models\Traits\Status;
-use InetStudio\Access\Models\Traits\Accessable;
-use InetStudio\Uploads\Models\Traits\HasImages;
-use Venturecraft\Revisionable\RevisionableTrait;
-use InetStudio\Widgets\Models\Traits\HasWidgets;
-use InetStudio\Comments\Models\Traits\HasComments;
-use InetStudio\Products\Models\Traits\HasProducts;
-use InetStudio\Favorites\Models\Traits\Favoritable;
-use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use InetStudio\Categories\Models\Traits\HasCategories;
-use InetStudio\Classifiers\Models\Traits\HasClassifiers;
-use InetStudio\Ingredients\Models\Traits\HasIngredients;
 use InetStudio\Meta\Contracts\Models\Traits\MetableContract;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
-use InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
 use InetStudio\Favorites\Contracts\Models\Traits\FavoritableContract;
 
+/**
+ * Class ArticleModel.
+ */
 class ArticleModel extends Model implements ArticleModelContract, MetableContract, HasMediaConversions, FavoritableContract, RateableContract
 {
-    use HasTags;
-    use Metable;
-    use Rateable;
-    use HasImages;
-    use Sluggable;
-    use Accessable;
-    use HasWidgets;
-    use Searchable;
-    use Favoritable;
-    use HasComments;
-    use HasProducts;
-    use SoftDeletes;
-    use HasCategories;
-    use HasClassifiers;
-    use HasIngredients;
-    use RevisionableTrait;
-    use SluggableScopeHelpers;
-    use HasSimpleCountersTrait;
+    use \Laravel\Scout\Searchable;
+    use \Cviebrock\EloquentSluggable\Sluggable;
+    use \InetStudio\Meta\Models\Traits\Metable;
+    use \InetStudio\Tags\Models\Traits\HasTags;
+    use \Illuminate\Database\Eloquent\SoftDeletes;
+    use \InetStudio\Rating\Models\Traits\Rateable;
+    use \InetStudio\Access\Models\Traits\Accessable;
+    use \InetStudio\Uploads\Models\Traits\HasImages;
+    use \InetStudio\Widgets\Models\Traits\HasWidgets;
+    use \Venturecraft\Revisionable\RevisionableTrait;
+    use \InetStudio\Comments\Models\Traits\HasComments;
+    use \InetStudio\Products\Models\Traits\HasProducts;
+    use \InetStudio\Favorites\Models\Traits\Favoritable;
+    use \Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+    use \InetStudio\Categories\Models\Traits\HasCategories;
+    use \InetStudio\Classifiers\Models\Traits\HasClassifiers;
+    use \InetStudio\Ingredients\Models\Traits\HasIngredients;
+    use \InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
 
     const HREF = '/article/';
     const MATERIAL_TYPE = 'article';
@@ -86,6 +72,46 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         'deleted_at',
         'publish_date',
     ];
+
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = strip_tags($value);
+    }
+
+    public function setSlugAttribute($value)
+    {
+        $this->attributes['slug'] = strip_tags($value);
+    }
+
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : $value)));
+    }
+
+    public function setContentAttribute($value)
+    {
+        $this->attributes['content'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : $value)));
+    }
+
+    public function setCorrectionsAttribute($value)
+    {
+        $this->attributes['corrections'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : $value)));
+    }
+
+    public function setPublishDateAttribute($value)
+    {
+        $this->attributes['publish_date'] = Carbon::createFromFormat('d.m.Y H:i', $value);
+    }
+
+    public function setWebmasterIdAttribute($value)
+    {
+        $this->attributes['webmaster_id'] = strip_tags($value);
+    }
+
+    public function setStatusIdAttribute($value)
+    {
+        $this->attributes['status_id'] = (int) $value;
+    }
 
     protected $revisionCreationsEnabled = true;
 
@@ -138,6 +164,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      * Правила для транслита.
      *
      * @param Slugify $engine
+     *
      * @return Slugify
      */
     public function customizeSlugEngine(Slugify $engine)
