@@ -4,6 +4,7 @@ namespace InetStudio\Articles\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
+use InetStudio\Categories\Repositories\Traits\CategoriesRepositoryTrait;
 use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 
 /**
@@ -11,6 +12,8 @@ use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
  */
 class ArticlesRepository implements ArticlesRepositoryContract
 {
+    use CategoriesRepositoryTrait;
+
     /**
      * @var ArticleModelContract
      */
