@@ -67,6 +67,36 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
+     * Получаем объекты по категории.
+     *
+     * @param string $categorySlug
+     * @param array $extColumns
+     * @param array $with
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getArticlesByCategory(string $categorySlug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    {
+        return $this->repository->getItemsByCategory($categorySlug, $extColumns, $with, $returnBuilder);
+    }
+
+    /**
+     * Получаем объекты из категорий.
+     *
+     * @param $categories
+     * @param array $extColumns
+     * @param array $with
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getArticlesFromCategories($categories, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    {
+        return $this->repository->getItemsFromCategories($categories, $extColumns, $with, $returnBuilder);
+    }
+
+    /**
      * Получаем все объекты.
      *
      * @param array $extColumns
