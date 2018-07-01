@@ -67,6 +67,21 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
+     * Получаем объекты по тегу.
+     *
+     * @param string $tagSlug
+     * @param array $extColumns
+     * @param array $with
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getArticlesByTag(string $tagSlug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    {
+        return $this->repository->getItemsByTag($tagSlug, $extColumns, $with, $returnBuilder);
+    }
+
+    /**
      * Получаем объекты по категории.
      *
      * @param string $categorySlug
