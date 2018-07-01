@@ -46,7 +46,7 @@ class ArticlesService implements ArticlesServiceContract
      *
      * @return mixed
      */
-    public function getArticlesByIds($ids, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticlesByIDs($ids, array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
         return $this->repository->getItemsByIDs($ids, $extColumns, $with, $returnBuilder);
     }
@@ -109,6 +109,21 @@ class ArticlesService implements ArticlesServiceContract
     public function getArticlesFromCategories($categories, array $extColumns = [], array $with = [], bool $returnBuilder = false)
     {
         return $this->repository->getItemsFromCategories($categories, $extColumns, $with, $returnBuilder);
+    }
+
+    /**
+     * Получаем сохраненные объекты пользователя.
+     *
+     * @param int $userID
+     * @param array $extColumns
+     * @param array $with
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getArticlesFavoritedByUser(int $userID, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    {
+        return $this->repository->getItemsFavoritedByUser($userID, $extColumns, $with, $returnBuilder);
     }
 
     /**

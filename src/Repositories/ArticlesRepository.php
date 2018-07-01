@@ -230,6 +230,13 @@ class ArticlesRepository implements ArticlesRepositoryContract
                     }]);
             },
 
+            'ingredients' => function ($query) {
+                $query->select(['id', 'title', 'slug', 'status_id'])
+                    ->with(['media' => function ($query) {
+                        $query->select(['id', 'model_id', 'model_type', 'collection_name', 'file_name', 'disk']);
+                    }]);
+            },
+
             'counters' => function ($query) {
                 $query->select(['countable_id', 'countable_type', 'type', 'counter']);
             },
