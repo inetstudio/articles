@@ -3,6 +3,7 @@
 namespace InetStudio\Articles\Services\Back;
 
 use League\Fractal\Manager;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use League\Fractal\Serializer\DataArraySerializer;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
@@ -43,7 +44,7 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем объект модели.
+     * Возвращаем объект модели.
      *
      * @param int $id
      *
@@ -55,7 +56,7 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем объекты по списку id.
+     * Возвращаем объекты по списку id.
      *
      * @param array|int $ids
      * @param bool $returnBuilder
@@ -115,7 +116,7 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем подсказки.
+     * Возвращаем подсказки.
      *
      * @param string $search
      * @param $type
@@ -142,5 +143,20 @@ class ArticlesService implements ArticlesServiceContract
         }
 
         return $data;
+    }
+
+    /**
+     * Возвращаем статистику статей по статусу.
+     *
+     * @return mixed
+     */
+    public function getArticlesStatisticByStatus()
+    {
+        $articles = $this->repository->getAllItems([], ['status'], true)
+            ->select(['status_id', DB::raw('count(*) as total')])
+            ->groupBy('status_id')
+            ->get();
+
+        return $articles;
     }
 }

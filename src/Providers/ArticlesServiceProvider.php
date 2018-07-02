@@ -2,7 +2,6 @@
 
 namespace InetStudio\Articles\Providers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -21,7 +20,6 @@ class ArticlesServiceProvider extends ServiceProvider
         $this->registerPublishes();
         $this->registerRoutes();
         $this->registerViews();
-        $this->registerViewComposers();
         $this->registerObservers();
     }
 
@@ -46,6 +44,7 @@ class ArticlesServiceProvider extends ServiceProvider
             $this->commands([
                 'InetStudio\Articles\Console\Commands\SetupCommand',
                 'InetStudio\Articles\Console\Commands\CreateFoldersCommand',
+                'InetStudio\Articles\Console\Commands\CreateArticleTypeCommand',
             ]);
         }
     }
@@ -93,25 +92,6 @@ class ArticlesServiceProvider extends ServiceProvider
     protected function registerViews(): void
     {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'admin.module.articles');
-    }
-
-    /**
-     * Register Article's view composers.
-     *
-     * @return void
-     */
-    public function registerViewComposers(): void
-    {
-        view()->composer('admin.module.articles::back.partials.analytics.materials.statistic', function ($view) {
-            $articles = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract')
-                ->getAllItems([], [], true)
-                ->select(['status_id', DB::raw('count(*) as total')])
-                ->with('status')
-                ->groupBy('status_id')
-                ->get();
-
-            $view->with('articles', $articles);
-        });
     }
 
     /**

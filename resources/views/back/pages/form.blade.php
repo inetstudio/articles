@@ -65,6 +65,8 @@
                                         'field' => [
                                             'placeholder' => 'Выберите тип материала',
                                             'type' => 'Тип материала',
+                                            'multiple' => false,
+                                            'default' => 'Статья',
                                         ],
                                     ]) !!}
 

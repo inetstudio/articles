@@ -34,8 +34,8 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     use \InetStudio\Classifiers\Models\Traits\HasClassifiers;
     use \InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
 
-    const HREF = '/article/';
-    const MATERIAL_TYPE = 'article';
+    const BASE_TYPE = 'article';
+    const ENTITY_TYPE = 'article';
 
     protected $images = [
         'config' => 'articles',
@@ -71,41 +71,81 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         'publish_date',
     ];
 
+    /**
+     * Сеттер атрибута title.
+     *
+     * @param $value
+     */
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = strip_tags($value);
     }
 
+    /**
+     * Сеттер атрибута slug.
+     *
+     * @param $value
+     */
     public function setSlugAttribute($value)
     {
         $this->attributes['slug'] = strip_tags($value);
     }
 
+    /**
+     * Сеттер атрибута description.
+     *
+     * @param $value
+     */
     public function setDescriptionAttribute($value)
     {
-        $this->attributes['description'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : $value)));
+        $this->attributes['description'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
     }
 
+    /**
+     * Сеттер атрибута content.
+     *
+     * @param $value
+     */
     public function setContentAttribute($value)
     {
-        $this->attributes['content'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : $value)));
+        $this->attributes['content'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
     }
 
+    /**
+     * Сеттер атрибута corrections.
+     *
+     * @param $value
+     */
     public function setCorrectionsAttribute($value)
     {
-        $this->attributes['corrections'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : $value)));
+        $this->attributes['corrections'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
     }
 
+    /**
+     * Сеттер атрибута publish_date.
+     *
+     * @param $value
+     */
     public function setPublishDateAttribute($value)
     {
         $this->attributes['publish_date'] = Carbon::createFromFormat('d.m.Y H:i', $value);
     }
 
+    /**
+     * Сеттер атрибута webmaster_id.
+     *
+     * @param $value
+     */
     public function setWebmasterIdAttribute($value)
     {
         $this->attributes['webmaster_id'] = strip_tags($value);
     }
 
+    /**
+     * Сеттер атрибута status_id.
+     *
+     * @param $value
+     */
     public function setStatusIdAttribute($value)
     {
         $this->attributes['status_id'] = (int) $value;
@@ -178,7 +218,10 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function getHrefAttribute()
     {
-        return url(self::HREF.(! empty($this->slug) ? $this->slug : $this->id));
+        $articleType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
+        $href = (empty($articleType)) ? self::BASE_TYPE : $articleType[0];
+
+        return url($href.'/'.(! empty($this->slug) ? $this->slug : $this->id));
     }
 
     /**
@@ -188,6 +231,6 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function getTypeAttribute()
     {
-        return self::MATERIAL_TYPE;
+        return self::ENTITY_TYPE;
     }
 }
