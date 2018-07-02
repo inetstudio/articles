@@ -15,6 +15,13 @@ use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 class ArticlesService implements ArticlesServiceContract
 {
     /**
+     * Используемые сервисы.
+     *
+     * @var array
+     */
+    public $services = [];
+
+    /**
      * @var
      */
     public $repository;
@@ -24,6 +31,14 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function __construct()
     {
+        $this->services['meta'] = app()->make('InetStudio\Meta\Contracts\Services\Back\MetaServiceContract');
+        $this->services['uploads'] = app()->make('InetStudio\Uploads\Contracts\Services\Back\ImagesServiceContract');
+        $this->services['tags'] = app()->make('InetStudio\Tags\Contracts\Services\Back\TagsServiceContract');
+        $this->services['classifiers'] = app()->make('InetStudio\Classifiers\Contracts\Services\Back\ClassifiersServiceContract');
+        $this->services['categories'] = app()->make('InetStudio\Categories\Contracts\Services\Back\CategoriesServiceContract');
+        $this->services['access'] = app()->make('InetStudio\Access\Contracts\Services\Back\AccessServiceContract');
+        $this->services['widgets'] = app()->make('InetStudio\Widgets\Contracts\Services\Back\WidgetsServiceContract');
+
         $this->repository = app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract');
     }
 
@@ -65,35 +80,16 @@ class ArticlesService implements ArticlesServiceContract
         $action = ($id) ? 'отредактирована' : 'создана';
         $item = $this->repository->save($request->only($this->repository->getModel()->getFillable()), $id);
 
-        app()->make('InetStudio\Meta\Contracts\Services\Back\MetaServiceContract')
-            ->attachToObject($request, $item);
+        $this->services['meta']->attachToObject($request, $item);
 
         $images = (config('articles.images.conversions.article')) ? array_keys(config('articles.images.conversions.article')) : [];
-        app()->make('InetStudio\Uploads\Contracts\Services\Back\ImagesServiceContract')
-            ->attachToObject($request, $item, $images, 'articles', 'article');
+        $this->services['uploads']->attachToObject($request, $item, $images, 'articles', 'article');
 
-        app()->make('InetStudio\Tags\Contracts\Services\Back\TagsServiceContract')
-            ->attachToObject($request, $item);
-
-        app()->make('InetStudio\Products\Contracts\Services\Back\ProductsServiceContract')
-            ->attachToObject($request, $item);
-
-        app()->make('InetStudio\Classifiers\Contracts\Services\Back\ClassifiersServiceContract')
-            ->attachToObject($request, $item);
-
-        /*
-        app()->make('InetStudio\Ingredients\Contracts\Services\Back\IngredientsServiceContract')
-            ->attachToObject($request, $item);
-        */
-
-        app()->make('InetStudio\Categories\Contracts\Services\Back\CategoriesServiceContract')
-            ->attachToObject($request, $item);
-
-        app()->make('InetStudio\Access\Contracts\Services\Back\AccessServiceContract')
-            ->attachToObject($request, $item);
-
-        app()->make('InetStudio\Widgets\Contracts\Services\Back\WidgetsServiceContract')
-            ->attachToObject($request, $item);
+        $this->services['tags']->attachToObject($request, $item);
+        $this->services['classifiers']->attachToObject($request, $item);
+        $this->services['categories']->attachToObject($request, $item);
+        $this->services['access']->attachToObject($request, $item);
+        $this->services['widgets']->attachToObject($request, $item);
 
         $item->searchable();
 

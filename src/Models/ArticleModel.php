@@ -28,12 +28,10 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     use \InetStudio\Widgets\Models\Traits\HasWidgets;
     use \Venturecraft\Revisionable\RevisionableTrait;
     use \InetStudio\Comments\Models\Traits\HasComments;
-    use \InetStudio\Products\Models\Traits\HasProducts;
     use \InetStudio\Favorites\Models\Traits\Favoritable;
     use \Cviebrock\EloquentSluggable\SluggableScopeHelpers;
     use \InetStudio\Categories\Models\Traits\HasCategories;
     use \InetStudio\Classifiers\Models\Traits\HasClassifiers;
-    use \InetStudio\Ingredients\Models\Traits\HasIngredients;
     use \InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
 
     const HREF = '/article/';
@@ -132,14 +130,6 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
 
         $arr['tags'] = $this->tags->map(function ($item) {
             return array_only($item->toSearchableArray(), ['id', 'name']);
-        })->toArray();
-
-        $arr['ingredients'] = $this->ingredients->map(function ($item) {
-            return array_only($item->toSearchableArray(), ['id', 'title']);
-        })->toArray();
-
-        $arr['products'] = $this->products->map(function ($item) {
-            return array_only($item->toSearchableArray(), ['id', 'title']);
         })->toArray();
 
         return $arr;

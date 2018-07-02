@@ -6,28 +6,22 @@ PUT app_index/_mapping/articles
 {
   "properties": {
     "id": {
-      "type": "integer"
-  	},
+        "type": "integer"
+    },
     "title": {
-  	  "type": "string"
+        "type": "string"
     },
-	  "description": {
-  	  "type": "text"
-  	},  
-	 "content": {
-  	  "type": "text"
-  	 },	
+    "description": {
+        "type": "text"
+    },  
+    "content": {
+        "type": "text"
+    },	
     "categories": {
-      "type": "nested"
-    },
-    "ingredients": {
-      "type": "nested"
+        "type": "nested"
     },
     "tags": {
-      "type": "nested"
-    },
-    "products": {
-      "type": "nested"
+        "type": "nested"
     }
   }
 }

@@ -200,8 +200,6 @@
                 </div>
             </div>
 
-            {!! Form::products('products', $item->products)!!}
-
             {!! Form::access('articles', $item) !!}
 
             <hr/>
@@ -252,5 +250,4 @@
     </div>
 
     @include('admin.module.articles::back.pages.modals.suggestion')
-    @include('admin.module.products::back.pages.modals.suggestion')
 @endsection
