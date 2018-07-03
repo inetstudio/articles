@@ -35,7 +35,7 @@ class CreateArticleTypeCommand extends Command
         if (DB::table('classifiers')->where('alias', 'material_type_article')->count() == 0) {
             $now = Carbon::now()->format('Y-m-d H:m:s');
 
-            DB::table('statuses')->insert([
+            DB::table('classifiers')->insert([
                 [
                     'type' => 'Тип материала',
                     'value' => 'Статья',

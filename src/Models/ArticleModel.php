@@ -4,6 +4,7 @@ namespace InetStudio\Articles\Models;
 
 use Cocur\Slugify\Slugify;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
 use InetStudio\Statuses\Models\Traits\Status;
 use InetStudio\Meta\Contracts\Models\Traits\MetableContract;
@@ -275,7 +276,10 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     private function getMaterialType()
     {
-        $materialType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
+        if (Schema::hasTable('classifiers')) {
+            $materialType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
+        }
+
         $materialType = (empty($materialType)) ? self::BASE_MATERIAL_TYPE : str_replace('material_type_', '', $materialType[0]);
 
         return $materialType;

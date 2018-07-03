@@ -90,7 +90,7 @@ class SetupCommand extends Command
             ],
             [
                 'type' => 'artisan',
-                'description' => 'Create classifiers article typ',
+                'description' => 'Create classifiers article type',
                 'command' => 'inetstudio:articles:type',
             ],
             [
