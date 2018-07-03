@@ -17,7 +17,12 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <a href="{{ route('back.articles.create') }}" class="btn btn-sm btn-primary btn-lg">Добавить</a>
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-sm btn-primary btn-lg dropdown-toggle">Создать <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ route('back.articles.create') }}">Статью</a></li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="ibox-content">
                         <div class="table-responsive">

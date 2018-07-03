@@ -66,7 +66,8 @@
                                             'placeholder' => 'Выберите тип материала',
                                             'type' => 'Тип материала',
                                             'multiple' => false,
-                                            'default' => 'Статья',
+                                            'disabled' => true,
+                                            'default' => 'material_type_'.$item->material_type,
                                         ],
                                     ]) !!}
 
@@ -104,7 +105,7 @@
 
                                     @php
                                         $previewImageMedia = $item->getFirstMedia('preview');
-                                        $previewCrops = config('articles.images.crops.article.preview') ?? [];
+                                        $previewCrops = config('articles.images.crops.'.$item->material_type.'.preview') ?? [];
 
                                         foreach ($previewCrops as &$previewCrop) {
                                             $previewCrop['value'] = isset($previewImageMedia) ? $previewImageMedia->getCustomProperty('crop.'.$previewCrop['name']) : '';

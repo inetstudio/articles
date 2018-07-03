@@ -9,7 +9,8 @@ Route::group([
     Route::post('articles/slug', 'ArticlesUtilityControllerContract@getSlug')->name('back.articles.getSlug');
     Route::post('articles/suggestions', 'ArticlesUtilityControllerContract@getSuggestions')->name('back.articles.getSuggestions');
 
+    Route::get('articles/create/{type?}', 'ArticlesControllerContract@create')->name('back.articles.create');
     Route::resource('articles', 'ArticlesControllerContract', ['except' => [
-        'show',
+        'show', 'create',
     ], 'as' => 'back']);
 });

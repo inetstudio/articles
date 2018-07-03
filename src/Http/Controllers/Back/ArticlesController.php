@@ -63,13 +63,17 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
     }
 
     /**
-     * Добавление объекта.
+     * Создание объекта.
+     *
+     * @param string $type
      *
      * @return FormResponseContract
      */
-    public function create(): FormResponseContract
+    public function create(string $type = ''): FormResponseContract
     {
         $item = $this->services['articles']->getArticleObject();
+
+        $item->setMaterialType($type);
 
         return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract', [
             'data' => compact('item'),

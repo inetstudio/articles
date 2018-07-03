@@ -270,7 +270,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
 
     /**
      * Получаем тип материала.
-     * 
+     *
      * @return string
      */
     private function getMaterialType()
@@ -279,5 +279,16 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         $materialType = (empty($materialType)) ? self::BASE_MATERIAL_TYPE : str_replace('material_type_', '', $materialType[0]);
 
         return $materialType;
+    }
+
+    /**
+     * Присваиваем тип материала.
+     *
+     * @param $type
+     */
+    public function setMaterialType($type)
+    {
+        $this->materialType = ($type) ? $type : $this->materialType;
+        $this->images['model'] = $this->materialType;
     }
 }
