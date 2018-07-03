@@ -34,13 +34,23 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     use \InetStudio\Classifiers\Models\Traits\HasClassifiers;
     use \InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
 
-    const BASE_TYPE = 'article';
     const ENTITY_TYPE = 'article';
 
-    protected $images = [
-        'config' => 'articles',
-        'model' => 'article',
-    ];
+    const BASE_MATERIAL_TYPE = 'article';
+
+    /**
+     * Конфиг изображений.
+     *
+     * @var array
+     */
+    private $images = [];
+
+    /**
+     * Тип материала.
+     *
+     * @var string
+     */
+    private $materialType;
 
     /**
      * Связанная с моделью таблица.
@@ -70,6 +80,25 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         'deleted_at',
         'publish_date',
     ];
+
+    protected $revisionCreationsEnabled = true;
+
+    /**
+     * ArticleModel constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->materialType = $this->getMaterialType();
+
+        $this->images = [
+            'config' => 'articles',
+            'model' => $this->materialType,
+        ];
+    }
 
     /**
      * Сеттер атрибута title.
@@ -151,7 +180,35 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         $this->attributes['status_id'] = (int) $value;
     }
 
-    protected $revisionCreationsEnabled = true;
+    /**
+     * Геттер атрибута href.
+     *
+     * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+     */
+    public function getHrefAttribute()
+    {
+        return url($this->materialType.'/'.(! empty($this->slug) ? $this->slug : $this->id));
+    }
+
+    /**
+     * Геттер атрибута type.
+     *
+     * @return string
+     */
+    public function getTypeAttribute()
+    {
+        return self::ENTITY_TYPE;
+    }
+
+    /**
+     * Геттер атрибута material_type.
+     *
+     * @return string
+     */
+    public function getMaterialTypeAttribute()
+    {
+        return $this->materialType;
+    }
 
     use Status;
 
@@ -212,25 +269,15 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     }
 
     /**
-     * Ссылка на материал.
-     *
-     * @return \Illuminate\Contracts\Routing\UrlGenerator|string
-     */
-    public function getHrefAttribute()
-    {
-        $articleType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
-        $href = (empty($articleType)) ? self::BASE_TYPE : $articleType[0];
-
-        return url($href.'/'.(! empty($this->slug) ? $this->slug : $this->id));
-    }
-
-    /**
-     * Тип материала.
-     *
+     * Получаем тип материала.
+     * 
      * @return string
      */
-    public function getTypeAttribute()
+    private function getMaterialType()
     {
-        return self::ENTITY_TYPE;
+        $materialType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
+        $materialType = (empty($materialType)) ? self::BASE_MATERIAL_TYPE : str_replace('material_type_', '', $materialType[0]);
+
+        return $materialType;
     }
 }

@@ -83,8 +83,8 @@ class ArticlesService implements ArticlesServiceContract
 
         $this->services['meta']->attachToObject($request, $item);
 
-        $images = (config('articles.images.conversions.article')) ? array_keys(config('articles.images.conversions.article')) : [];
-        $this->services['uploads']->attachToObject($request, $item, $images, 'articles', 'article');
+        $images = (config('articles.images.conversions.'.$item->material_type)) ? array_keys(config('articles.images.conversions.'.$item->material_type)) : [];
+        $this->services['uploads']->attachToObject($request, $item, $images, 'articles', $item->material_type);
 
         $this->services['tags']->attachToObject($request, $item);
         $this->services['classifiers']->attachToObject($request, $item);
