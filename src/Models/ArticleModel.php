@@ -138,7 +138,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function setContentAttribute($value)
     {
-        $this->attributes['content'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
+        $this->attributes['content'] = trim(str_replace("&nbsp;", ' ', (isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : '')));
     }
 
     /**
@@ -148,7 +148,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function setCorrectionsAttribute($value)
     {
-        $this->attributes['corrections'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
+        $this->attributes['corrections'] = trim(str_replace("&nbsp;", ' ', (isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : '')));
     }
 
     /**
@@ -158,7 +158,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function setPublishDateAttribute($value)
     {
-        $this->attributes['publish_date'] = Carbon::createFromFormat('d.m.Y H:i', $value);
+        $this->attributes['publish_date'] = ($value) ? Carbon::createFromFormat('d.m.Y H:i', $value) : null;
     }
 
     /**
