@@ -178,7 +178,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function setStatusIdAttribute($value)
     {
-        $this->attributes['status_id'] = (int) $value;
+        $this->attributes['status_id'] = (! $value) ? 1 : (int) $value;
     }
 
     /**
