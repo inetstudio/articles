@@ -44,14 +44,10 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      *
      * @var array
      */
-    private $images = [];
-
-    /**
-     * Тип материала.
-     *
-     * @var string
-     */
-    private $materialType;
+    private $images = [
+        'config' => 'articles',
+        'model' => '',
+    ];
 
     /**
      * Связанная с моделью таблица.
@@ -83,23 +79,6 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     ];
 
     protected $revisionCreationsEnabled = true;
-
-    /**
-     * ArticleModel constructor.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->materialType = $this->getMaterialType();
-
-        $this->images = [
-            'config' => 'articles',
-            'model' => $this->materialType,
-        ];
-    }
 
     /**
      * Сеттер атрибута title.
@@ -182,13 +161,24 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     }
 
     /**
+     * Сеттер атрибута material_type.
+     *
+     * @param $type
+     */
+    public function setMaterialTypeAttribute($value)
+    {
+        $this->attributes['material_type'] = ($value) ? $value : self::BASE_MATERIAL_TYPE;
+        $this->images['model'] = $this->attributes['material_type'];
+    }
+
+    /**
      * Геттер атрибута href.
      *
      * @return \Illuminate\Contracts\Routing\UrlGenerator|string
      */
     public function getHrefAttribute()
     {
-        return url($this->materialType.'/'.(! empty($this->slug) ? $this->slug : $this->id));
+        return url($this->material_type.'/'.(! empty($this->slug) ? $this->slug : $this->id));
     }
 
     /**
@@ -208,7 +198,13 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function getMaterialTypeAttribute()
     {
-        return $this->materialType;
+        if (Schema::hasTable('classifiers')) {
+            $materialType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
+        }
+
+        $materialType = (empty($materialType)) ? self::BASE_MATERIAL_TYPE : str_replace('material_type_', '', $materialType[0]);
+
+        return $materialType;
     }
 
     use Status;
@@ -267,32 +263,5 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
         $engine->addRules($rules);
 
         return $engine;
-    }
-
-    /**
-     * Получаем тип материала.
-     *
-     * @return string
-     */
-    private function getMaterialType()
-    {
-        if (Schema::hasTable('classifiers')) {
-            $materialType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
-        }
-
-        $materialType = (empty($materialType)) ? self::BASE_MATERIAL_TYPE : str_replace('material_type_', '', $materialType[0]);
-
-        return $materialType;
-    }
-
-    /**
-     * Присваиваем тип материала.
-     *
-     * @param $type
-     */
-    public function setMaterialType($type)
-    {
-        $this->materialType = ($type) ? $type : $this->materialType;
-        $this->images['model'] = $this->materialType;
     }
 }
