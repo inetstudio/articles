@@ -253,4 +253,5 @@
     </div>
 
     @include('admin.module.articles::back.pages.modals.suggestion')
+    @include('admin.module.widgets::back.pages.modals.embedded')
 @endsection
