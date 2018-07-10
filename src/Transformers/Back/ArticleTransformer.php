@@ -25,6 +25,9 @@ class ArticleTransformer extends TransformerAbstract implements ArticleTransform
         return [
             'id' => (int) $item->id,
             'title' => $item->title,
+            'material_type' => view('admin.module.articles::back.partials.datatables.material_type', [
+                'type' => $item->material_type,
+            ])->render(),
             'status' => view('admin.module.articles::back.partials.datatables.status', [
                 'status' => $item->status,
             ])->render(),

@@ -80,6 +80,7 @@ class ArticlesDataTableService extends DataTable implements ArticlesDataTableSer
     {
         return [
             ['data' => 'title', 'name' => 'title', 'title' => 'Заголовок'],
+            ['data' => 'material_type', 'name' => 'material_type', 'title' => 'Тип материала', 'orderable' => false, 'searchable' => false],
             ['data' => 'status', 'name' => 'status.name', 'title' => 'Статус', 'orderable' => false],
             ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
             ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
