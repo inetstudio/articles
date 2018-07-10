@@ -202,7 +202,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
             $materialType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
         }
 
-        $materialType = (empty($materialType)) ? self::BASE_MATERIAL_TYPE : str_replace('material_type_', '', $materialType[0]);
+        $materialType = (empty($materialType)) ? ($this->attributes['material_type'] ?? self::BASE_MATERIAL_TYPE) : str_replace('material_type_', '', $materialType[0]);
 
         return $materialType;
     }

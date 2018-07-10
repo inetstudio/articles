@@ -112,6 +112,10 @@ class ArticlesDataTableService extends DataTable implements ArticlesDataTableSer
         $i18n = trans('admin::datatables');
 
         return [
+            'order' => [
+                3,
+                'desc'
+            ],
             'paging' => true,
             'pagingType' => 'full_numbers',
             'searching' => true,

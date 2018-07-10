@@ -73,7 +73,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
     {
         $item = $this->services['articles']->getArticleObject();
 
-        $item->setMaterialType($type);
+        $item->material_type = $type;
 
         return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract', [
             'data' => compact('item'),
