@@ -185,7 +185,7 @@
 
                                     {!! Form::tags('', $item) !!}
 
-                                    {!! Form::datepicker('publish_date', ($item->publish_date) ? $item->publish_date->fornat('d.m.Y H:i') : '', [
+                                    {!! Form::datepicker('publish_date', ($item->publish_date) ? $item->publish_date->format('d.m.Y H:i') : '', [
                                         'label' => [
                                             'title' => 'Дата публикации',
                                         ],
