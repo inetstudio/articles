@@ -210,7 +210,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
             },
 
             'media' => function ($query) {
-                $query->select(['id', 'model_id', 'model_type', 'collection_name', 'file_name', 'disk']);
+                $query->select(['id', 'model_id', 'model_type', 'collection_name', 'file_name', 'disk', 'custom_properties']);
             },
 
             'tags' => function ($query) {
