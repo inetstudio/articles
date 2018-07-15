@@ -198,9 +198,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function getMaterialTypeAttribute()
     {
-        if (Schema::hasTable('classifiers')) {
-            $materialType = $this->classifiers()->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
-        }
+        $materialType = $this->classifiers->where('type', '=', 'Тип материала')->pluck('classifiers.alias')->toArray();
 
         $materialType = (empty($materialType)) ? ($this->attributes['material_type'] ?? self::BASE_MATERIAL_TYPE) : str_replace('material_type_', '', $materialType[0]);
 

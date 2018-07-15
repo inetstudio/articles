@@ -205,6 +205,10 @@ class ArticlesRepository implements ArticlesRepositoryContract
         $defaultColumns = ['id', 'title', 'slug'];
 
         $relations = [
+            'classifiers' => function ($query) {
+                $query->select(['type', 'value', 'alias']);
+            },
+            
             'meta' => function ($query) {
                 $query->select(['metable_id', 'metable_type', 'key', 'value']);
             },
