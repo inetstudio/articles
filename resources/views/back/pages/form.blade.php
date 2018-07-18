@@ -66,7 +66,7 @@
                                             'placeholder' => 'Выберите тип материала',
                                             'type' => 'Тип материала',
                                             'multiple' => false,
-                                            'disabled' => true,
+                                            'readonly' => true,
                                             'default' => 'material_type_'.$item->material_type,
                                         ],
                                     ]) !!}
