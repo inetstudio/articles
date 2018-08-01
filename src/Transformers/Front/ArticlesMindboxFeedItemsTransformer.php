@@ -37,7 +37,7 @@ class ArticlesMindboxFeedItemsTransformer extends TransformerAbstract implements
             'url' => $item->href,
             'description' => strip_tags($item->description),
             'categories' => $item->categories->pluck('id')->toArray(),
-            'tags' => implode('|', $item->tags->pluck('title')->toArray()),
+            'tags' => implode('|', $item->tags->pluck('name')->toArray()),
             'type' => 'Статья',
         ];
     }

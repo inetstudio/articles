@@ -171,7 +171,7 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getMindboxFeedItems(): array
     {
-        $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags', 'status'], true)->get();
+        $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags'], true)->get();
 
         $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\ArticlesMindboxFeedItemsTransformerContract')
             ->transformCollection($items);

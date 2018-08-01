@@ -86,7 +86,7 @@
                                             'title' => 'Заголовок',
                                         ],
                                         'field' => [
-                                            'class' => 'form-control '.(($status->classifiers->contains('alias', 'display_for_users')) ? '' : 'slugify'),
+                                            'class' => 'form-control '.(($status->classifiers->contains('alias', 'status_display_for_users')) ? '' : 'slugify'),
                                             'data-slug-url' => route('back.articles.getSlug'),
                                             'data-slug-target' => 'slug',
                                         ],
