@@ -5,6 +5,7 @@ namespace InetStudio\Articles\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use InetStudio\Tags\Repositories\Traits\TagsRepositoryTrait;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
+use InetStudio\Favorites\Repositories\Traits\FavoritesRepositoryTrait;
 use InetStudio\Categories\Repositories\Traits\CategoriesRepositoryTrait;
 use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 
@@ -14,7 +15,10 @@ use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 class ArticlesRepository implements ArticlesRepositoryContract
 {
     use TagsRepositoryTrait;
+    use FavoritesRepositoryTrait;
     use CategoriesRepositoryTrait;
+
+    protected $favoritesType = 'article';
 
     /**
      * @var ArticleModelContract
@@ -177,31 +181,6 @@ class ArticlesRepository implements ArticlesRepositoryContract
         $item = $builder->first();
 
         return $item;
-    }
-
-    /**
-     * Получаем сохраненные объекты пользователя.
-     *
-     * @param int $userID
-     * @param array $extColumns
-     * @param array $with
-     * @param bool $returnBuilder
-     *
-     * @return mixed
-     */
-    public function getItemsFavoritedByUser(int $userID, array $extColumns = [], array $with = [], bool $returnBuilder = false)
-    {
-        $builder = $this->getItemsQuery(array_merge($extColumns, ['publish_date']), $with)
-            ->orderBy('publish_date', 'DESC')
-            ->whereFavoritedBy('article', $userID);
-
-        if ($returnBuilder) {
-            return $builder;
-        }
-
-        $items = $builder->get();
-
-        return $items;
     }
 
     /**
