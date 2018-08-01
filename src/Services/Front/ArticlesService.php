@@ -167,9 +167,9 @@ class ArticlesService implements ArticlesServiceContract
     /**
      * Получаем информацию по статьям для фида mindbox.
      *
-     * @return array
+     * @return mixed
      */
-    public function getMindboxFeedItems(): array
+    public function getMindboxFeedItems()
     {
         $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags'], true)->get();
 
