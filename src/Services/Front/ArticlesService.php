@@ -141,7 +141,7 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем информацию по ингредиентам для фида.
+     * Получаем информацию по статьям для фида.
      *
      * @return array
      */
@@ -154,6 +154,26 @@ class ArticlesService implements ArticlesServiceContract
             ->get();
 
         $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\ArticlesFeedItemsTransformerContract')
+            ->transformCollection($items);
+
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+
+        $transformation = $manager->createData($resource)->toArray();
+
+        return $transformation['data'];
+    }
+
+    /**
+     * Получаем информацию по статьям для фида mindbox.
+     *
+     * @return array
+     */
+    public function getMindboxFeedItems(): array
+    {
+        $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags', 'status'], true)->get();
+
+        $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\ArticlesMindboxFeedItemsTransformerContract')
             ->transformCollection($items);
 
         $manager = new Manager();
