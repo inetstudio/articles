@@ -31,11 +31,11 @@ class ArticlesMindboxFeedItemsTransformer extends TransformerAbstract implements
 
         return [
             'id' => $item->id,
-            'available' => $item->status->classifiers->contains('alias', 'display_for_users') ? 'true' : 'false',
+            'available' => $item->status->classifiers->contains('alias', 'status_display_for_users') ? 'true' : 'false',
             'picture' => $picture,
             'name' => $item->title,
             'url' => $item->href,
-            'description' => strip_tags($item->description),
+            'description' => html_entity_decode(strip_tags($item->description)),
             'categories' => $item->categories->pluck('id')->toArray(),
             'tags' => implode('|', $item->tags->pluck('name')->toArray()),
             'type' => 'Статья',
