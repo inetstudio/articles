@@ -173,7 +173,7 @@ class ArticlesService implements ArticlesServiceContract
     {
         $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags'], true)->get();
 
-        $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\ArticlesMindboxFeedItemsTransformerContract')
+        $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\Feeds\Mindbox\ArticleTransformerContract')
             ->transformCollection($items);
 
         $manager = new Manager();
