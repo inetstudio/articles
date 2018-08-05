@@ -112,6 +112,21 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
+     * Получаем объекты из любых категорий.
+     *
+     * @param $categories
+     * @param array $extColumns
+     * @param array $with
+     * @param bool $returnBuilder
+     *
+     * @return mixed
+     */
+    public function getArticlesByAnyCategory($categories, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    {
+        return $this->repository->getItemsByAnyCategory($categories, $extColumns, $with, $returnBuilder);
+    }
+
+    /**
      * Получаем сохраненные объекты пользователя.
      *
      * @param int $userID
