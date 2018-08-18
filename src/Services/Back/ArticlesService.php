@@ -56,16 +56,18 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Возвращаем объекты по списку id.
+     * Получаем объекты по списку id.
      *
      * @param array|int $ids
-     * @param bool $returnBuilder
+     * @param array $properties
+     * @param array $with
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getArticlesByIDs($ids, bool $returnBuilder = false)
+    public function getArticlesByIDs($ids, array $properties = [], array $with = [], array $sort = [])
     {
-        return $this->repository->getItemsByIDs($ids, [], [], $returnBuilder);
+        return $this->repository->getItemsByIDs($ids, $properties, $with, $sort);
     }
 
     /**
@@ -152,8 +154,7 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getArticlesStatisticByStatus()
     {
-        $articles = $this->repository->getAllItems([], ['status'], true)
-            ->select(['status_id', DB::raw('count(*) as total')])
+        $articles = $this->repository->getItemsQuery(['status_id', DB::raw('count(*) as total')], ['status'])
             ->groupBy('status_id')
             ->get();
 

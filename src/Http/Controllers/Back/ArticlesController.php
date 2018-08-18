@@ -75,7 +75,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
 
         $item->material_type = $type;
 
-        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract', [
+        return app()->makeWith(FormResponseContract::class, [
             'data' => compact('item'),
         ]);
     }
@@ -103,7 +103,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
     {
         $item = $this->services['articles']->getArticleObject($id);
 
-        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract', [
+        return app()->makeWith(FormResponseContract::class, [
             'data' => compact('item'),
         ]);
     }
@@ -133,7 +133,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
     {
         $item = $this->services['articles']->save($request, $id);
 
-        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\SaveResponseContract', [
+        return app()->makeWith(SaveResponseContract::class, [
             'item' => $item,
         ]);
     }
@@ -149,7 +149,7 @@ class ArticlesController extends Controller implements ArticlesControllerContrac
     {
         $result = $this->services['articles']->destroy($id);
 
-        return app()->makeWith('InetStudio\Articles\Contracts\Http\Responses\Back\Articles\DestroyResponseContract', [
+        return app()->makeWith(DestroyResponseContract::class, [
             'result' => (!! $result),
         ]);
     }

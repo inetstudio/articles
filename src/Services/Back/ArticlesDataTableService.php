@@ -49,9 +49,7 @@ class ArticlesDataTableService extends DataTable implements ArticlesDataTableSer
      */
     public function query()
     {
-        $query = $this->repository->getAllItems([], [], true)
-            ->addSelect(['status_id', 'publish_date'])
-            ->with(['status']);
+        $query = $this->repository->getItemsQuery(['status_id', 'created_at', 'updated_at', 'publish_date'], ['status']);
 
         return $query;
     }

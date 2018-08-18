@@ -37,33 +37,32 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем объекты по id.
+     * Получаем объекты по списку id.
      *
-     * @param $ids
-     * @param array $extColumns
+     * @param array|int $ids
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getArticlesByIDs($ids, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticlesByIDs($ids, array $properties = [], array $with = [], array $sort = [])
     {
-        return $this->repository->getItemsByIDs($ids, $extColumns, $with, $returnBuilder);
+        return $this->repository->getItemsByIDs($ids, $properties, $with, $sort);
     }
 
     /**
      * Получаем объект по slug.
      *
      * @param string $slug
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getArticleBySlug(string $slug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticleBySlug(string $slug, array $properties = [], array $with = [])
     {
-        return $this->repository->getItemBySlug($slug, $extColumns, $with, $returnBuilder);
+        return $this->repository->getItemBySlug($slug, $properties, $with);
     }
 
     /**
@@ -85,45 +84,45 @@ class ArticlesService implements ArticlesServiceContract
      * Получаем объекты по категории.
      *
      * @param string $categorySlug
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getArticlesByCategory(string $categorySlug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticlesByCategory(string $categorySlug, array $properties = [], array $with = [], array $sort = [])
     {
-        return $this->repository->getItemsByCategory($categorySlug, $extColumns, $with, $returnBuilder);
+        return $this->repository->getItemsByCategory($categorySlug, $properties, $with, $sort);
     }
 
     /**
      * Получаем объекты из категорий.
      *
      * @param $categories
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getArticlesFromCategories($categories, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticlesFromCategories($categories, array $properties = [], array $with = [], array $sort = [])
     {
-        return $this->repository->getItemsFromCategories($categories, $extColumns, $with, $returnBuilder);
+        return $this->repository->getItemsFromCategories($categories, $properties, $with, $sort);
     }
 
     /**
      * Получаем объекты из любых категорий.
      *
      * @param $categories
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getArticlesByAnyCategory($categories, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticlesByAnyCategory($categories, array $properties = [], array $with = [], array $sort = [])
     {
-        return $this->repository->getItemsByAnyCategory($categories, $extColumns, $with, $returnBuilder);
+        return $this->repository->getItemsByAnyCategory($categories, $properties, $with, $sort);
     }
 
     /**
@@ -144,15 +143,15 @@ class ArticlesService implements ArticlesServiceContract
     /**
      * Получаем все объекты.
      *
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getAllArticles(array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getAllArticles(array $properties = [], array $with = [], array $sort = [])
     {
-        return $this->repository->getAllItems($extColumns, $with, $returnBuilder);
+        return $this->repository->getAllItems($properties, $with, $sort);
     }
 
     /**
@@ -162,7 +161,7 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getFeedItems(): array
     {
-        $items = $this->repository->getAllItems(['title', 'description', 'content', 'publish_date'], ['categories'], true)
+        $items = $this->repository->getItemsQuery(['title', 'description', 'content', 'publish_date'], ['categories'])
             ->whereNotNull('publish_date')
             ->orderBy('publish_date', 'desc')
             ->limit(500)
@@ -186,7 +185,7 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getMindboxFeedItems()
     {
-        $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags'], true)->get();
+        $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags']);
 
         $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\Feeds\Mindbox\ArticleTransformerContract')
             ->transformCollection($items);
@@ -200,7 +199,7 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем информацию по ингредиентам для карты сайта.
+     * Получаем информацию по статьям для карты сайта.
      *
      * @return array
      */

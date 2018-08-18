@@ -70,22 +70,31 @@ class ArticlesRepository implements ArticlesRepositoryContract
     }
 
     /**
+     * Возвращаем удаленный объект по id, либо пустой.
+     *
+     * @param int $id
+     *
+     * @return ArticleModelContract
+     */
+    public function getTrashedItemByID(int $id = 0): ArticleModelContract
+    {
+        return $this->model::onlyTrashed()->find($id) ?? new $this->model;
+    }
+
+    /**
      * Возвращаем объекты по списку id.
      *
      * @param $ids
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getItemsByIDs($ids, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getItemsByIDs($ids, array $properties = [], array $with = [], array $sort = [])
     {
-        $builder = $this->getItemsQuery($extColumns, $with)->whereIn('id', (array) $ids);
-
-        if ($returnBuilder) {
-            return $builder;
-        }
+        $builder = $this->getItemsQuery($properties, $with, $sort)
+            ->whereIn('id', (array) $ids);
 
         return $builder->get();
     }
@@ -98,7 +107,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
      *
      * @return ArticleModelContract
      */
-    public function save(array $data, int $id): ArticleModelContract
+    public function save(array $data, int $id = 0): ArticleModelContract
     {
         $item = $this->getItemByID($id);
         $item->fill($data);
@@ -114,7 +123,7 @@ class ArticlesRepository implements ArticlesRepositoryContract
      *
      * @return bool
      */
-    public function destroy($id): ?bool
+    public function destroy(int $id = 0): ?bool
     {
         return $this->getItemByID($id)->delete();
     }
@@ -123,19 +132,16 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Ищем объекты.
      *
      * @param array $conditions
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function searchItems(array $conditions, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function searchItems(array $conditions, array $properties = [], array $with = [], array $sort = [])
     {
-        $builder = $this->getItemsQuery($extColumns, $with)->where($conditions);
-
-        if ($returnBuilder) {
-            return $builder;
-        }
+        $builder = $this->getItemsQuery($properties, $with, $sort)
+            ->where($conditions);
 
         return $builder->get();
     }
@@ -143,19 +149,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
     /**
      * Получаем все объекты.
      *
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
+     * @param array $sort
      *
      * @return mixed
      */
-    public function getAllItems(array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getAllItems(array $properties = [], array $with = [], array $sort = [])
     {
-        $builder = $this->getItemsQuery(array_merge($extColumns, ['created_at', 'updated_at']), $with);
-
-        if ($returnBuilder) {
-            return $builder;
-        }
+        $builder = $this->getItemsQuery($properties, $with, $sort);
 
         return $builder->get();
     }
@@ -164,19 +166,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Получаем объекты по slug.
      *
      * @param string $slug
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
-     * @param bool $returnBuilder
      *
      * @return mixed
      */
-    public function getItemBySlug(string $slug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getItemBySlug(string $slug, array $properties = [], array $with = [])
     {
-        $builder = $this->getItemsQuery($extColumns, $with)->whereSlug($slug);
-
-        if ($returnBuilder) {
-            return $builder;
-        }
+        $builder = $this->getItemsQuery($properties, $with)
+            ->whereSlug($slug);
 
         $item = $builder->first();
 
@@ -186,12 +184,13 @@ class ArticlesRepository implements ArticlesRepositoryContract
     /**
      * Возвращаем запрос на получение объектов.
      *
-     * @param array $extColumns
+     * @param array $properties
      * @param array $with
+     * @param array $sort
      *
      * @return Builder
      */
-    protected function getItemsQuery($extColumns = [], $with = []): Builder
+    public function getItemsQuery($properties = [], $with = [], array $sort = []): Builder
     {
         $defaultColumns = ['id', 'title', 'slug'];
 
@@ -221,11 +220,17 @@ class ArticlesRepository implements ArticlesRepositoryContract
             },
 
             'status' => function ($query) {
-                $query->select(['id', 'name', 'alias']);
+                $query->select(['id', 'name', 'alias', 'color_class']);
             },
         ];
 
-        return $this->model::select(array_merge($defaultColumns, $extColumns))
+        $builder = $this->model::select(array_merge($defaultColumns, $properties))
             ->with(array_intersect_key($relations, array_flip($with)));
+
+        foreach ($sort as $column => $direction) {
+            $builder->orderBy($column, $direction);
+        }
+
+        return $builder;
     }
 }
