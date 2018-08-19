@@ -66,15 +66,13 @@ class ArticlesService implements ArticlesServiceContract
      * Получаем объекты по тегу.
      *
      * @param string $tagSlug
-     * @param array $extColumns
-     * @param array $with
-     * @param bool $returnBuilder
+     * @param array $params
      *
      * @return mixed
      */
-    public function getArticlesByTag(string $tagSlug, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticlesByTag(string $tagSlug, array $params = [])
     {
-        return $this->repository->getItemsByTag($tagSlug, $extColumns, $with, $returnBuilder);
+        return $this->repository->getItemsByTag($tagSlug, $params);
     }
 
     /**
@@ -120,15 +118,13 @@ class ArticlesService implements ArticlesServiceContract
      * Получаем сохраненные объекты пользователя.
      *
      * @param int $userID
-     * @param array $extColumns
-     * @param array $with
-     * @param bool $returnBuilder
+     * @param array $params
      *
      * @return mixed
      */
-    public function getArticlesFavoritedByUser(int $userID, array $extColumns = [], array $with = [], bool $returnBuilder = false)
+    public function getArticlesFavoritedByUser(int $userID, array $params = [])
     {
-        return $this->repository->getItemsFavoritedByUser($userID, $extColumns, $with, $returnBuilder);
+        return $this->repository->getItemsFavoritedByUser($userID, $params);
     }
 
     /**
