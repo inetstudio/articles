@@ -51,7 +51,7 @@ class ArticlesRepository extends BaseRepository implements ArticlesRepositoryCon
             },
 
             'categories' => function ($query) {
-                $query->select(['id', 'parent_id', 'name', 'slug', 'title', 'description'])->whereNotNull('parent_id');
+                $query->select(['id', 'parent_id', 'name', 'slug', 'title', 'description']);
             },
 
             'counters' => function ($query) {
