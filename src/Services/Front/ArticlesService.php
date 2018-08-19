@@ -40,29 +40,26 @@ class ArticlesService implements ArticlesServiceContract
      * Получаем объекты по списку id.
      *
      * @param array|int $ids
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function getArticlesByIDs($ids, array $properties = [], array $with = [], array $sort = [])
+    public function getArticlesByIDs($ids, array $params = [])
     {
-        return $this->repository->getItemsByIDs($ids, $properties, $with, $sort);
+        return $this->repository->getItemsByIDs($ids, $params);
     }
 
     /**
      * Получаем объект по slug.
      *
      * @param string $slug
-     * @param array $properties
-     * @param array $with
+     * @param array $params
      *
      * @return mixed
      */
-    public function getArticleBySlug(string $slug, array $properties = [], array $with = [])
+    public function getArticleBySlug(string $slug, array $params = [])
     {
-        return $this->repository->getItemBySlug($slug, $properties, $with);
+        return $this->repository->getItemBySlug($slug, $params);
     }
 
     /**
@@ -84,45 +81,39 @@ class ArticlesService implements ArticlesServiceContract
      * Получаем объекты по категории.
      *
      * @param string $categorySlug
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function getArticlesByCategory(string $categorySlug, array $properties = [], array $with = [], array $sort = [])
+    public function getArticlesByCategory(string $categorySlug, array $params = [])
     {
-        return $this->repository->getItemsByCategory($categorySlug, $properties, $with, $sort);
+        return $this->repository->getItemsByCategory($categorySlug, $params);
     }
 
     /**
      * Получаем объекты из категорий.
      *
      * @param $categories
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function getArticlesFromCategories($categories, array $properties = [], array $with = [], array $sort = [])
+    public function getArticlesFromCategories($categories, array $params = [])
     {
-        return $this->repository->getItemsFromCategories($categories, $properties, $with, $sort);
+        return $this->repository->getItemsFromCategories($categories, $params);
     }
 
     /**
      * Получаем объекты из любых категорий.
      *
      * @param $categories
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function getArticlesByAnyCategory($categories, array $properties = [], array $with = [], array $sort = [])
+    public function getArticlesByAnyCategory($categories, array $params = [])
     {
-        return $this->repository->getItemsByAnyCategory($categories, $properties, $with, $sort);
+        return $this->repository->getItemsByAnyCategory($categories, $params);
     }
 
     /**
@@ -143,15 +134,13 @@ class ArticlesService implements ArticlesServiceContract
     /**
      * Получаем все объекты.
      *
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function getAllArticles(array $properties = [], array $with = [], array $sort = [])
+    public function getAllArticles(array $params = [])
     {
-        return $this->repository->getAllItems($properties, $with, $sort);
+        return $this->repository->getAllItems($params);
     }
 
     /**
@@ -161,10 +150,16 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getFeedItems(): array
     {
-        $items = $this->repository->getItemsQuery(['title', 'description', 'content', 'publish_date'], ['categories'])
+        $items = $this->repository->getItemsQuery([
+                'columns' => ['title', 'description', 'content', 'publish_date'],
+                'relations' => ['categories'],
+                'order' => ['publish_date' => 'desc'],
+                'paging' => [
+                    'page' => 0,
+                    'limit' => 500,
+                ],
+            ])
             ->whereNotNull('publish_date')
-            ->orderBy('publish_date', 'desc')
-            ->limit(500)
             ->get();
 
         $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\ArticlesFeedItemsTransformerContract')
@@ -185,7 +180,10 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function getMindboxFeedItems()
     {
-        $items = $this->repository->getAllItems(['title', 'description', 'status_id'], ['media', 'categories', 'tags']);
+        $items = $this->repository->getAllItems([
+            'columns' => ['title', 'description', 'status_id'],
+            'relations' => ['media', 'categories', 'tags'],
+        ]);
 
         $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\Feeds\Mindbox\ArticleTransformerContract')
             ->transformCollection($items);

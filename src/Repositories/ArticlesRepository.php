@@ -18,6 +18,9 @@ class ArticlesRepository implements ArticlesRepositoryContract
     use FavoritesRepositoryTrait;
     use CategoriesRepositoryTrait;
 
+    /**
+     * @var string
+     */
     protected $favoritesType = 'article';
 
     /**
@@ -85,15 +88,13 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Возвращаем объекты по списку id.
      *
      * @param $ids
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function getItemsByIDs($ids, array $properties = [], array $with = [], array $sort = [])
+    public function getItemsByIDs($ids, array $params = [])
     {
-        $builder = $this->getItemsQuery($properties, $with, $sort)
+        $builder = $this->getItemsQuery($params)
             ->whereIn('id', (array) $ids);
 
         return $builder->get();
@@ -132,15 +133,13 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Ищем объекты.
      *
      * @param array $conditions
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function searchItems(array $conditions, array $properties = [], array $with = [], array $sort = [])
+    public function searchItems(array $conditions, array $params = [])
     {
-        $builder = $this->getItemsQuery($properties, $with, $sort)
+        $builder = $this->getItemsQuery($params)
             ->where($conditions);
 
         return $builder->get();
@@ -149,15 +148,13 @@ class ArticlesRepository implements ArticlesRepositoryContract
     /**
      * Получаем все объекты.
      *
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return mixed
      */
-    public function getAllItems(array $properties = [], array $with = [], array $sort = [])
+    public function getAllItems(array $params = [])
     {
-        $builder = $this->getItemsQuery($properties, $with, $sort);
+        $builder = $this->getItemsQuery($params);
 
         return $builder->get();
     }
@@ -166,15 +163,13 @@ class ArticlesRepository implements ArticlesRepositoryContract
      * Получаем объекты по slug.
      *
      * @param string $slug
-     * @param array $properties
-     * @param array $with
+     * @param array $params
      *
      * @return mixed
      */
-    public function getItemBySlug(string $slug, array $properties = [], array $with = [])
+    public function getItemBySlug(string $slug, array $params = [])
     {
-        $builder = $this->getItemsQuery($properties, $with)
-            ->whereSlug($slug);
+        $builder = $this->getItemsQuery($params)->whereSlug($slug);
 
         $item = $builder->first();
 
@@ -184,16 +179,15 @@ class ArticlesRepository implements ArticlesRepositoryContract
     /**
      * Возвращаем запрос на получение объектов.
      *
-     * @param array $properties
-     * @param array $with
-     * @param array $sort
+     * @param array $params
      *
      * @return Builder
      */
-    public function getItemsQuery($properties = [], $with = [], array $sort = []): Builder
+    public function getItemsQuery(array $params = []): Builder
     {
-        $defaultColumns = ['id', 'title', 'slug'];
+        $builder = $this->model::query();
 
+        $defaultColumns = ['id', 'title', 'slug'];
         $relations = [
             'classifiers' => function ($query) {
                 $query->select(['type', 'value', 'alias']);
@@ -224,11 +218,24 @@ class ArticlesRepository implements ArticlesRepositoryContract
             },
         ];
 
-        $builder = $this->model::select(array_merge($defaultColumns, $properties))
-            ->with(array_intersect_key($relations, array_flip($with)));
+        if (isset($params['columns'])) {
+            $builder->select(array_merge($defaultColumns, $params['columns']));
+        }
 
-        foreach ($sort as $column => $direction) {
-            $builder->orderBy($column, $direction);
+        if (isset($params['relations'])) {
+            $builder->with(array_intersect_key($relations, array_flip($params['relations'])));
+        }
+
+        if (isset($params['order'])) {
+            foreach ($params['order'] as $column => $direction) {
+                $builder->orderBy($column, $direction);
+            }
+        }
+
+        if (isset($params['paging'])) {
+            $skip = $params['paging']['page']*$params['paging']['limit'];
+
+            $builder->skip($skip)->limit($params['paging']['limit']);
         }
 
         return $builder;
