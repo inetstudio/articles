@@ -36,12 +36,18 @@ class ArticlesBindingsServiceProvider extends ServiceProvider
         'InetStudio\Articles\Contracts\Services\Back\ArticlesDataTableServiceContract' => 'InetStudio\Articles\Services\Back\ArticlesDataTableService',
         'InetStudio\Articles\Contracts\Services\Back\ArticlesObserverServiceContract' => 'InetStudio\Articles\Services\Back\ArticlesObserverService',
         'InetStudio\Articles\Contracts\Services\Back\ArticlesServiceContract' => 'InetStudio\Articles\Services\Back\ArticlesService',
-        'InetStudio\Articles\Contracts\Services\Front\ArticlesServiceContract' => 'InetStudio\Articles\Services\Front\ArticlesService',
         'InetStudio\Articles\Contracts\Transformers\Back\ArticleTransformerContract' => 'InetStudio\Articles\Transformers\Back\ArticleTransformer',
         'InetStudio\Articles\Contracts\Transformers\Back\SuggestionTransformerContract' => 'InetStudio\Articles\Transformers\Back\SuggestionTransformer',
         'InetStudio\Articles\Contracts\Transformers\Front\ArticlesFeedItemsTransformerContract' => 'InetStudio\Articles\Transformers\Front\ArticlesFeedItemsTransformer',
         'InetStudio\Articles\Contracts\Transformers\Front\ArticlesSiteMapTransformerContract' => 'InetStudio\Articles\Transformers\Front\ArticlesSiteMapTransformer',
         'InetStudio\Articles\Contracts\Transformers\Front\Feeds\Mindbox\ArticleTransformerContract' => 'InetStudio\Articles\Transformers\Front\Feeds\Mindbox\ArticleTransformer',
+    ];
+
+    /**
+     * @var  array
+     */
+    public $singletons = [
+        'InetStudio\Articles\Contracts\Services\Front\ArticlesServiceContract' => 'InetStudio\Articles\Services\Front\ArticlesService',
     ];
 
     /**
@@ -51,6 +57,9 @@ class ArticlesBindingsServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array_keys($this->bindings);
+        return array_merge(
+            array_keys($this->bindings),
+            array_keys($this->singletons)
+        );
     }
 }
