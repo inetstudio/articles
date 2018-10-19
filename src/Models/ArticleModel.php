@@ -5,17 +5,17 @@ namespace InetStudio\Articles\Models;
 use Cocur\Slugify\Slugify;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
 use InetStudio\Statuses\Models\Traits\Status;
 use InetStudio\Meta\Contracts\Models\Traits\MetableContract;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use InetStudio\Favorites\Contracts\Models\Traits\FavoritableContract;
 
 /**
  * Class ArticleModel.
  */
-class ArticleModel extends Model implements ArticleModelContract, MetableContract, HasMediaConversions, FavoritableContract, RateableContract
+class ArticleModel extends Model implements ArticleModelContract, MetableContract, HasMedia, FavoritableContract, RateableContract
 {
     use \Laravel\Scout\Searchable;
     use \Cviebrock\EloquentSluggable\Sluggable;
