@@ -10,16 +10,15 @@
       }
     ],
     "require": {
-      "inetstudio/access": "1.6.*",
-      "inetstudio/admin-panel": "1.6.*",
-      "inetstudio/categories": "1.6.*",
-      "inetstudio/classifiers": "1.6.*",
-      "inetstudio/comments": "1.6.*",
-      "inetstudio/favorites": "1.6.*",
-      "inetstudio/tags": "1.6.*",
-      "inetstudio/rating": "1.6.*",
-      "inetstudio/statuses": "1.6.*",
-      "inetstudio/widgets": "1.6.*"
+      "inetstudio/access": "1.7.*",
+      "inetstudio/categories": "1.7.*",
+      "inetstudio/classifiers": "1.7.*",
+      "inetstudio/comments": "1.7.*",
+      "inetstudio/favorites": "1.7.*",
+      "inetstudio/tags": "1.7.*",
+      "inetstudio/rating": "1.7.*",
+      "inetstudio/statuses": "1.7.*",
+      "inetstudio/widgets": "1.7.*"
     },
     "autoload": {
       "psr-4": {
