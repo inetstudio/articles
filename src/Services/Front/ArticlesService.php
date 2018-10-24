@@ -170,29 +170,6 @@ class ArticlesService implements ArticlesServiceContract
     }
 
     /**
-     * Получаем информацию по статьям для фида mindbox.
-     *
-     * @return mixed
-     */
-    public function getMindboxFeedItems()
-    {
-        $items = $this->repository->getAllItems([
-            'columns' => ['title', 'description', 'status_id'],
-            'relations' => ['media', 'categories', 'tags'],
-        ]);
-
-        $resource = app()->make('InetStudio\Articles\Contracts\Transformers\Front\Feeds\Mindbox\ArticleTransformerContract')
-            ->transformCollection($items);
-
-        $manager = new Manager();
-        $manager->setSerializer(new DataArraySerializer());
-
-        $transformation = $manager->createData($resource)->toArray();
-
-        return $transformation['data'];
-    }
-
-    /**
      * Получаем информацию по статьям для карты сайта.
      *
      * @return array

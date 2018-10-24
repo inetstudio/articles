@@ -40,7 +40,6 @@ class ArticlesBindingsServiceProvider extends ServiceProvider
         'InetStudio\Articles\Contracts\Transformers\Back\SuggestionTransformerContract' => 'InetStudio\Articles\Transformers\Back\SuggestionTransformer',
         'InetStudio\Articles\Contracts\Transformers\Front\ArticlesFeedItemsTransformerContract' => 'InetStudio\Articles\Transformers\Front\ArticlesFeedItemsTransformer',
         'InetStudio\Articles\Contracts\Transformers\Front\ArticlesSiteMapTransformerContract' => 'InetStudio\Articles\Transformers\Front\ArticlesSiteMapTransformer',
-        'InetStudio\Articles\Contracts\Transformers\Front\Feeds\Mindbox\ArticleTransformerContract' => 'InetStudio\Articles\Transformers\Front\Feeds\Mindbox\ArticleTransformer',
     ];
 
     /**

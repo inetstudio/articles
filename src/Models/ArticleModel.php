@@ -106,7 +106,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      */
     public function setDescriptionAttribute($value)
     {
-        $this->attributes['description'] = trim(str_replace("&nbsp;", '', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
+        $this->attributes['description'] = trim(str_replace("&nbsp;", ' ', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
     }
 
     /**
