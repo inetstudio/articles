@@ -237,6 +237,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
             'slug' => [
                 'source' => 'title',
                 'unique' => true,
+                'includeTrashed' => true,
             ],
         ];
     }

@@ -38,8 +38,10 @@ class ArticlesUtilityController extends Controller implements ArticlesUtilityCon
      */
     public function getSlug(Request $request): SlugResponseContract
     {
+        $id = (int) $request->get('id');
         $name = $request->get('name');
-        $model = app()->make('InetStudio\Articles\Contracts\Models\ArticleModelContract');
+
+        $model = $this->services['articles']->getArticleObject($id);
 
         $slug = ($name) ? SlugService::createSlug($model, 'slug', $name) : '';
 
