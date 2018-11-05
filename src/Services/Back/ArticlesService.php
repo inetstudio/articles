@@ -153,9 +153,9 @@ class ArticlesService implements ArticlesServiceContract
     public function getArticlesStatisticByStatus()
     {
         $articles = $this->repository->getItemsQuery([
-                'columns' => ['status_id', DB::raw('count(*) as total')],
                 'relations' => ['status'],
             ])
+            ->select(['status_id', DB::raw('count(*) as total')])
             ->groupBy('status_id')
             ->get();
 
