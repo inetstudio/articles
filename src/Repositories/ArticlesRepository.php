@@ -5,7 +5,7 @@ namespace InetStudio\Articles\Repositories;
 use InetStudio\AdminPanel\Repositories\BaseRepository;
 use InetStudio\Tags\Repositories\Traits\TagsRepositoryTrait;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
-use InetStudio\AdminPanel\Services\Front\Traits\SlugsServiceTrait;
+use InetStudio\AdminPanel\Repositories\Traits\SlugsRepositoryTrait;
 use InetStudio\Favorites\Repositories\Traits\FavoritesRepositoryTrait;
 use InetStudio\Categories\Repositories\Traits\CategoriesRepositoryTrait;
 use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
@@ -15,8 +15,8 @@ use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
  */
 class ArticlesRepository extends BaseRepository implements ArticlesRepositoryContract
 {
-    use SlugsServiceTrait;
     use TagsRepositoryTrait;
+    use SlugsRepositoryTrait;
     use FavoritesRepositoryTrait;
     use CategoriesRepositoryTrait;
 
