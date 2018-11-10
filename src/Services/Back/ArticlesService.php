@@ -82,15 +82,14 @@ class ArticlesService implements ArticlesServiceContract
         $item = $this->repository->save($request->only($this->repository->getModel()->getFillable()), $id);
 
         $this->services['meta']->attachToObject($request, $item);
-
-        $images = (config('articles.images.conversions.'.$item->material_type)) ? array_keys(config('articles.images.conversions.'.$item->material_type)) : [];
-        $this->services['uploads']->attachToObject($request, $item, $images, 'articles', $item->material_type);
-
         $this->services['tags']->attachToObject($request, $item);
         $this->services['classifiers']->attachToObject($request, $item);
         $this->services['categories']->attachToObject($request, $item);
         $this->services['access']->attachToObject($request, $item);
         $this->services['widgets']->attachToObject($request, $item);
+
+        $images = (config('articles.images.conversions.'.$item->material_type)) ? array_keys(config('articles.images.conversions.'.$item->material_type)) : [];
+        $this->services['uploads']->attachToObject($request, $item, $images, 'articles', $item->material_type);
 
         $item->searchable();
 
