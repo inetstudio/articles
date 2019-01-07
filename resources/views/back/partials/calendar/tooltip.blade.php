@@ -6,7 +6,7 @@
                 <span class="label label-{{ $item->status->color_class }} pull-left m-r">{{ $item->status->name }}</span>
                 <div class="btn-group pull-right">
                     <a href="{{ $item->href }}" target="_blank" class="btn btn-xs btn-default"><i class="fa fa-eye"></i></a>
-                    <a href="{{ route('back.articles.edit', [$item->id]) }}" target="_blank" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a>
+                    <a href="{{ route('back.articles.edit', [$item->id]) }}" target="_blank" class="btn btn-xs btn-default"><i class="fa fa-pencil-alt"></i></a>
                 </div>
             </div>
             <div class="ibox-content" style="padding-bottom: 0px">
