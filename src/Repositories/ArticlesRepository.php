@@ -45,7 +45,7 @@ class ArticlesRepository extends BaseRepository implements ArticlesRepositoryCon
             },
 
             'media' => function ($query) {
-                $query->select(['id', 'model_id', 'model_type', 'collection_name', 'file_name', 'disk', 'mime_type', 'custom_properties']);
+                $query->select(['id', 'model_id', 'model_type', 'collection_name', 'file_name', 'disk', 'mime_type', 'custom_properties', 'responsive_images']);
             },
 
             'tags' => function ($query) {
