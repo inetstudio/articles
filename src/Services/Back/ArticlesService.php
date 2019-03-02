@@ -35,7 +35,7 @@ class ArticlesService implements ArticlesServiceContract
         $this->services['meta'] = app()->make('InetStudio\Meta\Contracts\Services\Back\MetaServiceContract');
         $this->services['uploads'] = app()->make('InetStudio\Uploads\Contracts\Services\Back\ImagesServiceContract');
         $this->services['tags'] = app()->make('InetStudio\Tags\Contracts\Services\Back\TagsServiceContract');
-        $this->services['classifiers'] = app()->make('InetStudio\Classifiers\Contracts\Services\Back\ClassifiersServiceContract');
+        $this->services['classifiers'] = app()->make('InetStudio\Classifiers\Entries\Contracts\Services\Back\EntriesServiceContract');
         $this->services['categories'] = app()->make('InetStudio\Categories\Contracts\Services\Back\CategoriesServiceContract');
         $this->services['access'] = app()->make('InetStudio\Access\Contracts\Services\Back\AccessServiceContract');
         $this->services['widgets'] = app()->make('InetStudio\Widgets\Contracts\Services\Back\WidgetsServiceContract');

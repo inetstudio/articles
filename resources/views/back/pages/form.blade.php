@@ -64,7 +64,7 @@
                                         ],
                                         'field' => [
                                             'placeholder' => 'Выберите тип материала',
-                                            'type' => 'Тип материала',
+                                            'group' => 'Тип материала',
                                             'multiple' => false,
                                             'readonly' => true,
                                             'default' => 'material_type_'.$item->material_type,
@@ -77,7 +77,7 @@
                                         ],
                                         'field' => [
                                             'placeholder' => 'Выберите типы публикации',
-                                            'type' => 'Тип публикации',
+                                            'group' => 'Тип публикации',
                                         ],
                                     ]) !!}
 

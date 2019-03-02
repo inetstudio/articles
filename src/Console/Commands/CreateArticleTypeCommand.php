@@ -32,18 +32,25 @@ class CreateArticleTypeCommand extends Command
      */
     public function handle(): void
     {
-        if (DB::table('classifiers')->where('alias', 'material_type_article')->count() == 0) {
+        $groupsService = app()->make('InetStudio\Classifiers\Groups\Contracts\Services\Back\GroupsServiceContract');
+
+        if (DB::table('classifiers_entries')->where('alias', 'material_type_article')->count() == 0) {
             $now = Carbon::now()->format('Y-m-d H:m:s');
 
-            DB::table('classifiers')->insert([
-                [
-                    'type' => 'Тип материала',
-                    'value' => 'Статья',
-                    'alias' => 'material_type_article',
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ],
+            $group = $groupsService->model::updateOrCreate([
+                'name' => 'Тип материала',
+            ], [
+                'alias' => 'article_material_types',
             ]);
+
+            $id = DB::connection('mysql')->table('classifiers_entries')->insertGetId([
+                'value' => 'Статья',
+                'alias' => 'material_type_article',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+
+            $group->entries()->attach($id);
         }
     }
 }
