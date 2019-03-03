@@ -37,7 +37,7 @@ class ArticlesRepository extends BaseRepository implements ArticlesRepositoryCon
         $this->defaultColumns = ['id', 'title', 'slug'];
         $this->relations = [
             'classifiers' => function ($query) {
-                $query->select(['id', 'value', 'alias']);
+                $query->select(['classifiers_entries.id', 'classifiers_entries.value', 'classifiers_entries.alias']);
             },
 
             'meta' => function ($query) {
