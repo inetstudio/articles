@@ -6,6 +6,7 @@ use League\Fractal\Manager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use League\Fractal\Serializer\DataArraySerializer;
+use InetStudio\AdminPanel\Base\Services\Back\BaseService;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Articles\Contracts\Services\Back\ArticlesServiceContract;
 use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
@@ -13,7 +14,7 @@ use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 /**
  * Class ArticlesService.
  */
-class ArticlesService implements ArticlesServiceContract
+class ArticlesService extends BaseService implements ArticlesServiceContract
 {
     /**
      * Используемые сервисы.
@@ -32,6 +33,8 @@ class ArticlesService implements ArticlesServiceContract
      */
     public function __construct()
     {
+        parent::__construct(app()->make('InetStudio\Articles\Contracts\Models\ArticleModelContract'));
+
         $this->services['meta'] = app()->make('InetStudio\Meta\Contracts\Services\Back\MetaServiceContract');
         $this->services['uploads'] = app()->make('InetStudio\Uploads\Contracts\Services\Back\ImagesServiceContract');
         $this->services['tags'] = app()->make('InetStudio\Tags\Contracts\Services\Back\TagsServiceContract');
@@ -100,18 +103,6 @@ class ArticlesService implements ArticlesServiceContract
         Session::flash('success', 'Статья «'.$item->title.'» успешно '.$action);
 
         return $item;
-    }
-
-    /**
-     * Удаляем модель.
-     *
-     * @param int $id
-     *
-     * @return bool|null
-     */
-    public function destroy(int $id): ?bool
-    {
-        return $this->repository->destroy($id);
     }
 
     /**
