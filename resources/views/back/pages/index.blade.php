@@ -18,7 +18,7 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <div class="btn-group">
-                            <button data-toggle="dropdown" class="btn btn-sm btn-primary btn-lg dropdown-toggle">Создать <span class="caret"></span></button>
+                            <button data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Добавить</button>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ route('back.articles.create') }}">Статью</a></li>
                             </ul>
