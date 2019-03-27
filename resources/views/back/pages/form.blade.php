@@ -27,7 +27,7 @@
                     @php
                         $status = (! $item->id or ! $item->status) ? \InetStudio\Statuses\Models\StatusModel::get()->first() : $item->status;
                     @endphp
-                    <div class="btn bg-{{ $status->color_class }}">{{ $status->name }}</div>
+                    <button class="btn btn-sm btn-{{ $status->color_class }}">{{ $status->name }}</button>
                 </div>
             </div>
         </div>
