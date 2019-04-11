@@ -6,7 +6,7 @@ use League\Fractal\Manager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use League\Fractal\Serializer\DataArraySerializer;
-use InetStudio\AdminPanel\Base\Services\Back\BaseService;
+use InetStudio\AdminPanel\Base\Services\BaseService;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Articles\Contracts\Services\Back\ArticlesServiceContract;
 use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
@@ -38,7 +38,7 @@ class ArticlesService extends BaseService implements ArticlesServiceContract
         $this->services['meta'] = app()->make('InetStudio\Meta\Contracts\Services\Back\MetaServiceContract');
         $this->services['uploads'] = app()->make('InetStudio\Uploads\Contracts\Services\Back\ImagesServiceContract');
         $this->services['tags'] = app()->make('InetStudio\Tags\Contracts\Services\Back\TagsServiceContract');
-        $this->services['classifiers'] = app()->make('InetStudio\Classifiers\Entries\Contracts\Services\Back\EntriesServiceContract');
+        $this->services['classifiers'] = app()->make('InetStudio\Classifiers\Entries\Contracts\Services\Back\ItemsServiceContract');
         $this->services['categories'] = app()->make('InetStudio\Categories\Contracts\Services\Back\CategoriesServiceContract');
         $this->services['access'] = app()->make('InetStudio\Access\Contracts\Services\Back\AccessServiceContract');
         $this->services['widgets'] = app()->make('InetStudio\Widgets\Contracts\Services\Back\WidgetsServiceContract');

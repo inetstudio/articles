@@ -32,12 +32,12 @@ class CreateArticleTypeCommand extends Command
      */
     public function handle(): void
     {
-        $groupsService = app()->make('InetStudio\Classifiers\Groups\Contracts\Services\Back\GroupsServiceContract');
+        $groupsService = app()->make('InetStudio\Classifiers\Groups\Contracts\Services\Back\ItemsServiceContract');
 
         if (DB::table('classifiers_entries')->where('alias', 'material_type_article')->count() == 0) {
             $now = Carbon::now()->format('Y-m-d H:m:s');
 
-            $group = $groupsService->model::updateOrCreate([
+            $group = $groupsService->getModel()::updateOrCreate([
                 'name' => 'Тип материала',
             ], [
                 'alias' => 'article_material_types',
