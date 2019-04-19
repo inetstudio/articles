@@ -23,7 +23,7 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
     use \OwenIt\Auditing\Auditable;
     use \Cviebrock\EloquentSluggable\Sluggable;
     use \InetStudio\Meta\Models\Traits\Metable;
-    use \InetStudio\Tags\Models\Traits\HasTags;
+    use \InetStudio\TagsPackage\Tags\Models\Traits\HasTags;
     use \Illuminate\Database\Eloquent\SoftDeletes;
     use \InetStudio\Rating\Models\Traits\Rateable;
     use \InetStudio\Access\Models\Traits\Accessable;
