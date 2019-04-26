@@ -21,12 +21,15 @@ class ArticlesService extends BaseService implements ArticlesServiceContract
     use FavoritesServiceTrait;
     use CategoriesServiceTrait;
 
+    public $model;
+
     /**
      * ArticlesService constructor.
      */
     public function __construct()
     {
         parent::__construct(app()->make('InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract'));
+        $this->model = app()->make('InetStudio\Articles\Contracts\Models\ArticleModelContract');
     }
 
     /**

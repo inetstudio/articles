@@ -3,6 +3,7 @@
 namespace InetStudio\Articles\Models;
 
 use Cocur\Slugify\Slugify;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -13,12 +14,14 @@ use InetStudio\Meta\Contracts\Models\Traits\MetableContract;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\Rating\Contracts\Models\Traits\RateableContract;
 use InetStudio\Favorites\Contracts\Models\Traits\FavoritableContract;
+use InetStudio\AdminPanel\Base\Models\Traits\Scopes\BuildQueryScopeTrait;
 
 /**
  * Class ArticleModel.
  */
 class ArticleModel extends Model implements ArticleModelContract, MetableContract, HasMedia, FavoritableContract, RateableContract, Auditable
 {
+    use BuildQueryScopeTrait;
     use \Laravel\Scout\Searchable;
     use \OwenIt\Auditing\Auditable;
     use \Cviebrock\EloquentSluggable\Sluggable;
@@ -85,6 +88,50 @@ class ArticleModel extends Model implements ArticleModelContract, MetableContrac
      * @var bool
      */
     protected $auditTimestamps = true;
+
+    /**
+     * Загрузка модели.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::$buildQueryScopeDefaults['columns'] = [
+            'id',
+            'slug',
+            'title',
+        ];
+
+        self::$buildQueryScopeDefaults['relations'] = [
+            'classifiers' => function ($query) {
+                $query->select(['classifiers_entries.id', 'classifiers_entries.value', 'classifiers_entries.alias']);
+            },
+
+            'meta' => function ($query) {
+                $query->select(['metable_id', 'metable_type', 'key', 'value']);
+            },
+
+            'media' => function ($query) {
+                $query->select(['id', 'model_id', 'model_type', 'collection_name', 'file_name', 'disk', 'mime_type', 'custom_properties', 'responsive_images']);
+            },
+
+            'tags' => function ($query) {
+                $query->select(['id', 'name', 'slug']);
+            },
+
+            'categories' => function ($query) {
+                $query->select(['id', 'parent_id', 'name', 'slug', 'title', 'description']);
+            },
+
+            'counters' => function ($query) {
+                $query->select(['countable_id', 'countable_type', 'type', 'counter']);
+            },
+
+            'status' => function ($query) {
+                $query->select(['id', 'name', 'alias', 'color_class']);
+            },
+        ];
+    }
 
     /**
      * Сеттер атрибута title.
