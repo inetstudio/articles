@@ -39,7 +39,7 @@ class ArticlesService extends BaseService implements ArticlesServiceContract
         $this->services['uploads'] = app()->make('InetStudio\Uploads\Contracts\Services\Back\ImagesServiceContract');
         $this->services['tags'] = app()->make('InetStudio\TagsPackage\Tags\Contracts\Services\Back\ItemsServiceContract');
         $this->services['classifiers'] = app()->make('InetStudio\Classifiers\Entries\Contracts\Services\Back\ItemsServiceContract');
-        $this->services['categories'] = app()->make('InetStudio\Categories\Contracts\Services\Back\CategoriesServiceContract');
+        $this->services['categories'] = app()->make('InetStudio\CategoriesPackage\Categories\Contracts\Services\Back\ItemsServiceContract');
         $this->services['access'] = app()->make('InetStudio\Access\Contracts\Services\Back\AccessServiceContract');
         $this->services['widgets'] = app()->make('InetStudio\Widgets\Contracts\Services\Back\WidgetsServiceContract');
 
@@ -87,7 +87,7 @@ class ArticlesService extends BaseService implements ArticlesServiceContract
         $this->services['meta']->attachToObject($request, $item);
         $this->services['tags']->attachToObject($request, $item);
         $this->services['classifiers']->attachToObject($request, $item);
-        $this->services['categories']->attachToObject($request, $item);
+        $this->services['categories']->attachToObject($request->get('categories'), $item);
         $this->services['access']->attachToObject($request, $item);
         $this->services['widgets']->attachToObject($request, $item);
 

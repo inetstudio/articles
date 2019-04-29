@@ -6,7 +6,6 @@ use InetStudio\AdminPanel\Repositories\BaseRepository;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
 use InetStudio\AdminPanel\Repositories\Traits\SlugsRepositoryTrait;
 use InetStudio\Favorites\Repositories\Traits\FavoritesRepositoryTrait;
-use InetStudio\Categories\Repositories\Traits\CategoriesRepositoryTrait;
 use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 
 /**
@@ -16,7 +15,6 @@ class ArticlesRepository extends BaseRepository implements ArticlesRepositoryCon
 {
     use SlugsRepositoryTrait;
     use FavoritesRepositoryTrait;
-    use CategoriesRepositoryTrait;
 
     /**
      * @var string
