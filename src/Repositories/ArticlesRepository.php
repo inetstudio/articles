@@ -4,7 +4,6 @@ namespace InetStudio\Articles\Repositories;
 
 use InetStudio\AdminPanel\Repositories\BaseRepository;
 use InetStudio\Articles\Contracts\Models\ArticleModelContract;
-use InetStudio\AdminPanel\Repositories\Traits\SlugsRepositoryTrait;
 use InetStudio\Favorites\Repositories\Traits\FavoritesRepositoryTrait;
 use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
 
@@ -13,7 +12,6 @@ use InetStudio\Articles\Contracts\Repositories\ArticlesRepositoryContract;
  */
 class ArticlesRepository extends BaseRepository implements ArticlesRepositoryContract
 {
-    use SlugsRepositoryTrait;
     use FavoritesRepositoryTrait;
 
     /**

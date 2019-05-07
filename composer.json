@@ -15,6 +15,7 @@
       "inetstudio/classifiers": "1.8.*",
       "inetstudio/comments": "1.8.*",
       "inetstudio/favorites": "1.8.*",
+      "inetstudio/meta": "1.8.*",
       "inetstudio/tags": "1.8.*",
       "inetstudio/rating": "1.8.*",
       "inetstudio/statuses": "1.8.*",
