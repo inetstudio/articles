@@ -24,6 +24,11 @@ class ArticlesService extends BaseService implements ArticlesServiceContract
     public $model;
 
     /**
+     * @var string
+     */
+    protected $favoritesType = 'article';
+
+    /**
      * ArticlesService constructor.
      */
     public function __construct()
