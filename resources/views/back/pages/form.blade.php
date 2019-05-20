@@ -24,10 +24,7 @@
                     </a>
                 @endif
                 <div class="ibox-tools">
-                    @php
-                        $status = (! $item->id or ! $item->status) ? \InetStudio\Statuses\Models\StatusModel::get()->first() : $item->status;
-                    @endphp
-                    <button class="btn btn-sm btn-{{ $status->color_class }}">{{ $status->name }}</button>
+                    {!! Form::status_block('', $item) !!}
                 </div>
             </div>
         </div>
@@ -95,7 +92,7 @@
                                                         'title' => 'Заголовок',
                                                     ],
                                                     'field' => [
-                                                        'class' => 'form-control '.(($status->classifiers->contains('alias', 'status_display_for_users')) ? '' : 'slugify'),
+                                                        'class' => 'form-control '.(($item->status && $item->status->classifiers->contains('alias', 'status_display_for_users')) ? '' : 'slugify'),
                                                         'data-slug-url' => route('back.articles.getSlug'),
                                                         'data-slug-target' => 'slug',
                                                     ],
