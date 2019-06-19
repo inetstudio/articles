@@ -18,6 +18,7 @@
       "inetstudio/meta": "1.8.*",
       "inetstudio/tags": "1.8.*",
       "inetstudio/rating": "1.8.*",
+      "inetstudio/simple-counters": "1.8.*",
       "inetstudio/statuses": "1.8.*",
       "inetstudio/widgets": "1.8.*"
     },
