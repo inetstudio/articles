@@ -37,7 +37,7 @@ class ArticleModel extends Model implements ArticleModelContract, HasMedia, Favo
     use \Cviebrock\EloquentSluggable\SluggableScopeHelpers;
     use \InetStudio\CategoriesPackage\Categories\Models\Traits\HasCategories;
     use \InetStudio\Classifiers\Models\Traits\HasClassifiers;
-    use \InetStudio\SimpleCounters\Models\Traits\HasSimpleCountersTrait;
+    use \InetStudio\SimpleCounters\Counters\Models\Traits\HasSimpleCountersTrait;
 
     const ENTITY_TYPE = 'article';
 
