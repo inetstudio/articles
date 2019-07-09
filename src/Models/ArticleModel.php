@@ -32,7 +32,7 @@ class ArticleModel extends Model implements ArticleModelContract, HasMedia, Favo
     use \InetStudio\Access\Models\Traits\Accessable;
     use \InetStudio\Uploads\Models\Traits\HasImages;
     use \InetStudio\Widgets\Models\Traits\HasWidgets;
-    use \InetStudio\Comments\Models\Traits\HasComments;
+    use \InetStudio\CommentsPackage\Comments\Models\Traits\HasComments;
     use \InetStudio\Favorites\Models\Traits\Favoritable;
     use \Cviebrock\EloquentSluggable\SluggableScopeHelpers;
     use \InetStudio\CategoriesPackage\Categories\Models\Traits\HasCategories;
