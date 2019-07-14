@@ -279,6 +279,16 @@ class ArticleModel extends Model implements ArticleModelContract, HasMedia, Favo
     }
 
     /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableIndex()
+    {
+        return trim(config('scout.elasticsearch.index', '').'_articles', '_');
+    }
+
+    /**
      * Get the _type name for the model.
      *
      * @return string
