@@ -279,6 +279,16 @@ class ArticleModel extends Model implements ArticleModelContract, HasMedia, Favo
     }
 
     /**
+     * Get the _type name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return '_doc';
+    }
+
+    /**
      * Возвращаем конфиг для генерации slug модели.
      *
      * @return array
