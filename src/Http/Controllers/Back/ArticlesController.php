@@ -2,7 +2,7 @@
 
 namespace InetStudio\Articles\Http\Controllers\Back;
 
-use App\Http\Controllers\Controller;
+use InetStudio\AdminPanel\Base\Http\Controllers\Controller;
 use InetStudio\Articles\Contracts\Http\Requests\Back\SaveArticleRequestContract;
 use InetStudio\Articles\Contracts\Http\Controllers\Back\ArticlesControllerContract;
 use InetStudio\Articles\Contracts\Http\Responses\Back\Articles\FormResponseContract;
