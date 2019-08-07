@@ -10,6 +10,7 @@
       }
     ],
     "require": {
+      "inetstudio/admin-panel": "1.8.*",
       "inetstudio/access": "1.8.*",
       "inetstudio/categories": "1.8.*",
       "inetstudio/classifiers": "1.8.*",
@@ -24,14 +25,16 @@
     },
     "autoload": {
       "psr-4": {
-        "InetStudio\\Articles\\": "src/"
+        "InetStudio\\ArticlesPackage\\": "package/src",
+        "InetStudio\\ArticlesPackage\\Articles\\": "entities/articles/src"
       }
     },
     "extra": {
       "laravel": {
         "providers": [
-          "InetStudio\\Articles\\Providers\\ArticlesBindingsServiceProvider",
-          "InetStudio\\Articles\\Providers\\ArticlesServiceProvider"
+          "InetStudio\\ArticlesPackage\\Providers\\ServiceProvider",
+          "InetStudio\\ArticlesPackage\\Articles\\Providers\\BindingsServiceProvider",
+          "InetStudio\\ArticlesPackage\\Articles\\Providers\\ServiceProvider"
         ]
       }
     }
