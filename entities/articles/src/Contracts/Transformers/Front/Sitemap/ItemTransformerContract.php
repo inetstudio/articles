@@ -7,4 +7,13 @@ namespace InetStudio\ArticlesPackage\Articles\Contracts\Transformers\Front\Sitem
  */
 interface ItemTransformerContract
 {
+    /**
+     * Трансформация данных.
+     *
+     * @param $item
+     *
+     * @return array
+     */
+    public function transform($item): array;
+
 }

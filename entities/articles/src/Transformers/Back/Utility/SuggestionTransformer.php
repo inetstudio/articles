@@ -2,15 +2,14 @@
 
 namespace InetStudio\ArticlesPackage\Articles\Transformers\Back\Utility;
 
-use League\Fractal\TransformerAbstract;
-use League\Fractal\Resource\Collection as FractalCollection;
-use InetStudio\ArticlesPackage\Articles\Contracts\Models\ArticleModelContract;
+use Throwable;
+use InetStudio\AdminPanel\Base\Transformers\BaseTransformer;
 use InetStudio\ArticlesPackage\Articles\Contracts\Transformers\Back\Utility\SuggestionTransformerContract;
 
 /**
  * Class SuggestionTransformer.
  */
-class SuggestionTransformer extends TransformerAbstract implements SuggestionTransformerContract
+class SuggestionTransformer extends BaseTransformer implements SuggestionTransformerContract
 {
     /**
      * @var string
@@ -30,13 +29,13 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
     /**
      * Подготовка данных для отображения в выпадающих списках.
      *
-     * @param  ArticleModelContract  $item
+     * @param $item
      *
      * @return array
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function transform(ArticleModelContract $item): array
+    public function transform($item): array
     {
         return ($this->type == 'autocomplete')
             ? [
@@ -53,17 +52,5 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
                 'id' => $item['id'],
                 'name' => $item['title'],
             ];
-    }
-
-    /**
-     * Обработка коллекции объектов.
-     *
-     * @param $items
-     *
-     * @return FractalCollection
-     */
-    public function transformCollection($items): FractalCollection
-    {
-        return new FractalCollection($items, $this);
     }
 }

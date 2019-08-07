@@ -7,4 +7,12 @@ namespace InetStudio\ArticlesPackage\Articles\Contracts\Transformers\Back\Resour
  */
 interface IndexTransformerContract
 {
+    /**
+     * Трансформация данных.
+     *
+     * @param $item
+     *
+     * @return array
+     */
+    public function transform($item): array;
 }

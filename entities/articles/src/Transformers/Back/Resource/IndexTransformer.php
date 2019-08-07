@@ -3,25 +3,24 @@
 namespace InetStudio\ArticlesPackage\Articles\Transformers\Back\Resource;
 
 use Throwable;
-use League\Fractal\TransformerAbstract;
-use InetStudio\ArticlesPackage\Articles\Contracts\Models\ArticleModelContract;
+use InetStudio\AdminPanel\Base\Transformers\BaseTransformer;
 use InetStudio\ArticlesPackage\Articles\Contracts\Transformers\Back\Resource\IndexTransformerContract;
 
 /**
  * Class IndexTransformer.
  */
-class IndexTransformer extends TransformerAbstract implements IndexTransformerContract
+class IndexTransformer extends BaseTransformer implements IndexTransformerContract
 {
     /**
      * Подготовка данных для отображения в таблице.
      *
-     * @param  ArticleModelContract  $item
+     * @param $item
      *
      * @return array
      *
      * @throws Throwable
      */
-    public function transform(ArticleModelContract $item): array
+    public function transform($item): array
     {
         return [
             'id' => (int) $item['id'],
