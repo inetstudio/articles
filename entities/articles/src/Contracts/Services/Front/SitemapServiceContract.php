@@ -10,9 +10,11 @@ use InetStudio\AdminPanel\Base\Contracts\Services\BaseServiceContract;
 interface SitemapServiceContract extends BaseServiceContract
 {
     /**
-     * Возвращаем объекты для карты сайта.
+     * Получаем информацию по объектам для карты сайта.
+     *
+     * @param  array $params
      *
      * @return array
      */
-    public function getItems(): array;
+    public function getItems(array $params = []): array;
 }

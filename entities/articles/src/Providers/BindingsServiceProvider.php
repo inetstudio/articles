@@ -15,9 +15,12 @@ class BindingsServiceProvider extends BaseServiceProvider implements DeferrableP
      */
     public $bindings = [
         'InetStudio\ArticlesPackage\Articles\Contracts\Events\Back\ModifyItemEventContract' => 'InetStudio\ArticlesPackage\Articles\Events\Back\ModifyItemEvent',
+        'InetStudio\ArticlesPackage\Articles\Contracts\Exports\CommentsExportContract' => 'InetStudio\ArticlesPackage\Articles\Exports\CommentsExport',
+        'InetStudio\ArticlesPackage\Articles\Contracts\Exports\ImagesExportContract' => 'InetStudio\ArticlesPackage\Articles\Exports\ImagesExport',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Controllers\Back\DataControllerContract' => 'InetStudio\ArticlesPackage\Articles\Http\Controllers\Back\DataController',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Controllers\Back\ResourceControllerContract' => 'InetStudio\ArticlesPackage\Articles\Http\Controllers\Back\ResourceController',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Controllers\Back\UtilityControllerContract' => 'InetStudio\ArticlesPackage\Articles\Http\Controllers\Back\UtilityController',
+        'InetStudio\ArticlesPackage\Articles\Contracts\Http\Controllers\Front\ExportControllerContract' => 'InetStudio\ArticlesPackage\Articles\Http\Controllers\Front\ExportController',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Requests\Back\SaveItemRequestContract' => 'InetStudio\ArticlesPackage\Articles\Http\Requests\Back\SaveItemRequest',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\DestroyResponseContract' => 'InetStudio\ArticlesPackage\Articles\Http\Responses\Back\Resource\DestroyResponse',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\FormResponseContract' => 'InetStudio\ArticlesPackage\Articles\Http\Responses\Back\Resource\FormResponse',

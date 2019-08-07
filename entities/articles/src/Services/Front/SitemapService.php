@@ -26,18 +26,15 @@ class SitemapService extends BaseService implements SitemapServiceContract
     /**
      * Получаем информацию по объектам для карты сайта.
      *
+     * @param  array $params
+     *
      * @return array
      *
      * @throws BindingResolutionException
      */
-    public function getItems(): array
+    public function getItems(array $params = []): array
     {
-        $items = $this->model->buildQuery(
-            [
-                'columns' => ['created_at', 'updated_at'],
-                'order' => ['created_at' => 'desc'],
-            ]
-        )->get();
+        $items = $this->model->buildQuery($params)->get();
 
         $transformer = app()->make(
             'InetStudio\ArticlesPackage\Articles\Contracts\Transformers\Front\Sitemap\ItemTransformerContract'

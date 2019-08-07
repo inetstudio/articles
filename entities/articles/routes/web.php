@@ -31,3 +31,14 @@ Route::group(
         );
     }
 );
+
+Route::group(
+    [
+        'namespace' => 'InetStudio\ArticlesPackage\Articles\Contracts\Http\Controllers\Front',
+        'middleware' => ['web'],
+    ],
+    function () {
+        Route::get('/article/{slug}/export/comments', 'ExportController@exportComments')->name('front.articles.export.comments');
+        Route::get('/article/{slug}/export/images', 'ExportController@exportImages')->name('front.articles.export.images');
+    }
+);
