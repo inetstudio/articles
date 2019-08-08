@@ -38,7 +38,7 @@ Route::group(
         'middleware' => ['web'],
     ],
     function () {
-        Route::get('/article/{slug}/export/comments', 'ExportController@exportComments')->name('front.articles.export.comments');
-        Route::get('/article/{slug}/export/images', 'ExportController@exportImages')->name('front.articles.export.images');
+        Route::get('/article/{slug}/export/comments', 'ExportControllerContract@exportComments')->name('front.articles.export.comments');
+        Route::get('/article/{slug}/export/images', 'ExportControllerContract@exportImages')->name('front.articles.export.images');
     }
 );
