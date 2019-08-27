@@ -2,7 +2,6 @@
 
 namespace InetStudio\ArticlesPackage\Articles\Transformers\Front\Sitemap;
 
-use Throwable;
 use Carbon\Carbon;
 use InetStudio\AdminPanel\Base\Transformers\BaseTransformer;
 use InetStudio\ArticlesPackage\Articles\Contracts\Transformers\Front\Sitemap\ItemTransformerContract;
@@ -18,8 +17,6 @@ class ItemTransformer extends BaseTransformer implements ItemTransformerContract
      * @param $item
      *
      * @return array
-     *
-     * @throws Throwable
      */
     public function transform($item): array
     {
