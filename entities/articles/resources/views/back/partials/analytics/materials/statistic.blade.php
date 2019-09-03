@@ -1,4 +1,4 @@
-@inject('articlesService', 'InetStudio\Articles\Contracts\Services\Back\ArticlesServiceContract')
+@inject('articlesService', 'InetStudio\ArticlesPackage\Articles\Contracts\Services\Back\ItemsServiceContract')
 
 @php
     $articles = $articlesService->getArticlesStatisticByStatus();
