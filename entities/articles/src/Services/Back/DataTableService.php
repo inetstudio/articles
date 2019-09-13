@@ -23,6 +23,8 @@ class DataTableService extends DataTable implements DataTableServiceContract
 
     /**
      * DataTableService constructor.
+     *
+     * @param  ArticleModelContract  $model
      */
     public function __construct(ArticleModelContract $model)
     {

@@ -87,17 +87,17 @@ class ItemsService extends BaseService implements ItemsServiceContract
      *
      * @return mixed
      */
-    public function getArticlesStatisticByStatus()
+    public function getItemsStatisticByStatus()
     {
-        $articles = $this->model::buildQuery(
-            [
-                'relations' => ['status'],
-            ]
-        )
+        $items = $this->model::buildQuery(
+                [
+                    'relations' => ['status'],
+                ]
+            )
             ->select(['status_id', DB::raw('count(*) as total')])
             ->groupBy('status_id')
             ->get();
 
-        return $articles;
+        return $items;
     }
 }

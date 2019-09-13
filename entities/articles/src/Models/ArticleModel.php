@@ -70,7 +70,7 @@ class ArticleModel extends Model implements ArticleModelContract
      *
      * @var array
      */
-    private $images = [
+    protected $images = [
         'config' => 'articles',
         'model' => '',
     ];
@@ -175,6 +175,10 @@ class ArticleModel extends Model implements ArticleModelContract
         ];
 
         self::$buildQueryScopeDefaults['relations'] = [
+            'access' => function ($query) {
+                $query->select(['accessable_id', 'accessable_type', 'field', 'access']);
+            },
+
             'classifiers' => function ($query) {
                 $query->with(
                     [
