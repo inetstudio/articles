@@ -30,7 +30,7 @@ class CommentsExport implements CommentsExportContract, FromCollection, WithMapp
      *
      * @param  array  $data
      */
-    protected function setData(array $data): void
+    public function setData(array $data): void
     {
         $this->data = $data;
     }

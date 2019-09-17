@@ -37,7 +37,7 @@ class ImagesExportResponse implements ImagesExportResponseContract
     public function toResponse($request)
     {
         $data = [
-            'route' => $request->rout()->parameters(),
+            'route' => $request->route()->parameters(),
             'request' => $request->all(),
         ];
 

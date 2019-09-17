@@ -29,7 +29,7 @@ class ImagesExport implements ImagesExportContract, FromCollection, WithMapping,
      *
      * @param  array  $data
      */
-    protected function setData(array $data): void
+    public function setData(array $data): void
     {
         $this->data = $data;
     }
