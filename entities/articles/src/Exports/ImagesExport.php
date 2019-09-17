@@ -22,16 +22,16 @@ class ImagesExport implements ImagesExportContract, FromCollection, WithMapping,
     /**
      * @var string
      */
-    protected $slug = '';
+    protected $data = [];
 
     /**
-     * PointsExport constructor.
+     * Data property setter.
      *
-     * @param string $slug
+     * @param  array  $data
      */
-    public function __construct(string $slug)
+    protected function setData(array $data): void
     {
-        $this->slug = $slug;
+        $this->data = $data;
     }
 
     /**
@@ -49,7 +49,7 @@ class ImagesExport implements ImagesExportContract, FromCollection, WithMapping,
             'relations' => ['media']
         ];
 
-        return $articlesService->getItemBySlug($this->slug, $params)->first()->media;
+        return $articlesService->getItemBySlug($this->data['route']['slug'], $params)->first()->media;
     }
 
     /**

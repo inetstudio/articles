@@ -29,6 +29,8 @@ class BindingsServiceProvider extends BaseServiceProvider implements DeferrableP
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\ShowResponseContract' => 'InetStudio\ArticlesPackage\Articles\Http\Responses\Back\Resource\ShowResponse',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Utility\SlugResponseContract' => 'InetStudio\ArticlesPackage\Articles\Http\Responses\Back\Utility\SlugResponse',
         'InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract' => 'InetStudio\ArticlesPackage\Articles\Http\Responses\Back\Utility\SuggestionsResponse',
+        'InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Front\Export\CommentsExportResponseContract' => 'InetStudio\ArticlesPackage\Articles\Http\Responses\Front\Export\CommentsExportResponse',
+        'InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Front\Export\ImagesExportResponseContract' => 'InetStudio\ArticlesPackage\Articles\Http\Responses\Front\Export\ImagesExportResponse',
         'InetStudio\ArticlesPackage\Articles\Contracts\Models\ArticleModelContract' => 'InetStudio\ArticlesPackage\Articles\Models\ArticleModel',
         'InetStudio\ArticlesPackage\Articles\Contracts\Services\Back\DataTableServiceContract' => 'InetStudio\ArticlesPackage\Articles\Services\Back\DataTableService',
         'InetStudio\ArticlesPackage\Articles\Contracts\Services\Back\ItemsServiceContract' => 'InetStudio\ArticlesPackage\Articles\Services\Back\ItemsService',

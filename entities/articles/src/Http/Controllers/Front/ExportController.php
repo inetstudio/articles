@@ -2,11 +2,11 @@
 
 namespace InetStudio\ArticlesPackage\Articles\Http\Controllers\Front;
 
-use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Http\Request;
 use InetStudio\AdminPanel\Base\Http\Controllers\Controller;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use InetStudio\ArticlesPackage\Articles\Contracts\Http\Controllers\Front\ExportControllerContract;
+use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Front\Export\ImagesExportResponseContract;
+use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Front\Export\CommentsExportResponseContract;
 
 /**
  * Class ExportController.
@@ -16,32 +16,26 @@ class ExportController extends Controller implements ExportControllerContract
     /**
      * Экспортируем комментарии.
      *
-     * @param string $slug
+     * @param  Request  $request
+     * @param  CommentsExportResponseContract  $response
      *
-     * @return BinaryFileResponse
-     *
-     * @throws BindingResolutionException
+     * @return CommentsExportResponseContract
      */
-    public function exportComments(string $slug)
+    public function exportComments(Request $request, CommentsExportResponseContract $response): CommentsExportResponseContract
     {
-        $export = app()->make('InetStudio\ArticlesPackage\Articles\Contracts\Exports\CommentsExportContract', compact('slug'));
-
-        return Excel::download($export, time().'.xlsx');
+        return $response;
     }
 
     /**
      * Экспортируем изображения.
      *
-     * @param string $slug
+     * @param  Request  $request
+     * @param  ImagesExportResponseContract  $response
      *
-     * @return BinaryFileResponse
-     *
-     * @throws BindingResolutionException
+     * @return ImagesExportResponseContract
      */
-    public function exportImages(string $slug)
+    public function exportImages(Request $request, ImagesExportResponseContract $response): ImagesExportResponseContract
     {
-        $export = app()->make('InetStudio\ArticlesPackage\Articles\Contracts\Exports\ImagesExportContract', compact('slug'));
-
-        return Excel::download($export, time().'.xlsx');
+        return $response;
     }
 }
