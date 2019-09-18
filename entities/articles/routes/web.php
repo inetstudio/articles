@@ -38,7 +38,12 @@ Route::group(
         'middleware' => ['web'],
     ],
     function () {
-        Route::get('/{material_type}/{slug}/export/comments', 'ExportControllerContract@exportComments')->name('front.articles.export.comments');
-        Route::get('/{material_type}/{slug}/export/images', 'ExportControllerContract@exportImages')->name('front.articles.export.images');
+        Route::get('/{material_type}/{slug}/export/comments', 'ExportControllerContract@exportComments')
+            ->where('material_type', '^(?!battle|contest|ingredient).*$')
+            ->name('front.articles.export.comments');
+
+        Route::get('/{material_type}/{slug}/export/images', 'ExportControllerContract@exportImages')
+            ->where('material_type', '^(?!battle|contest|ingredient).*$')
+            ->name('front.articles.export.images');
     }
 );
