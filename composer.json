@@ -10,18 +10,18 @@
       }
     ],
     "require": {
-      "inetstudio/admin-panel": "1.8.*",
-      "inetstudio/access": "1.8.*",
-      "inetstudio/categories": "1.8.*",
-      "inetstudio/classifiers": "1.8.*",
-      "inetstudio/comments": "1.8.*",
-      "inetstudio/favorites": "1.8.*",
-      "inetstudio/meta": "1.8.*",
-      "inetstudio/tags": "1.8.*",
-      "inetstudio/rating": "1.8.*",
-      "inetstudio/simple-counters": "1.8.*",
-      "inetstudio/statuses": "1.8.*",
-      "inetstudio/widgets": "1.8.*"
+      "inetstudio/admin-panel": "^6.0",
+      "inetstudio/access": "^6.0",
+      "inetstudio/categories": "^6.0",
+      "inetstudio/classifiers": "^6.0",
+      "inetstudio/comments": "^6.0",
+      "inetstudio/favorites": "^6.0",
+      "inetstudio/meta": "^6.0",
+      "inetstudio/tags": "^6.0",
+      "inetstudio/rating": "^6.0",
+      "inetstudio/simple-counters": "^6.0",
+      "inetstudio/statuses": "^6.0",
+      "inetstudio/widgets": "^6.0"
     },
     "autoload": {
       "psr-4": {
