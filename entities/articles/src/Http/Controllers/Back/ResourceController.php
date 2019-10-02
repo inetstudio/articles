@@ -8,9 +8,9 @@ use InetStudio\ArticlesPackage\Articles\Contracts\Services\Back\ItemsServiceCont
 use InetStudio\ArticlesPackage\Articles\Contracts\Services\Back\DataTableServiceContract;
 use InetStudio\ArticlesPackage\Articles\Contracts\Http\Requests\Back\SaveItemRequestContract;
 use InetStudio\ArticlesPackage\Articles\Contracts\Http\Controllers\Back\ResourceControllerContract;
+use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\FormResponseContract;
 use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
 use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\ShowResponseContract;
-use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\FormResponseContract;
 use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\IndexResponseContract;
 use InetStudio\ArticlesPackage\Articles\Contracts\Http\Responses\Back\Resource\DestroyResponseContract;
 

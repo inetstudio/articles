@@ -14,9 +14,9 @@ use InetStudio\Access\Models\Traits\Accessable;
 use InetStudio\Uploads\Models\Traits\HasImages;
 use InetStudio\Widgets\Models\Traits\HasWidgets;
 use InetStudio\Favorites\Models\Traits\Favoritable;
-use InetStudio\TagsPackage\Tags\Models\Traits\HasTags;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use InetStudio\MetaPackage\Meta\Models\Traits\HasMeta;
+use InetStudio\TagsPackage\Tags\Models\Traits\HasTags;
 use InetStudio\Classifiers\Models\Traits\HasClassifiers;
 use InetStudio\StatusesPackage\Statuses\Models\Traits\Status;
 use InetStudio\CommentsPackage\Comments\Models\Traits\HasComments;
@@ -184,7 +184,7 @@ class ArticleModel extends Model implements ArticleModelContract
                     [
                         'groups' => function ($query) {
                             $query->select(['id', 'name', 'alias']);
-                        }
+                        },
                     ]
                 )->select(['classifiers_entries.id', 'classifiers_entries.value', 'classifiers_entries.alias']);
             },
@@ -203,7 +203,7 @@ class ArticleModel extends Model implements ArticleModelContract
                     'disk',
                     'mime_type',
                     'custom_properties',
-                    'responsive_images'
+                    'responsive_images',
                 ]);
             },
 

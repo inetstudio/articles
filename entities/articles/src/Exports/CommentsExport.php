@@ -47,7 +47,7 @@ class CommentsExport implements CommentsExportContract, FromCollection, WithMapp
         $articlesService = app()->make('InetStudio\ArticlesPackage\Articles\Contracts\Services\Front\ItemsServiceContract');
 
         $params = [
-            'relations' => ['comments']
+            'relations' => ['comments'],
         ];
 
         return $articlesService->getItemBySlug($this->data['route']['slug'], $params)->first()->comments;
