@@ -15,5 +15,4 @@ interface ItemTransformerContract
      * @return array
      */
     public function transform($item): array;
-
 }

@@ -46,7 +46,7 @@ class ImagesExport implements ImagesExportContract, FromCollection, WithMapping,
         $articlesService = app()->make('InetStudio\ArticlesPackage\Articles\Contracts\Services\Front\ItemsServiceContract');
 
         $params = [
-            'relations' => ['media']
+            'relations' => ['media'],
         ];
 
         return $articlesService->getItemBySlug($this->data['route']['slug'], $params)->first()->media;
