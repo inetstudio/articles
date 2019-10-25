@@ -156,7 +156,6 @@ class ArticleModel extends Model implements ArticleModelContract
             'slug' => [
                 'source' => 'title',
                 'unique' => true,
-                'includeTrashed' => true,
             ],
         ];
     }
