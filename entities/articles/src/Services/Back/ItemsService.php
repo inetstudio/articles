@@ -65,7 +65,7 @@ class ItemsService extends BaseService implements ItemsServiceContract
             ->attachToObject(request(), $item);
 
         $item = $item->fresh();
-        
+
         $images = (config('articles.images.conversions.'.$item->material_type)) ? array_keys(config('articles.images.conversions.'.$item->material_type)) : [];
         app()->make('InetStudio\Uploads\Contracts\Services\Back\ImagesServiceContract')
             ->attachToObject(request(), $item, $images, 'articles', $item->material_type);
