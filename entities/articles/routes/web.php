@@ -24,7 +24,7 @@ Route::group(
             'ResourceControllerContract',
             [
                 'except' => [
-                    'show', 'create',
+                    'create',
                 ],
                 'as' => 'back',
             ]
