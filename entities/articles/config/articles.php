@@ -7,8 +7,10 @@ return [
      */
 
     'access' => [
-        'content' => 'Контент',
-        'comments' => 'Комментарии',
+        'fields' => [
+            'content' => 'Контент',
+            'comments' => 'Комментарии',
+        ],
     ],
 
     /*
