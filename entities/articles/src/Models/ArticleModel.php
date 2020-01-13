@@ -175,7 +175,7 @@ class ArticleModel extends Model implements ArticleModelContract
 
         self::$buildQueryScopeDefaults['relations'] = [
             'fields_access' => function ($query) {
-                $query->select(['accessable_id', 'accessable_type', 'field', 'access']);
+                $query->select(['model_id', 'model_type', 'field', 'access']);
             },
 
             'classifiers' => function ($query) {
