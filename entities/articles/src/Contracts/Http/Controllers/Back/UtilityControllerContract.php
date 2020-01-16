@@ -18,10 +18,11 @@ interface UtilityControllerContract
      *
      * @param  ItemsServiceContract  $itemsService
      * @param  Request  $request
+     * @param  string  $type
      *
      * @return SlugResponseContract
      */
-    public function getSlug(ItemsServiceContract $itemsService, Request $request): SlugResponseContract;
+    public function getSlug(ItemsServiceContract $itemsService, Request $request, string $type): SlugResponseContract;
 
     /**
      * Возвращаем объекты для поля.

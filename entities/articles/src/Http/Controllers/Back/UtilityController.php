@@ -22,17 +22,20 @@ class UtilityController extends Controller implements UtilityControllerContract
      *
      * @param  ItemsServiceContract  $itemsService
      * @param  Request  $request
+     * @param  string  $type
      *
      * @return SlugResponseContract
      *
      * @throws BindingResolutionException
      */
-    public function getSlug(ItemsServiceContract $itemsService, Request $request): SlugResponseContract
+    public function getSlug(ItemsServiceContract $itemsService, Request $request, string $type): SlugResponseContract
     {
         $id = (int) $request->get('id');
         $name = $request->get('name');
 
         $model = $itemsService->getItemById($id);
+        $model->material_type = $type;
+        
         $slug = ($name) ? SlugService::createSlug($model, 'slug', $name) : '';
 
         return $this->app->make(SlugResponseContract::class, compact('slug'));

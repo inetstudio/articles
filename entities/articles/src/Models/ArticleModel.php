@@ -13,10 +13,10 @@ use InetStudio\Rating\Models\Traits\Rateable;
 use InetStudio\Uploads\Models\Traits\HasImages;
 use InetStudio\Widgets\Models\Traits\HasWidgets;
 use InetStudio\Favorites\Models\Traits\Favoritable;
-use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use InetStudio\MetaPackage\Meta\Models\Traits\HasMeta;
 use InetStudio\TagsPackage\Tags\Models\Traits\HasTags;
 use InetStudio\Classifiers\Models\Traits\HasClassifiers;
+use InetStudio\AdminPanel\Base\Models\Traits\SluggableTrait;
 use InetStudio\StatusesPackage\Statuses\Models\Traits\Status;
 use InetStudio\AccessPackage\Fields\Models\Traits\HasFieldsAccess;
 use InetStudio\CommentsPackage\Comments\Models\Traits\HasComments;
@@ -43,9 +43,9 @@ class ArticleModel extends Model implements ArticleModelContract
     use SoftDeletes;
     use HasCategories;
     use HasClassifiers;
+    use SluggableTrait;
     use HasFieldsAccess;
     use BuildQueryScopeTrait;
-    use SluggableScopeHelpers;
     use HasSimpleCountersTrait;
 
     /**

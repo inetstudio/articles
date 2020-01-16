@@ -12,7 +12,7 @@ Route::group(
         Route::any('articles/data', 'DataControllerContract@data')
             ->name('back.articles.data.index');
 
-        Route::post('articles/slug', 'UtilityControllerContract@getSlug')
+        Route::post('articles/{type}/slug', 'UtilityControllerContract@getSlug')
             ->name('back.articles.getSlug');
 
         Route::post('articles/suggestions', 'UtilityControllerContract@getSuggestions')

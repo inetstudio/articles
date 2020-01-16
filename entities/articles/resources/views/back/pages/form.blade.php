@@ -104,7 +104,7 @@
                                                     ],
                                                     'field' => [
                                                         'class' => 'form-control slugify',
-                                                        'data-slug-url' => route('back.articles.getSlug'),
+                                                        'data-slug-url' => route('back.articles.getSlug', ['type' => $item->material_type]),
                                                         'data-slug-target' => 'slug',
                                                     ],
                                                 ]) !!}
