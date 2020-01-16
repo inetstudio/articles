@@ -93,7 +93,7 @@
                                                     ],
                                                     'field' => [
                                                         'class' => 'form-control '.(($item->status && $item->status->classifiers->contains('alias', 'status_display_for_users')) ? '' : 'slugify'),
-                                                        'data-slug-url' => route('back.articles.getSlug'),
+                                                        'data-slug-url' => route('back.articles.getSlug', ['type' => $item->material_type]),
                                                         'data-slug-target' => 'slug',
                                                     ],
                                                 ]) !!}

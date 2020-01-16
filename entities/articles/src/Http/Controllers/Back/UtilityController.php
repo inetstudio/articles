@@ -35,7 +35,7 @@ class UtilityController extends Controller implements UtilityControllerContract
 
         $model = $itemsService->getItemById($id);
         $model->material_type = $type;
-        
+
         $slug = ($name) ? SlugService::createSlug($model, 'slug', $name) : '';
 
         return $this->app->make(SlugResponseContract::class, compact('slug'));
