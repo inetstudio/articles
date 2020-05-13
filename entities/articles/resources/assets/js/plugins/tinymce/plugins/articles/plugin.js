@@ -13,20 +13,8 @@ window.tinymce.PluginManager.add('articles', function(editor) {
     },
   };
 
-  function initArticlesComponents() {
-    if (typeof window.Admin.vue.modulesComponents.$refs['articles-package_ArticleWidget'] == 'undefined') {
-      window.Admin.vue.modulesComponents.modules['articles-package'].components = _.union(
-          window.Admin.vue.modulesComponents.modules['articles-package'].components, [
-            {
-              name: 'ArticleWidget',
-              data: widgetData,
-            },
-          ]);
-    }
-  }
-
   function loadWidget() {
-    let component = window.Admin.vue.modulesComponents.$refs['articles-package_ArticleWidget'][0];
+    let component = window.Admin.vue.helpers.getVueComponent('articles-package', 'ArticleWidget');
 
     component.$data.model.id = widgetData.model.id;
   }
@@ -45,7 +33,7 @@ window.tinymce.PluginManager.add('articles', function(editor) {
           id: parseInt($(content).attr('data-id')) || 0,
         };
 
-        initArticlesComponents();
+        window.Admin.vue.helpers.initComponent('articles-package', 'ArticleWidget', widgetData);
 
         window.waitForElement('#add_article_widget_modal', function() {
           loadWidget();

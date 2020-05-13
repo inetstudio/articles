@@ -1,6 +1,6 @@
 require('./plugins/tinymce/plugins/articles');
 
-require('../../../../../../widgets/resources/assets/js/mixins/widget');
+require('../../../../../../widgets/entities/widgets/resources/assets/js/mixins/widget');
 
 require('./stores/articles');
 
