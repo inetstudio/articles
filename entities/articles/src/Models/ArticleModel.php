@@ -149,7 +149,7 @@ class ArticleModel extends Model implements ArticleModelContract
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [
