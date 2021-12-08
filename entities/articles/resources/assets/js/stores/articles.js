@@ -1,4 +1,7 @@
-window.Admin.vue.stores['articles-package_articles'] = new Vuex.Store({
+import hash from 'object-hash';
+import { v4 as uuidv4 } from 'uuid';
+
+window.Admin.vue.stores['articles-package_articles'] = new window.Vuex.Store({
   state: {
     emptyArticle: {
       model: {
@@ -23,10 +26,10 @@ window.Admin.vue.stores['articles-package_articles'] = new Vuex.Store({
   mutations: {
     setArticle(state, article) {
       let emptyArticle = JSON.parse(JSON.stringify(state.emptyArticle));
-      emptyArticle.model.id = UUID.generate();
+      emptyArticle.model.id = uuidv4();
 
       let resultArticle = _.merge(emptyArticle, article);
-      resultArticle.hash = window.hash(resultArticle.model);
+      resultArticle.hash = hash(resultArticle.model);
 
       state.article = resultArticle;
     },

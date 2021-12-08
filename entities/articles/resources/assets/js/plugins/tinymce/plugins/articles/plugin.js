@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2';
+
 window.tinymce.PluginManager.add('articles', function(editor) {
   let widgetData = {
     widget: {
@@ -41,10 +43,10 @@ window.tinymce.PluginManager.add('articles', function(editor) {
           $('#add_article_widget_modal').modal();
         });
       } else {
-        swal({
+        Swal.fire({
           title: 'Ошибка',
           text: 'Необходимо выбрать виджет-статью',
-          type: 'error',
+          icon: 'error',
         });
 
         return false;

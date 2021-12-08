@@ -62,8 +62,18 @@ class ItemsService extends BaseService implements ItemsServiceContract
         app()->make('InetStudio\AccessPackage\Fields\Contracts\Services\Back\ItemsServiceContract')
             ->attachToObject($fieldsAccessData, $item);
 
-        app()->make('InetStudio\WidgetsPackage\Widgets\Contracts\Services\Back\ItemsServiceContract')
-            ->attachToObject(request(), $item);
+        resolve('InetStudio\WidgetsPackage\Widgets\Contracts\Actions\Back\AttachWidgetsToObjectActionContract')
+            ->execute(
+                resolve(
+                    'InetStudio\WidgetsPackage\Widgets\Contracts\DTO\Actions\Back\AttachWidgetsToObjectDataContract',
+                    [
+                        'args' => [
+                            'item' => $item,
+                            'widgets' => explode(',', request()->get('widgets'))
+                        ],
+                    ]
+                )
+            );
 
         $item = $item->fresh();
 

@@ -4,9 +4,9 @@ require('../../../../../../widgets/entities/widgets/resources/assets/js/mixins/w
 
 require('./stores/articles');
 
-Vue.component(
+window.Vue.component(
     'ArticleWidget',
-    require('./components/partials/ArticleWidget/ArticleWidget.vue').default,
+    () => import('./components/partials/ArticleWidget/ArticleWidget.vue'),
 );
 
 let articles = require('./package/articles');
