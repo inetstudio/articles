@@ -10,7 +10,7 @@ use OwenIt\Auditing\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use InetStudio\Uploads\Models\Traits\HasImages;
+use InetStudio\UploadsPackage\Uploads\Models\Traits\HasMedia;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use InetStudio\WidgetsPackage\Widgets\Models\Traits\HasWidgets;
 use InetStudio\MetaPackage\Meta\Models\Traits\HasMeta;
@@ -33,7 +33,7 @@ class ArticleModel extends Model implements ArticleModelContract
     use HasMeta;
     use HasTags;
     use Auditable;
-    use HasImages;
+    use HasMedia;
     use Sluggable;
     use HasWidgets;
     use Searchable;
