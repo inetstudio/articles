@@ -1,6 +1,6 @@
-let articles = {};
+export let articles = {
+  init: function () {
 
-articles.init = function () {
+  }
 };
 
-module.exports = articles;
