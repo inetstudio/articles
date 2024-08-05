@@ -42,8 +42,8 @@ class SuggestionTransformer extends BaseTransformer implements SuggestionTransfo
                 'value' => $item['title'],
                 'data' => [
                     'id' => $item['id'],
-                    'type' => get_class($item),
-                    'title' => 'articles',
+                    'type' => 'articles',
+                    'title' => $item['title'],
                     'path' => parse_url($item['href'], PHP_URL_PATH),
                     'href' => $item['href'],
                 ],
